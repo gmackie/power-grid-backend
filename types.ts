@@ -24,6 +24,7 @@ interface ResourceState {
 }
 
 interface GameState {
+  id: string;
   players: PlayerState[];
   market: PowerPlant[];
   deck: PowerPlant[];
