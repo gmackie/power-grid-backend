@@ -1,0 +1,25 @@
+GET http://localhost:3000 
+
+###
+GET http://localhost:3000/game
+
+###
+POST http://localhost:3000/game HTTP/1.1
+Content-Type: application/json
+
+{
+    "host": "gmackie"
+}
+
+###
+
+GET http://localhost:3000/game/IWDMW
+
+### 
+
+POST http://localhost:3000/game/IWDMW/add_player HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "playerTwo"
+}

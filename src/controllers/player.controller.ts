@@ -9,7 +9,7 @@ const router = Router();
 router.get('/', async (req: Request, res: Response) => {
     const players = await DI.playerRepository.findAll(['player'], { code: QueryOrder.DESC }, 20);
     res.json(players);
-    // test
+    // test 1
 });
 
 export const PlayerController = router;

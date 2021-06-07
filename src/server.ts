@@ -4,16 +4,12 @@ import * as expressWinston from 'express-winston';
 import cors from 'cors'
 import debug from 'debug';
 import { MikroORM, RequestContext, EntityManager, EntityRepository } from '@mikro-orm/core';
-import { MongoMemoryServer } from 'mongodb-memory-server';
 import { Game, Player } from './entities';
 import { GameController, PlayerController } from './controllers';
 
 const app: express.Application = express();
 const port = process.env.PORT || 3000;
 const debugLog: debug.IDebugger = debug('app');
-
-const mongoServer = new MongoMemoryServer();
-// const uri = await mongoServer.getUri();
 
 export const DI = {} as {
   orm: MikroORM,
