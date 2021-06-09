@@ -1,4 +1,4 @@
-import { QueryOrder, wrap } from '@mikro-orm/core';
+import { Dictionary, QueryOrder, wrap } from '@mikro-orm/core';
 import { Request, Response } from 'express';
 import Router from 'express-promise-router';
 import { DI } from '../server';
@@ -53,7 +53,8 @@ router.get('/:code', async (req: Request, res: Response) => {
 });
 
 router.post('/:code/add_player', async (req: Request, res: Response) => {
-  if (!req.body.name) {
+  const { name } = req.body;
+  if (!name) {
     res.status(400).json({ message: 'missing player name' });
   }
 
@@ -62,8 +63,39 @@ router.post('/:code/add_player', async (req: Request, res: Response) => {
     if (!game) {
       return res.status(404).json({ message: 'game not found' });
     }
-    const player = new Player(req.body.name, game);
+
+    const playerNames = game.players.toArray().map((player: Dictionary<Player>) => player.name);
+
+    if (playerNames.includes(name)) {
+      return res.status(400).json({ message: `player: ${name} already exists in game`});
+    }
+
+    const player = new Player(name, game);
     game.players.add(player);
+    await DI.gameRepository.flush();
+
+    res.json(game);
+  } catch(e) {
+    return res.status(400).json({ message: e.message });
+  }
+});
+
+router.post('/:code/start_game', async (req: Request, res: Response) => {
+  try {
+    const game = await DI.gameRepository.findOne({ code: req.params.code }, ['players']);
+    if (!game) {
+      return res.status(404).json({ message: 'game not found' });
+    }
+
+    if (game.gamePhase > 0) {
+      return res.status(400).json({ message: 'game already started'});
+    }
+
+    if (game.players.count() < 3) {
+      return res.status(400).json({ message: 'not enough players to start game'});
+    }
+
+    game.gamePhase = 1;
     await DI.gameRepository.flush();
 
     res.json(game);

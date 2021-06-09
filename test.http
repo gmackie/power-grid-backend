@@ -23,3 +23,7 @@ Content-Type: application/json
 {
     "name": "playerTwo"
 }
+
+### 
+
+POST http://localhost:3000/game/IWDMW/start_game HTTP/1.1
