@@ -7,6 +7,16 @@ import { MikroORM, RequestContext, EntityManager, EntityRepository } from '@mikr
 import { Game, Player } from './entities';
 import { GameController, PlayerController } from './controllers';
 
+import WebSocket from 'ws';
+import http from 'http';
+
+const wsServer = WebSocket.Server;
+const server = http.createServer();
+const wss = new wsServer({
+  server,
+  perMessageDeflate: false,
+});
+
 const app: express.Application = express();
 const port = process.env.PORT || 3000;
 const debugLog: debug.IDebugger = debug('app');
@@ -46,7 +56,18 @@ if (!process.env.DEBUG) {
   app.use('/player', PlayerController);
   app.use((req, res) => res.status(404).json({ message: 'No route found'}));
 
-  app.listen(port, () => {
-    console.log(`PowerGrid game server started at http://localhost:${port}`);
+  server.on('request', app);
+  wss.on('connection', (ws) => {
+    ws.on('message', (message: string) => {
+      console.log(`message: ${message}`);
+      const num = JSON.parse(message).test;
+      console.log(`received: ${num}`);
+      ws.send(JSON.stringify({
+        answer: 42
+      }));
+    });
+  });
+  server.listen(port, () => {
+    console.log(`http/ws server listening on ${port}`);
   });
 })();
