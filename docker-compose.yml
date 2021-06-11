@@ -1,6 +1,14 @@
-version: "3.4"
-
+version: '3.8'
 services:
+  redis:
+    image: redis:alpine
+    container_name: redis
+    volumes:
+      - redis-vol:/var/lib/redis
+    ports:
+      - '${REDIS_PORT}:${REDIS_PORT}'
+    networks:
+      - powergrid-network
   mongo:
     container_name: mongo
     image: mongo:3.7
@@ -8,6 +16,14 @@ services:
       - 27017:27017
     volumes:
       - mongo:/data/db
+    restart: on-failure
+    networks:
+      - powergrid-network
+
+networks:
+  powergrid-network:
+    driver: bridge
 
 volumes:
+  redis-vol: {}
   mongo:

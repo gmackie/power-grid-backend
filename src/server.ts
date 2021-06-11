@@ -17,6 +17,8 @@ const wss = new wsServer({
   perMessageDeflate: false,
 });
 
+const connections = [];
+
 const app: express.Application = express();
 const port = process.env.PORT || 3000;
 const debugLog: debug.IDebugger = debug('app');
@@ -58,10 +60,15 @@ if (!process.env.DEBUG) {
 
   server.on('request', app);
   wss.on('connection', (ws) => {
+    console.log(`clients: ${wss.clients.keys}`);
     ws.on('message', (message: string) => {
       console.log(`message: ${message}`);
-      const num = JSON.parse(message).test;
-      console.log(`received: ${num}`);
+      try {
+        const num = JSON.parse(message).test;
+        console.log(`received: ${num}`);
+      } catch (e) {
+        console.error(e.message);
+      }
       ws.send(JSON.stringify({
         answer: 42
       }));
