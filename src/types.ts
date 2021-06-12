@@ -59,7 +59,7 @@ export interface PlayerState {
   cities: string[];
 }
 
-interface CityState {
+export interface CityState {
   name: string;
   region: number;
   location: {
@@ -74,5 +74,6 @@ interface CityState {
       y: number;
     };
   }[];
+  networks: string[];
   houses: string[];
 }

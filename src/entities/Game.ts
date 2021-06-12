@@ -1,6 +1,6 @@
 import { Collection, Entity, Index, OneToMany, Property } from "@mikro-orm/core";
 import { Player } from ".";
-import { powerPlants, shuffleDeck } from "../deck";
+import { newDeck, newMarket} from "../deck";
 import { PowerPlant, BidState, ResourceState, Resource } from "../types";
 import { BaseEntity } from "./BaseEntity";
 
@@ -24,6 +24,9 @@ export class Game extends BaseEntity {
   roundStep: number;
 
   @Property()
+  discard!: PowerPlant[];
+
+  @Property()
   deck: PowerPlant[];
 
   @Property()
@@ -45,8 +48,8 @@ export class Game extends BaseEntity {
     this.players.add(new Player(host, this));
     this.gamePhase = 0;
     this.roundStep = 0;
-    this.deck = shuffleDeck(powerPlants.slice(8));
-    this.market = powerPlants.slice(0,8);
+    this.deck = newDeck();
+    this.market = newMarket();
     this.resourceState = [
       {
         resourceType: Resource.COAL,

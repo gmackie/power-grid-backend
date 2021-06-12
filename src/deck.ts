@@ -1,6 +1,6 @@
 import { PowerPlant, Resource } from "./types";
 
-export const powerPlants: PowerPlant[] = [
+const powerPlants: PowerPlant[] = [
     {
       initialCost: 3,
       resourcesRequired: 2,
@@ -60,12 +60,6 @@ export const powerPlants: PowerPlant[] = [
       resourcesRequired: 2,
       resourceType: Resource.HYBRID,
       housesPowered: 2
-    },
-    {
-      initialCost: 13,
-      resourcesRequired: 0,
-      resourceType: Resource.GREEN,
-      housesPowered: 1
     },
     {
       initialCost: 14,
@@ -254,6 +248,22 @@ export const powerPlants: PowerPlant[] = [
       housesPowered: 6
     },
 ];
+
+const plantThirteen = {
+  initialCost: 13,
+  resourcesRequired: 0,
+  resourceType: Resource.GREEN,
+  housesPowered: 1
+};
+
+export const newDeck = (): PowerPlant[] => {
+  const deck =  powerPlants.slice(8);
+  const shuffledDeck = shuffleDeck(deck);
+  shuffledDeck.push(plantThirteen);
+  return shuffledDeck;
+};
+
+export const newMarket = (): PowerPlant[] => powerPlants.slice(0,8);
 
 export const shuffleDeck = (inCards: PowerPlant[]): PowerPlant[] => {
   const cards = inCards.slice(0);

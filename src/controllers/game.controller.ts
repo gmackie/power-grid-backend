@@ -64,6 +64,10 @@ router.post('/:code/add_player', async (req: Request, res: Response) => {
       return res.status(404).json({ message: 'game not found' });
     }
 
+    if (game.players.count() == 6) {
+      return res.status(400).json({ message: 'max players reached'});
+    }
+
     const playerNames = game.players.toArray().map((player: Dictionary<Player>) => player.name);
 
     if (playerNames.includes(name)) {
@@ -91,11 +95,29 @@ router.post('/:code/start_game', async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'game already started'});
     }
 
-    if (game.players.count() < 3) {
+    if (game.players.count() < 2) {
       return res.status(400).json({ message: 'not enough players to start game'});
     }
 
     game.gamePhase = 1;
+    let regions: number;
+    switch(game.players.count()) {
+      case 2:
+        regions = 3;
+        break;
+      case 3:
+        regions = 3;
+        break;
+      case 4:
+        regions = 4;
+        break;
+      case 5:
+        regions = 5;
+        break;
+      case 6:
+        regions = 5;
+        break;
+    }
     await DI.gameRepository.flush();
 
     res.json(game);
