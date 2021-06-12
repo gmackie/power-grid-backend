@@ -1,5 +1,8 @@
+/*
 import { Request, Response, NextFunction } from 'express';
-
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
+import { ErrorHandler, verifyToken } from '../middleware';
 export default class AuthController {
   async login(request: Request, response: Response, next: NextFunction) {
     try {
@@ -81,3 +84,4 @@ export default class AuthController {
   }
 
 }
+*/

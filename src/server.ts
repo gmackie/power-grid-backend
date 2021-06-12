@@ -7,15 +7,15 @@ import { MikroORM, RequestContext, EntityManager, EntityRepository } from '@mikr
 import { Game, Player } from './entities';
 import { GameController, PlayerController } from './controllers';
 
-import WebSocket from 'ws';
+// import WebSocket from 'ws';
 import http from 'http';
 
-const wsServer = WebSocket.Server;
+// const wsServer = WebSocket.Server;
 const server = http.createServer();
-const wss = new wsServer({
-  server,
-  perMessageDeflate: false,
-});
+// const wss = new wsServer({
+//   server,
+//   perMessageDeflate: false,
+// });
 
 const connections = [];
 
@@ -59,21 +59,21 @@ if (!process.env.DEBUG) {
   app.use((req, res) => res.status(404).json({ message: 'No route found'}));
 
   server.on('request', app);
-  wss.on('connection', (ws) => {
-    console.log(`clients: ${wss.clients.keys}`);
-    ws.on('message', (message: string) => {
-      console.log(`message: ${message}`);
-      try {
-        const num = JSON.parse(message).test;
-        console.log(`received: ${num}`);
-      } catch (e) {
-        console.error(e.message);
-      }
-      ws.send(JSON.stringify({
-        answer: 42
-      }));
-    });
-  });
+  // wss.on('connection', (ws) => {
+  //   console.log(`clients: ${wss.clients.keys}`);
+  //   ws.on('message', (message: string) => {
+  //     console.log(`message: ${message}`);
+  //     try {
+  //       const num = JSON.parse(message).test;
+  //       console.log(`received: ${num}`);
+  //     } catch (e) {
+  //       console.error(e.message);
+  //     }
+  //     ws.send(JSON.stringify({
+  //       answer: 42
+  //     }));
+  //   });
+  // });
   server.listen(port, () => {
     console.log(`http/ws server listening on ${port}`);
   });

@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
+import jwt, { VerifyErrors } from 'jsonwebtoken';
 import { config } from '../config';
 
 const authenticated = (request: Request, response: Response, next: NextFunction) => {
-  const token = request.headers.authorization;
-  jwt.verify(token, config.JWT_SECRET, (error, _) => {
+  const token = request.headers.authorization || '';
+  jwt.verify(token, config.JWT_SECRET, (error: VerifyErrors | null, _: any) => {
     if (error) {
       response.json('Token not provided');
     } else {

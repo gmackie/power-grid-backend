@@ -1,5 +1,5 @@
 
-enum Resource {
+export enum Resource {
   COAL = "COAL",
   OIL = "OIL",
   HYBRID = "HYBRID",
@@ -8,14 +8,14 @@ enum Resource {
   GREEN = "GREEN",
 };
 
-interface PowerPlant {
+export interface PowerPlant {
   initialCost: number;
   resourcesRequired: number;
-  resourseType: Resource;
+  resourceType: Resource;
   housesPowered: number;
 }
 
-interface ResourceState {
+export interface ResourceState {
   resourceType: Resource;
   available: {
     cost: number;
@@ -23,7 +23,7 @@ interface ResourceState {
   }[]
 }
 
-interface GameState {
+export interface GameState {
   id: string;
   players: PlayerState[];
   market: PowerPlant[];
@@ -33,9 +33,10 @@ interface GameState {
   roundStep: number;
   cities: CityState[];
   resources: ResourceState[];
+  bidState: BidState;
 }
 
-interface BidState {
+export interface BidState {
   currentBidder: string;
   remainingBidders: string[];
   eligibleBidders: string[];
@@ -43,7 +44,7 @@ interface BidState {
   powerPlant: PowerPlant;
 }
 
-interface PowerPlantState {
+export interface PowerPlantState {
   powerPlant: PowerPlant;
   currentResources: {
     resourceType: Resource;
@@ -51,10 +52,10 @@ interface PowerPlantState {
   }[];
 }
 
-interface PlayerState {
+export interface PlayerState {
   id: string;
   money: number;
-  powerPlants: PowerPlant[];
+  powerPlants: PowerPlantState[];
   cities: string[];
 }
 
