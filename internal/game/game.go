@@ -281,3 +281,234 @@ func (g *Game) EndPlayerTurn(playerID string) error {
 
 	return nil
 }
+
+// DeterminePlayerOrder sets the turn order for the current round
+func (g *Game) DeterminePlayerOrder() {
+	var playerIDs []string
+	for id := range g.Players {
+		playerIDs = append(playerIDs, id)
+	}
+
+	if g.CurrentRound == 1 {
+		// First round: random order
+		for i := len(playerIDs) - 1; i > 0; i-- {
+			j := int(time.Now().UnixNano()) % (i + 1)
+			playerIDs[i], playerIDs[j] = playerIDs[j], playerIDs[i]
+		}
+	} else {
+		// Subsequent rounds: order by cities (ascending), then by highest power plant (descending)
+		// This implements the Power Grid player order rules
+		type playerRank struct {
+			id          string
+			cities      int
+			highestPlant int
+		}
+
+		var rankings []playerRank
+		for _, id := range playerIDs {
+			player := g.Players[id]
+			highestPlant := 0
+			for _, plant := range player.PowerPlants {
+				if plant.Number > highestPlant {
+					highestPlant = plant.Number
+				}
+			}
+			rankings = append(rankings, playerRank{
+				id:          id,
+				cities:      len(player.Cities),
+				highestPlant: highestPlant,
+			})
+		}
+
+		// Sort by cities (ascending), then by highest power plant (descending)
+		for i := 0; i < len(rankings)-1; i++ {
+			for j := i + 1; j < len(rankings); j++ {
+				// Primary sort: fewer cities come first
+				if rankings[i].cities > rankings[j].cities {
+					rankings[i], rankings[j] = rankings[j], rankings[i]
+				} else if rankings[i].cities == rankings[j].cities {
+					// Secondary sort: higher power plant comes first (for same city count)
+					if rankings[i].highestPlant < rankings[j].highestPlant {
+						rankings[i], rankings[j] = rankings[j], rankings[i]
+					}
+				}
+			}
+		}
+
+		// Extract sorted player IDs
+		playerIDs = make([]string, len(rankings))
+		for i, rank := range rankings {
+			playerIDs[i] = rank.id
+		}
+	}
+
+	g.TurnOrder = playerIDs
+}
+
+// GetCurrentPlayerID returns the ID of the current player
+func (g *Game) GetCurrentPlayerID() string {
+	if len(g.TurnOrder) == 0 {
+		return ""
+	}
+	return g.TurnOrder[g.CurrentTurn]
+}
+
+// GetCurrentPlayer returns the current player
+func (g *Game) GetCurrentPlayer() *Player {
+	playerID := g.GetCurrentPlayerID()
+	if playerID == "" {
+		return nil
+	}
+	return g.Players[playerID]
+}
+
+// BroadcastGameState sends the current game state to all players
+func (g *Game) BroadcastGameState() {
+	if len(g.sessions) == 0 {
+		return
+	}
+
+	// Create game state payload
+	gameState := g.GetGameStatePayload()
+	
+	message := protocol.NewMessage(protocol.MsgGameState, gameState)
+	
+	// Send to all players
+	for _, session := range g.sessions {
+		if session != nil {
+			session.Send(message)
+		}
+	}
+}
+
+// BroadcastPhaseChange notifies all players of a phase change
+func (g *Game) BroadcastPhaseChange() {
+	phasePayload := protocol.PhaseChangePayload{
+		Phase: string(g.CurrentPhase),
+		Round: g.CurrentRound,
+	}
+	
+	message := protocol.NewMessage(protocol.MsgPhaseChange, phasePayload)
+	
+	for _, session := range g.sessions {
+		if session != nil {
+			session.Send(message)
+		}
+	}
+}
+
+// BroadcastTurnChange notifies all players of a turn change
+func (g *Game) BroadcastTurnChange() {
+	turnPayload := protocol.TurnChangePayload{
+		CurrentPlayerID: g.GetCurrentPlayerID(),
+		Turn:           g.CurrentTurn,
+	}
+	
+	message := protocol.NewMessage(protocol.MsgTurnChange, turnPayload)
+	
+	for _, session := range g.sessions {
+		if session != nil {
+			session.Send(message)
+		}
+	}
+}
+
+// GetGameStatePayload creates a complete game state payload for broadcasting
+func (g *Game) GetGameStatePayload() protocol.GameStatePayload {
+	// Convert players map to match protocol format
+	players := make(map[string]protocol.PlayerInfo)
+	for id, player := range g.Players {
+		// Convert power plants
+		var powerPlants []protocol.PowerPlantInfo
+		for _, plant := range player.PowerPlants {
+			powerPlants = append(powerPlants, protocol.PowerPlantInfo{
+				ID:           plant.Number, // Using Number as ID for protocol
+				Cost:         plant.Cost,
+				Capacity:     plant.Capacity,
+				ResourceType: plant.ResourceType,
+				ResourceCost: plant.ResourceCost,
+			})
+		}
+
+		players[id] = protocol.PlayerInfo{
+			ID:            player.ID,
+			Name:          player.Name,
+			Color:         player.Color,
+			Money:         player.Money,
+			PowerPlants:   powerPlants,
+			Cities:        player.Cities,
+			Resources:     player.Resources,
+			PoweredCities: player.PoweredCities,
+		}
+	}
+
+	// Convert available power plants
+	var availablePlants []protocol.PowerPlantInfo
+	for _, plant := range g.PowerPlants {
+		availablePlants = append(availablePlants, protocol.PowerPlantInfo{
+			ID:           plant.Number,
+			Cost:         plant.Cost,
+			Capacity:     plant.Capacity,
+			ResourceType: plant.ResourceType,
+			ResourceCost: plant.ResourceCost,
+		})
+	}
+
+	// Create map info
+	mapInfo := protocol.MapInfo{
+		Name:        g.Map.Name,
+		Cities:      g.Map.GetCitiesInfo(),
+		Connections: g.Map.GetConnectionsInfo(),
+	}
+
+	// Create market info
+	marketInfo := protocol.MarketInfo{
+		Resources: g.Market.GetResourcesInfo(),
+	}
+
+	return protocol.GameStatePayload{
+		GameID:       g.ID,
+		Name:         g.Name,
+		Status:       g.Status,
+		CurrentPhase: g.CurrentPhase,
+		CurrentTurn:  g.GetCurrentPlayerID(),
+		CurrentRound: g.CurrentRound,
+		Players:      players,
+		Map:          mapInfo,
+		Market:       marketInfo,
+		PowerPlants:  availablePlants,
+		TurnOrder:    g.TurnOrder,
+	}
+}
+
+// CheckGameEnd checks if the game should end
+func (g *Game) CheckGameEnd() bool {
+	// Game ends when a player reaches the target number of cities
+	// Target varies by player count: 21 (2p), 17 (3p), 17 (4p), 15 (5p), 14 (6p)
+	targetCities := map[int]int{
+		2: 21,
+		3: 17,
+		4: 17,
+		5: 15,
+		6: 14,
+	}
+
+	target, exists := targetCities[len(g.Players)]
+	if !exists {
+		target = 17 // Default
+	}
+
+	for _, player := range g.Players {
+		if len(player.Cities) >= target {
+			return true
+		}
+	}
+
+	return false
+}
+
+// InitializeAuctionMarket sets up the power plant market for auction
+func (g *Game) InitializeAuctionMarket() {
+	// This would typically sort plants and set up current/future market
+	// For now, this is a placeholder
+}

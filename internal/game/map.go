@@ -2,6 +2,7 @@ package game
 
 import (
 	"errors"
+	"powergrid/pkg/protocol"
 )
 
 // Map represents the game map
@@ -197,4 +198,32 @@ func createTestMap() *Map {
 	})
 
 	return m
+}
+
+// GetCitiesInfo returns city information for the protocol
+func (m *Map) GetCitiesInfo() map[string]protocol.CityInfo {
+	cities := make(map[string]protocol.CityInfo)
+	for id, city := range m.Cities {
+		cities[id] = protocol.CityInfo{
+			ID:       city.ID,
+			Name:     city.Name,
+			Region:   city.Region,
+			Position: city.Position,
+			Slots:    city.Slots,
+		}
+	}
+	return cities
+}
+
+// GetConnectionsInfo returns connection information for the protocol
+func (m *Map) GetConnectionsInfo() []protocol.ConnectionInfo {
+	var connections []protocol.ConnectionInfo
+	for _, conn := range m.Connections {
+		connections = append(connections, protocol.ConnectionInfo{
+			CityA: conn.CityA,
+			CityB: conn.CityB,
+			Cost:  conn.Cost,
+		})
+	}
+	return connections
 }

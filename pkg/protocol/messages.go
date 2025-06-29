@@ -199,6 +199,18 @@ type PowerCitiesPayload struct {
 	PowerPlants []int `json:"power_plants"` // IDs of power plants to use
 }
 
+// PhaseChangePayload contains data for phase change notifications
+type PhaseChangePayload struct {
+	Phase string `json:"phase"`
+	Round int    `json:"round"`
+}
+
+// TurnChangePayload contains data for turn change notifications
+type TurnChangePayload struct {
+	CurrentPlayerID string `json:"current_player_id"`
+	Turn           int    `json:"turn"`
+}
+
 // SerializeMessage converts a message to JSON bytes
 func SerializeMessage(msg Message) ([]byte, error) {
 	return json.Marshal(msg)

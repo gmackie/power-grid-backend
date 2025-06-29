@@ -206,3 +206,14 @@ func min(a, b int) int {
 	}
 	return b
 }
+
+// GetResourcesInfo returns resource market information for the protocol
+func (m *ResourceMarket) GetResourcesInfo() map[string][]int {
+	// Return a copy of the resources map
+	resources := make(map[string][]int)
+	for resourceType, prices := range m.Resources {
+		resources[resourceType] = make([]int, len(prices))
+		copy(resources[resourceType], prices)
+	}
+	return resources
+}
