@@ -217,3 +217,31 @@ func (m *ResourceMarket) GetResourcesInfo() map[string][]int {
 	}
 	return resources
 }
+
+// CalculateCost calculates the cost to buy a certain amount of resources
+func (m *ResourceMarket) CalculateCost(resourceType string, amount int) (int, error) {
+	resources, exists := m.Resources[resourceType]
+	if !exists {
+		return 0, errors.New("resource type not found")
+	}
+
+	totalCost := 0
+	remaining := amount
+
+	// Start from the cheapest price (lowest index with resources)
+	for price := 1; price < len(resources) && remaining > 0; price++ {
+		available := resources[price]
+		if available > 0 {
+			// Buy as many as possible at this price
+			toBuy := min(available, remaining)
+			totalCost += toBuy * price
+			remaining -= toBuy
+		}
+	}
+
+	if remaining > 0 {
+		return 0, errors.New("not enough resources available")
+	}
+
+	return totalCost, nil
+}

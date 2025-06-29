@@ -9,17 +9,19 @@ import (
 // PowerPlant represents a power plant in the game
 type PowerPlant struct {
 	ID           int
-	Cost         int
-	Capacity     int
-	ResourceType string
-	ResourceCost int
-	InMarket     bool
+	Number       int    // The number on the plant card
+	Cost         int    // Minimum bid/cost
+	Capacity     int    // Number of cities it can power
+	ResourceType string // Coal, Oil, Garbage, Uranium, Wind, Hybrid
+	ResourceCost int    // Resources needed to power
+	InMarket     bool   // Whether it's in the current/future market
 }
 
 // NewPowerPlant creates a new power plant
-func NewPowerPlant(id, cost, capacity int, resourceType string, resourceCost int) *PowerPlant {
+func NewPowerPlant(number, cost, capacity int, resourceType string, resourceCost int) *PowerPlant {
 	return &PowerPlant{
-		ID:           id,
+		ID:           number, // ID and Number are the same for now
+		Number:       number,
 		Cost:         cost,
 		Capacity:     capacity,
 		ResourceType: resourceType,

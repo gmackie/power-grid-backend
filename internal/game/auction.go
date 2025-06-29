@@ -189,8 +189,8 @@ func (g *Game) EndAuction(winnerID string) error {
 	return nil
 }
 
-// InitializeAuctionMarket initializes the auction market
-func (g *Game) InitializeAuctionMarket() {
+// setupAuctionMarket initializes the auction market
+func (g *Game) setupAuctionMarket() {
 	// Sort power plants by cost
 	sortPowerPlants(g.PowerPlants)
 

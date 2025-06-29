@@ -235,9 +235,12 @@ func (g *Game) AdvancePhase() {
 	case protocol.PhasePlayerOrder:
 		g.CurrentPhase = protocol.PhaseAuction
 		g.InitializeAuctionMarket()
+		g.StartAuctionPhase()
 	case protocol.PhaseAuction:
 		g.CurrentPhase = protocol.PhaseBuyResources
 		g.CurrentTurn = 0 // Reset turn counter for new phase
+		// Set up reverse turn order for resource buying
+		g.setupReversePlayerOrder()
 	case protocol.PhaseBuyResources:
 		g.CurrentPhase = protocol.PhaseBuildCities
 		g.CurrentTurn = 0
@@ -509,6 +512,245 @@ func (g *Game) CheckGameEnd() bool {
 
 // InitializeAuctionMarket sets up the power plant market for auction
 func (g *Game) InitializeAuctionMarket() {
-	// This would typically sort plants and set up current/future market
-	// For now, this is a placeholder
+	// This is now implemented in powerplant.go through InitializePowerPlants
+	// The actual market setup is handled when plants are initialized
+}
+
+// ProcessBuyResources processes a resource buying action
+func (g *Game) ProcessBuyResources(playerID string, resources map[string]int) error {
+	player := g.Players[playerID]
+	if player == nil {
+		return errors.New("player not found")
+	}
+
+	// Calculate total cost
+	totalCost := 0
+	for resourceType, amount := range resources {
+		cost, err := g.Market.CalculateCost(resourceType, amount)
+		if err != nil {
+			return err
+		}
+		totalCost += cost
+	}
+
+	// Check if player can afford it
+	if !player.HasEnoughMoney(totalCost) {
+		return errors.New("not enough money")
+	}
+
+	// Buy the resources
+	for resourceType, amount := range resources {
+		err := g.Market.BuyResources(resourceType, amount)
+		if err != nil {
+			return err
+		}
+		player.AddResources(resourceType, amount)
+	}
+
+	// Deduct money
+	player.SpendMoney(totalCost)
+
+	return nil
+}
+
+// ProcessBuildCity processes a city building action
+func (g *Game) ProcessBuildCity(playerID string, cityID string) error {
+	player := g.Players[playerID]
+	if player == nil {
+		return errors.New("player not found")
+	}
+
+	city, exists := g.Map.GetCity(cityID)
+	if !exists {
+		return errors.New("city not found")
+	}
+
+	// Check if city has space
+	if len(city.Slots) >= 3 {
+		return errors.New("city is full")
+	}
+
+	// Check if player already has a house in this city
+	for _, slot := range city.Slots {
+		if slot == playerID {
+			return errors.New("player already has a house in this city")
+		}
+	}
+
+	// Calculate building cost
+	baseCost := 10 + (len(city.Slots) * 5) // 10, 15, 20 for 1st, 2nd, 3rd house
+
+	// Calculate connection cost
+	connectionCost := 0
+	if len(player.Cities) > 0 {
+		// Find cheapest connection to player's network
+		cheapestConnection := 999
+		for _, playerCityID := range player.Cities {
+			cost, err := g.Map.GetConnectionCost(playerCityID, cityID)
+			if err == nil && cost < cheapestConnection {
+				cheapestConnection = cost
+			}
+		}
+		if cheapestConnection == 999 {
+			return errors.New("city not connected to player's network")
+		}
+		connectionCost = cheapestConnection
+	}
+
+	totalCost := baseCost + connectionCost
+
+	// Check if player can afford it
+	if !player.HasEnoughMoney(totalCost) {
+		return errors.New("not enough money")
+	}
+
+	// Build the house
+	err := g.Map.AddPlayerToCity(cityID, playerID)
+	if err != nil {
+		return err
+	}
+
+	player.AddCity(cityID)
+	player.SpendMoney(totalCost)
+
+	return nil
+}
+
+// ProcessPowerCities processes the bureaucracy phase power cities action
+func (g *Game) ProcessPowerCities(playerID string, plantIDs []int) error {
+	player := g.Players[playerID]
+	if player == nil {
+		return errors.New("player not found")
+	}
+
+	// Power the cities using the specified plants
+	citiesPowered, err := player.PowerCities(plantIDs)
+	if err != nil {
+		return err
+	}
+
+	player.PoweredCities = citiesPowered
+
+	// Calculate and give income based on cities powered
+	income := g.calculateIncome(citiesPowered)
+	player.EarnMoney(income)
+
+	return nil
+}
+
+// calculateIncome returns income based on cities powered
+func (g *Game) calculateIncome(citiesPowered int) int {
+	// Standard Power Grid income table
+	incomeTable := []int{
+		10,  // 0 cities
+		22,  // 1 city
+		33,  // 2 cities
+		44,  // 3 cities
+		54,  // 4 cities
+		64,  // 5 cities
+		73,  // 6 cities
+		82,  // 7 cities
+		90,  // 8 cities
+		98,  // 9 cities
+		105, // 10 cities
+		112, // 11 cities
+		118, // 12 cities
+		124, // 13 cities
+		129, // 14 cities
+		134, // 15 cities
+		138, // 16 cities
+		142, // 17 cities
+		145, // 18 cities
+		148, // 19 cities
+		150, // 20+ cities
+	}
+
+	if citiesPowered >= len(incomeTable) {
+		return incomeTable[len(incomeTable)-1]
+	}
+	return incomeTable[citiesPowered]
+}
+
+// setupReversePlayerOrder sets up reverse turn order for resource buying and building phases
+func (g *Game) setupReversePlayerOrder() {
+	// Create a reversed copy of the turn order
+	reversedOrder := make([]string, len(g.TurnOrder))
+	for i, playerID := range g.TurnOrder {
+		reversedOrder[len(g.TurnOrder)-1-i] = playerID
+	}
+	g.TurnOrder = reversedOrder
+}
+
+// StartAuctionPhase initializes the auction phase
+func (g *Game) StartAuctionPhase() error {
+	// Reset all players for auction
+	for _, player := range g.Players {
+		player.ResetForNewPhase()
+	}
+
+	// Auction state will be created when first plant is nominated
+	g.AuctionState = nil
+
+	return nil
+}
+
+// NominatePlant allows the current player to nominate a plant for auction
+func (g *Game) NominatePlant(playerID string, plantID int) error {
+	// Check if it's this player's turn
+	if g.GetCurrentPlayerID() != playerID {
+		return errors.New("not your turn to nominate")
+	}
+
+	// Check if player has already bought a plant or passed
+	player := g.Players[playerID]
+	if player.HasPassed {
+		return errors.New("player has already passed this round")
+	}
+
+	// Check if player already has 3 plants
+	if len(player.PowerPlants) >= 3 {
+		// Player must discard a plant first
+		// For now, we'll prevent buying a 4th plant
+		return errors.New("player already has 3 power plants")
+	}
+
+	// Start the auction for this plant
+	err := g.StartAuction(plantID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// PassOnNomination allows a player to pass on nominating a plant
+func (g *Game) PassOnNomination(playerID string) error {
+	// Check if it's this player's turn
+	if g.GetCurrentPlayerID() != playerID {
+		return errors.New("not your turn")
+	}
+
+	player := g.Players[playerID]
+	player.HasPassed = true
+	player.IsActive = false
+
+	// Move to next player
+	g.CurrentTurn++
+	
+	// Check if all players have passed or bought
+	allDone := true
+	for _, p := range g.Players {
+		if !p.HasPassed && len(p.PowerPlants) < 3 {
+			// This player could still buy
+			allDone = false
+			break
+		}
+	}
+
+	if allDone || g.CurrentTurn >= len(g.TurnOrder) {
+		// Auction phase is complete
+		g.AdvancePhase()
+	}
+
+	return nil
 }
