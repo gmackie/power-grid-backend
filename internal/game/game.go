@@ -5,9 +5,13 @@ import (
 	"sync"
 	"time"
 
-	"powergrid/internal/network"
 	"powergrid/pkg/protocol"
 )
+
+// SessionInterface defines the interface that sessions must implement
+type SessionInterface interface {
+	Send(msg *protocol.Message) error
+}
 
 // Game represents the main game state
 type Game struct {
@@ -27,7 +31,7 @@ type Game struct {
 	UpdatedAt    time.Time
 
 	mutex    sync.RWMutex
-	sessions map[string]*network.Session
+	sessions map[string]SessionInterface
 }
 
 // NewGame creates a new game instance
@@ -43,7 +47,7 @@ func NewGame(id, name string, mapName string) (*Game, error) {
 		Status:       protocol.StatusLobby,
 		CreatedAt:    time.Now(),
 		UpdatedAt:    time.Now(),
-		sessions:     make(map[string]*network.Session),
+		sessions:     make(map[string]SessionInterface),
 	}
 
 	// Load map
@@ -63,7 +67,7 @@ func NewGame(id, name string, mapName string) (*Game, error) {
 }
 
 // AddPlayer adds a new player to the game
-func (g *Game) AddPlayer(id, name, color string, session *network.Session) error {
+func (g *Game) AddPlayer(id, name, color string, session SessionInterface) error {
 	g.mutex.Lock()
 	defer g.mutex.Unlock()
 
@@ -182,7 +186,7 @@ func (g *Game) ProcessAction(playerID string, action protocol.MessageType, paylo
 		if !ok {
 			return errors.New("invalid payload for buy resources")
 		}
-		err = g.ProcessResourcePurchase(playerID, resourcesPayload.Resources)
+		err = g.ProcessBuyResources(playerID, resourcesPayload.Resources)
 
 	case protocol.MsgBuildCity:
 		if g.CurrentPhase != protocol.PhaseBuildCities {
@@ -192,7 +196,7 @@ func (g *Game) ProcessAction(playerID string, action protocol.MessageType, paylo
 		if !ok {
 			return errors.New("invalid payload for build city")
 		}
-		err = g.ProcessCityBuild(playerID, buildPayload.CityID)
+		err = g.ProcessBuildCity(playerID, buildPayload.CityID)
 
 	case protocol.MsgPowerCities:
 		if g.CurrentPhase != protocol.PhaseBureaucracy {
@@ -247,6 +251,7 @@ func (g *Game) AdvancePhase() {
 	case protocol.PhaseBuildCities:
 		g.CurrentPhase = protocol.PhaseBureaucracy
 		g.CurrentTurn = 0
+		g.processBureaucracyPhase()
 	case protocol.PhaseBureaucracy:
 		// Check for game end condition
 		if g.CheckGameEnd() {
@@ -346,14 +351,6 @@ func (g *Game) DeterminePlayerOrder() {
 	}
 
 	g.TurnOrder = playerIDs
-}
-
-// GetCurrentPlayerID returns the ID of the current player
-func (g *Game) GetCurrentPlayerID() string {
-	if len(g.TurnOrder) == 0 {
-		return ""
-	}
-	return g.TurnOrder[g.CurrentTurn]
 }
 
 // GetCurrentPlayer returns the current player
@@ -540,7 +537,7 @@ func (g *Game) ProcessBuyResources(playerID string, resources map[string]int) er
 
 	// Buy the resources
 	for resourceType, amount := range resources {
-		err := g.Market.BuyResources(resourceType, amount)
+		_, err := g.Market.BuyResources(resourceType, amount)
 		if err != nil {
 			return err
 		}
@@ -753,4 +750,84 @@ func (g *Game) PassOnNomination(playerID string) error {
 	}
 
 	return nil
+}
+
+// processBureaucracyPhase handles the bureaucracy phase processing
+func (g *Game) processBureaucracyPhase() {
+	// All players have already powered cities and received income
+	// Now we need to refresh the markets
+	g.refreshMarkets()
+}
+
+// refreshMarkets refreshes both resource and power plant markets
+func (g *Game) refreshMarkets() {
+	// Refresh resource market based on player count and game step
+	gameStep := g.calculateGameStep()
+	g.Market.ReplenishByPhase(len(g.Players), gameStep)
+
+	// Refresh power plant market
+	g.refreshPowerPlantMarket()
+}
+
+// calculateGameStep determines the current game step (1, 2, or 3)
+func (g *Game) calculateGameStep() int {
+	// Step 2 starts when any player reaches 7 cities
+	// Step 3 starts when the Step 3 card is drawn (not implemented in basic version)
+	for _, player := range g.Players {
+		if len(player.Cities) >= 7 {
+			return 2
+		}
+	}
+	return 1
+}
+
+// refreshPowerPlantMarket removes the lowest plant and adds a new one from the deck
+func (g *Game) refreshPowerPlantMarket() {
+	// Find the lowest numbered plant in the market
+	var lowestPlant *PowerPlant
+	lowestNumber := 999
+
+	for _, plant := range g.PowerPlants {
+		if plant.InMarket && plant.Number < lowestNumber {
+			lowestNumber = plant.Number
+			lowestPlant = plant
+		}
+	}
+
+	if lowestPlant != nil {
+		// Remove it from the market
+		lowestPlant.InMarket = false
+
+		// Add the next plant from the deck
+		for _, plant := range g.PowerPlants {
+			if !plant.InMarket {
+				// This plant is in the deck, add it to the market
+				plant.InMarket = true
+				break
+			}
+		}
+
+		// Re-sort the market
+		g.sortPowerPlantMarket()
+	}
+}
+
+// sortPowerPlantMarket ensures power plants in the market are properly sorted
+func (g *Game) sortPowerPlantMarket() {
+	// Get all plants in the market
+	var marketPlants []*PowerPlant
+	for _, plant := range g.PowerPlants {
+		if plant.InMarket {
+			marketPlants = append(marketPlants, plant)
+		}
+	}
+
+	// Sort them by number
+	for i := 0; i < len(marketPlants)-1; i++ {
+		for j := i + 1; j < len(marketPlants); j++ {
+			if marketPlants[i].Number > marketPlants[j].Number {
+				marketPlants[i], marketPlants[j] = marketPlants[j], marketPlants[i]
+			}
+		}
+	}
 }

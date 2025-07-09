@@ -98,12 +98,13 @@ func (sm *SessionManager) HandleMessage(session *Session, msg protocol.Message) 
 // processMessages processes messages in the queue
 func (sm *SessionManager) processMessages() {
 	for task := range sm.messageQueue {
-		// This is where message handling logic will be implemented
-		// For now, we'll just acknowledge receipt
-		task.session.SendMessage(protocol.MsgError, protocol.ErrorPayload{
-			Code:    "NOT_IMPLEMENTED",
-			Message: "Message handling not yet implemented",
-		})
+		err := ProcessGameMessage(task.session, task.message)
+		if err != nil {
+			task.session.SendMessage(protocol.MsgError, protocol.ErrorPayload{
+				Code:    "MESSAGE_ERROR",
+				Message: err.Error(),
+			})
+		}
 	}
 }
 
@@ -168,7 +169,11 @@ func (s *Session) InRoom(roomID string) bool {
 func (s *Session) SendMessage(msgType protocol.MessageType, payload interface{}) error {
 	msg := protocol.NewMessage(msgType, payload)
 	msg.SessionID = s.ID
+	return s.Send(msg)
+}
 
+// Send sends a protocol message to the client
+func (s *Session) Send(msg *protocol.Message) error {
 	jsonData, err := json.Marshal(msg)
 	if err != nil {
 		return err

@@ -6,8 +6,10 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 
 	"powergrid/handlers"
+	"powergrid/internal/maps"
 )
 
 var addr = flag.String("addr", ":4080", "http service address")
@@ -59,8 +61,26 @@ func main() {
 
 	logger.Printf("Starting Power Grid Game Server on %s", *addr)
 
-	// Create a new lobby handler
+	// Initialize map manager
+	mapDir := filepath.Join(".", "maps")
+	mapManager := maps.NewMapManager(mapDir)
+	
+	// Load all maps
+	if err := mapManager.LoadMaps(); err != nil {
+		logger.Fatalf("Failed to load maps: %v", err)
+	}
+	
+	mapList := mapManager.GetMapList()
+	logger.Printf("Loaded %d maps: ", len(mapList))
+	for _, mapInfo := range mapList {
+		logger.Printf("  - %s (%s): %d cities, %d--%d players", 
+			mapInfo.ID, mapInfo.Name, mapInfo.CityCount, 
+			mapInfo.PlayerCount.Min, mapInfo.PlayerCount.Max)
+	}
+
+	// Create a new lobby handler with map manager
 	lobbyHandler := handlers.NewLobbyHandler()
+	lobbyHandler.SetMapManager(mapManager)
 
 	// Pass the logger to the handlers
 	lobbyHandler.SetLogger(logger)
@@ -68,7 +88,11 @@ func main() {
 	// Register handlers
 	http.HandleFunc("/", homeHandler)
 	http.HandleFunc("/health", healthHandler)
+	http.HandleFunc("/maps", func(w http.ResponseWriter, r *http.Request) {
+		handlers.HandleMapsAPI(w, r, mapManager)
+	})
 	http.HandleFunc("/ws", lobbyHandler.HandleWebSocket)
+	http.HandleFunc("/game", handlers.HandleGameWebSocket)
 
 	// Start the server
 	logger.Fatal(http.ListenAndServe(*addr, nil))

@@ -1,0 +1,106 @@
+# Power Grid Digital Server Configuration
+
+# Server Settings
+server:
+  host: "0.0.0.0"
+  port: 8080
+  environment: "production"  # development, staging, production
+  
+# WebSocket Configuration
+websocket:
+  max_connections: 500
+  read_timeout: "30s"
+  write_timeout: "10s"
+  ping_interval: "25s"
+  max_message_size: 8192
+  
+# Game Settings
+game:
+  max_players_per_game: 6
+  min_players_per_game: 2
+  game_timeout: "45m"
+  turn_timeout: "5m"
+  lobby_timeout: "10m"
+  max_concurrent_games: 100
+  
+# Database (if adding persistence later)
+database:
+  type: "sqlite"  # sqlite, postgres, mysql
+  connection_string: "powergrid.db"
+  max_connections: 25
+  max_idle_connections: 5
+  
+# Logging
+logging:
+  level: "info"  # debug, info, warn, error
+  format: "json"  # text, json
+  file: "server.log"
+  max_size: "100MB"
+  max_backups: 5
+  
+# Security
+security:
+  cors_origins: ["*"]  # Restrict in production
+  rate_limit:
+    requests_per_minute: 60
+    burst: 10
+  max_rooms: 1000
+  
+# Monitoring
+monitoring:
+  enabled: true
+  metrics_endpoint: "/metrics"
+  health_endpoint: "/health"
+  
+# Performance
+performance:
+  enable_compression: true
+  cache_static_files: true
+  max_cpu_cores: 0  # 0 = use all available
+  
+# Cloud Provider Settings (uncomment as needed)
+
+# Heroku
+# heroku:
+#   port: "${PORT}"
+#   host: "0.0.0.0"
+
+# Railway
+# railway:
+#   port: "${PORT}"
+#   host: "0.0.0.0"
+
+# AWS
+# aws:
+#   region: "us-east-1"
+#   load_balancer: true
+
+# Development Overrides
+development:
+  server:
+    host: "localhost"
+    port: 8080
+  logging:
+    level: "debug"
+    format: "text"
+  game:
+    game_timeout: "60m"  # Longer for development
+    turn_timeout: "10m"
+  security:
+    cors_origins: ["http://localhost:*", "http://127.0.0.1:*"]
+    
+# Mobile-Specific Settings
+mobile:
+  connection_retry_attempts: 5
+  connection_retry_delay: "2s"
+  background_ping_interval: "60s"
+  low_data_mode: false
+  
+# Feature Flags
+features:
+  chat: true
+  spectator_mode: true
+  game_recording: false
+  statistics: true
+  leaderboards: false
+  tournaments: false

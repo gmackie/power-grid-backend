@@ -10,6 +10,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 
+	"powergrid/internal/maps"
 	"powergrid/models"
 )
 
@@ -52,6 +53,7 @@ const (
 	TypeLeaveLobby  MessageType = "LEAVE_LOBBY"
 	TypeChatMessage MessageType = "CHAT_MESSAGE"
 	TypeListLobbies MessageType = "LIST_LOBBIES"
+	TypeListMaps    MessageType = "LIST_MAPS"
 	TypeSetReady    MessageType = "SET_READY"
 	TypeStartGame   MessageType = "START_GAME"
 
@@ -62,6 +64,7 @@ const (
 	TypeLobbyJoined   MessageType = "LOBBY_JOINED"
 	TypeLobbyLeft     MessageType = "LOBBY_LEFT"
 	TypeLobbiesListed MessageType = "LOBBIES_LISTED"
+	TypeMapsListed    MessageType = "MAPS_LISTED"
 	TypeLobbyUpdated  MessageType = "LOBBY_UPDATED"
 	TypeReadyUpdated  MessageType = "READY_UPDATED"
 	TypeGameStarting  MessageType = "GAME_STARTING"
@@ -76,11 +79,23 @@ type Message struct {
 	Data      map[string]interface{} `json:"data,omitempty"`
 }
 
+// PlayerSession tracks a player's session state
+type PlayerSession struct {
+	PlayerID      string
+	PlayerName    string
+	Connection    *websocket.Conn
+	ConnMutex     sync.Mutex // Mutex for thread-safe writes
+	CreatedAt     time.Time
+	LastActivity  time.Time
+}
+
 // LobbyHandler handles lobby-related WebSocket connections
 type LobbyHandler struct {
 	upgrader     websocket.Upgrader
 	lobbyManager *models.LobbyManager
-	clients      map[*websocket.Conn]string // conn -> playerID
+	mapManager   *maps.MapManager
+	sessions     map[string]*PlayerSession  // sessionID -> PlayerSession
+	connections  map[*websocket.Conn]string // conn -> sessionID for cleanup
 	mu           sync.Mutex
 	logger       Logger
 }
@@ -94,7 +109,8 @@ func NewLobbyHandler() *LobbyHandler {
 			},
 		},
 		lobbyManager: models.NewLobbyManager(),
-		clients:      make(map[*websocket.Conn]string),
+		sessions:     make(map[string]*PlayerSession),
+		connections:  make(map[*websocket.Conn]string),
 		logger:       &DefaultLogger{},
 	}
 }
@@ -102,6 +118,53 @@ func NewLobbyHandler() *LobbyHandler {
 // SetLogger sets a custom logger for the handler
 func (h *LobbyHandler) SetLogger(logger Logger) {
 	h.logger = logger
+}
+
+// SetMapManager sets the map manager for the handler
+func (h *LobbyHandler) SetMapManager(mapManager *maps.MapManager) {
+	h.mapManager = mapManager
+}
+
+// StartSessionCleanup starts a goroutine that periodically cleans up inactive sessions
+func (h *LobbyHandler) StartSessionCleanup(interval time.Duration, maxInactivity time.Duration) {
+	go func() {
+		ticker := time.NewTicker(interval)
+		defer ticker.Stop()
+		
+		for {
+			select {
+			case <-ticker.C:
+				h.cleanupInactiveSessions(maxInactivity)
+			}
+		}
+	}()
+	h.logger.Printf("[backend] Session cleanup started: interval=%v, maxInactivity=%v", interval, maxInactivity)
+}
+
+// GetSessionInfo returns information about current sessions for debugging
+func (h *LobbyHandler) GetSessionInfo() map[string]interface{} {
+	h.mu.Lock()
+	defer h.mu.Unlock()
+	
+	sessionInfo := make(map[string]interface{})
+	sessionInfo["total_sessions"] = len(h.sessions)
+	sessionInfo["total_connections"] = len(h.connections)
+	
+	sessions := make([]map[string]interface{}, 0, len(h.sessions))
+	for sessionID, session := range h.sessions {
+		sessionData := map[string]interface{}{
+			"session_id":    sessionID,
+			"player_id":     session.PlayerID,
+			"player_name":   session.PlayerName,
+			"created_at":    session.CreatedAt,
+			"last_activity": session.LastActivity,
+			"has_connection": session.Connection != nil,
+		}
+		sessions = append(sessions, sessionData)
+	}
+	sessionInfo["sessions"] = sessions
+	
+	return sessionInfo
 }
 
 // HandleWebSocket handles WebSocket connections for lobby-related operations
@@ -114,33 +177,40 @@ func (h *LobbyHandler) HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 	}
 	defer h.closeConnection(conn)
 
-	// Generate a session ID
-	sessionID := uuid.New().String()
-	h.logger.Printf("New client connected with session ID: %s", sessionID)
+	// Generate a temporary session ID for this connection
+	// The actual session ID will be determined when the client sends its first message
+	tempSessionID := uuid.New().String()
+	h.logger.Printf("[backend] New WebSocket connection established (temp ID: %s)", tempSessionID)
 
-	// Send connected message
-	h.sendConnectedMessage(conn, sessionID)
-
+	// Don't send initial connected message - wait for client to identify itself
+	
 	// Process messages from the client
 	for {
 		// Read message
 		_, rawMessage, err := conn.ReadMessage()
 		if err != nil {
-			h.logger.Println("Read error:", err)
+			h.logger.Printf("[backend] Connection closed: %v", err)
 			break
 		}
 
-		h.logger.Printf("Received message: %s", rawMessage)
+		h.logger.Printf("[backend] Received message: %s", rawMessage)
 
 		// Parse the message
 		var message Message
 		if err := json.Unmarshal(rawMessage, &message); err != nil {
-			h.logger.Println("Parse error:", err)
-			h.sendErrorMessage(conn, sessionID, "Invalid message format")
+			h.logger.Printf("[backend] Parse error: %v", err)
+			h.sendErrorMessage(conn, tempSessionID, "Invalid message format")
 			continue
 		}
 
-		// Process the message
+		// Use client's session ID if provided, otherwise use temp ID
+		sessionID := message.SessionID
+		if sessionID == "" {
+			sessionID = tempSessionID
+			h.logger.Printf("[backend] No session ID in message, using temp ID: %s", tempSessionID)
+		}
+
+		// Process the message with the determined session ID
 		h.processMessage(conn, sessionID, message)
 	}
 }
@@ -148,23 +218,55 @@ func (h *LobbyHandler) HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 // closeConnection handles a closed WebSocket connection
 func (h *LobbyHandler) closeConnection(conn *websocket.Conn) {
 	h.mu.Lock()
-	playerID, exists := h.clients[conn]
+	sessionID, exists := h.connections[conn]
+	var playerID string
 	if exists {
-		delete(h.clients, conn)
+		delete(h.connections, conn)
+		// Update the session's connection to nil (player session remains for potential reconnection)
+		if session, sessionExists := h.sessions[sessionID]; sessionExists {
+			playerID = session.PlayerID
+			session.Connection = nil
+			h.logger.Printf("[backend] Connection closed for session %s (PlayerID: %s). Session retained for reconnection.", sessionID, playerID)
+		}
 	}
 	h.mu.Unlock()
 
-	// If the player was in a lobby, remove them
-	if exists {
-		lobby := h.lobbyManager.GetPlayerLobby(playerID)
-		if lobby != nil {
-			lobby.RemovePlayer(playerID)
-			h.broadcastLobbyUpdate(lobby)
-			h.lobbyManager.CleanupLobby(lobby.ID)
+	// Note: We don't remove the player from lobbies on connection close
+	// This allows for reconnection without losing lobby state
+	// Players are only removed from lobbies on explicit LEAVE_LOBBY or after a timeout
+	
+	conn.Close()
+}
+
+// cleanupInactiveSessions removes sessions that haven't been active for a specified duration
+func (h *LobbyHandler) cleanupInactiveSessions(maxInactivity time.Duration) {
+	h.mu.Lock()
+	defer h.mu.Unlock()
+	
+	now := time.Now()
+	var sessionsToRemove []string
+	
+	for sessionID, session := range h.sessions {
+		if now.Sub(session.LastActivity) > maxInactivity {
+			sessionsToRemove = append(sessionsToRemove, sessionID)
+			
+			// Remove player from lobby if they're in one
+			if session.PlayerID != "" {
+				lobby := h.lobbyManager.GetPlayerLobby(session.PlayerID)
+				if lobby != nil {
+					lobby.RemovePlayer(session.PlayerID)
+					h.broadcastLobbyUpdate(lobby)
+					h.lobbyManager.CleanupLobby(lobby.ID)
+				}
+			}
 		}
 	}
-
-	conn.Close()
+	
+	// Remove inactive sessions
+	for _, sessionID := range sessionsToRemove {
+		delete(h.sessions, sessionID)
+		h.logger.Printf("[backend] Cleaned up inactive session: %s", sessionID)
+	}
 }
 
 // sendMessage sends a message to a client
@@ -181,11 +283,20 @@ func (h *LobbyHandler) sendMessage(conn *websocket.Conn, messageType MessageType
 	}
 }
 
-// sendConnectedMessage sends a connected message to a client
-func (h *LobbyHandler) sendConnectedMessage(conn *websocket.Conn, sessionID string) {
-	h.sendMessage(conn, TypeConnected, sessionID, map[string]interface{}{
-		"message": "Welcome to Power Grid Game Server",
-	})
+// sendMessageToSession sends a message to a client's session (thread-safe)
+func (h *LobbyHandler) sendMessageToSession(sessionID string, messageType MessageType, data map[string]interface{}) {
+	h.mu.Lock()
+	session, exists := h.sessions[sessionID]
+	h.mu.Unlock()
+
+	if !exists || session.Connection == nil {
+		return
+	}
+
+	session.ConnMutex.Lock()
+	defer session.ConnMutex.Unlock()
+
+	h.sendMessage(session.Connection, messageType, sessionID, data)
 }
 
 // sendErrorMessage sends an error message to a client
@@ -197,11 +308,35 @@ func (h *LobbyHandler) sendErrorMessage(conn *websocket.Conn, sessionID string, 
 
 // processMessage processes a message from a client
 func (h *LobbyHandler) processMessage(conn *websocket.Conn, sessionID string, message Message) {
+	// Update last activity time for existing sessions
+	h.mu.Lock()
+	if session, exists := h.sessions[sessionID]; exists {
+		session.LastActivity = time.Now()
+		// Update connection if it's different (reconnection case)
+		if session.Connection != conn {
+			h.logger.Printf("[backend] Updating connection for existing session %s", sessionID)
+			session.Connection = conn
+			h.connections[conn] = sessionID
+		}
+	}
+	h.mu.Unlock()
+	
+	h.logger.Printf("[backend] Processing message type %s with sessionID: %s", message.Type, sessionID)
+	
 	switch message.Type {
 	case TypeConnect:
 		h.handleConnect(conn, sessionID, message)
 
 	case TypeCreateLobby:
+		// Ensure session exists before processing CREATE_LOBBY
+		h.mu.Lock()
+		_, sessionExists := h.sessions[sessionID]
+		h.mu.Unlock()
+		if !sessionExists {
+			h.logger.Printf("[backend] CREATE_LOBBY attempted without session for sessionID: %s", sessionID)
+			h.sendErrorMessage(conn, sessionID, "No active session found. Please send CONNECT message first.")
+			return
+		}
 		h.handleCreateLobby(conn, sessionID, message)
 
 	case TypeJoinLobby:
@@ -215,6 +350,9 @@ func (h *LobbyHandler) processMessage(conn *websocket.Conn, sessionID string, me
 
 	case TypeListLobbies:
 		h.handleListLobbies(conn, sessionID, message)
+
+	case TypeListMaps:
+		h.handleListMaps(conn, sessionID, message)
 
 	case TypeSetReady:
 		h.handleSetReady(conn, sessionID, message)
@@ -236,32 +374,88 @@ func (h *LobbyHandler) handleConnect(conn *websocket.Conn, sessionID string, mes
 		return
 	}
 
-	// Create a new player
-	playerID := uuid.New().String()
-
-	// Associate the connection with the player ID
 	h.mu.Lock()
-	h.clients[conn] = playerID
+	
+	// Check if session already exists (reconnection)
+	if existingSession, exists := h.sessions[sessionID]; exists {
+		h.logger.Printf("[backend] Restoring existing session: %s (PlayerID: %s, PlayerName: %s)", 
+			sessionID, existingSession.PlayerID, existingSession.PlayerName)
+		
+		// Update connection for existing session
+		existingSession.Connection = conn
+		existingSession.LastActivity = time.Now()
+		h.connections[conn] = sessionID
+		h.mu.Unlock()
+		
+		// Send confirmation with existing player ID and session restored flag
+		h.sendMessage(conn, TypeConnected, sessionID, map[string]interface{}{
+			"player_id":      existingSession.PlayerID,
+			"player_name":    existingSession.PlayerName,
+			"session_id":     sessionID,
+			"reconnected":    true,
+			"message":        "Session restored successfully",
+		})
+		return
+	}
+
+	// Create a new player session
+	playerID := uuid.New().String()
+	session := &PlayerSession{
+		PlayerID:     playerID,
+		PlayerName:   playerName,
+		Connection:   conn,
+		CreatedAt:    time.Now(),
+		LastActivity: time.Now(),
+	}
+
+	// Store the session and connection mapping
+	h.sessions[sessionID] = session
+	h.connections[conn] = sessionID
 	h.mu.Unlock()
 
-	// Send confirmation
+	h.logger.Printf("[backend] New player session created: %s (PlayerID: %s, PlayerName: %s)", 
+		sessionID, playerID, playerName)
+
+	// Send confirmation with session created flag
 	h.sendMessage(conn, TypeConnected, sessionID, map[string]interface{}{
-		"player_id":   playerID,
-		"player_name": playerName,
+		"player_id":      playerID,
+		"player_name":    playerName,
+		"session_id":     sessionID,
+		"reconnected":    false,
+		"message":        "New session created successfully",
 	})
 }
 
 // handleCreateLobby handles a create lobby message
 func (h *LobbyHandler) handleCreateLobby(conn *websocket.Conn, sessionID string, message Message) {
-	// Get the player ID
+	// Get the player session
 	h.mu.Lock()
-	playerID, exists := h.clients[conn]
+	session, exists := h.sessions[sessionID]
+	totalSessions := len(h.sessions)
 	h.mu.Unlock()
 
 	if !exists {
-		h.sendErrorMessage(conn, sessionID, "Player not found")
+		h.logger.Printf("[backend] ERROR: Player session not found for sessionID: %s (total sessions: %d)", sessionID, totalSessions)
+		h.mu.Lock()
+		h.logger.Printf("[backend] Available sessions:")
+		for sid, sess := range h.sessions {
+			h.logger.Printf("[backend]   - %s: PlayerID=%s, PlayerName=%s, HasConnection=%t", sid, sess.PlayerID, sess.PlayerName, sess.Connection != nil)
+		}
+		
+		// Check if this connection has a different session mapping
+		if mappedSessionID, exists := h.connections[conn]; exists {
+			h.logger.Printf("[backend] Connection is mapped to different session: %s", mappedSessionID)
+		} else {
+			h.logger.Printf("[backend] Connection has no session mapping")
+		}
+		h.mu.Unlock()
+		
+		h.sendErrorMessage(conn, sessionID, "Player session not found. Please send CONNECT message first.")
 		return
 	}
+
+	playerID := session.PlayerID
+	h.logger.Printf("[backend] Player %s (SessionID: %s) creating lobby", playerID, sessionID)
 
 	// Extract lobby data
 	lobbyName, ok := message.Data["lobby_name"].(string)
@@ -277,12 +471,22 @@ func (h *LobbyHandler) handleCreateLobby(conn *websocket.Conn, sessionID string,
 		maxPlayers = 6 // Default to 6 players (Power Grid allows 2-6 players)
 	}
 
-	// Extract player name
-	playerName, ok := message.Data["player_name"].(string)
-	if !ok || playerName == "" {
-		h.sendErrorMessage(conn, sessionID, "Player name is required")
-		return
+	// Extract map ID
+	mapID, _ := message.Data["map_id"].(string)
+	if mapID == "" {
+		mapID = "usa" // Default to USA map
 	}
+
+	// Validate map exists if map manager is available
+	if h.mapManager != nil {
+		if _, exists := h.mapManager.GetMap(mapID); !exists {
+			h.sendErrorMessage(conn, sessionID, "Invalid map selected")
+			return
+		}
+	}
+
+	// Get player name from session
+	playerName := session.PlayerName
 
 	// Create a new player
 	player := &models.Player{
@@ -293,7 +497,7 @@ func (h *LobbyHandler) handleCreateLobby(conn *websocket.Conn, sessionID string,
 	}
 
 	// Create a lobby
-	lobby := h.lobbyManager.CreateLobby(lobbyName, player, maxPlayers, "")
+	lobby := h.lobbyManager.CreateLobby(lobbyName, player, maxPlayers, "", mapID)
 
 	// Log the lobby creation
 	h.logger.Printf("Created lobby: %s (ID: %s) with host: %s", lobby.Name, lobby.ID, player.Name)
@@ -304,24 +508,30 @@ func (h *LobbyHandler) handleCreateLobby(conn *websocket.Conn, sessionID string,
 	})
 
 	// Broadcast the new lobby to all connected clients
-	for client := range h.clients {
-		h.sendMessage(client, TypeLobbiesListed, "", map[string]interface{}{
-			"lobbies": h.lobbyManager.ListLobbiesJSON(),
-		})
+	h.mu.Lock()
+	for _, session := range h.sessions {
+		if session.Connection != nil {
+			h.sendMessage(session.Connection, TypeLobbiesListed, "", map[string]interface{}{
+				"lobbies": h.lobbyManager.ListLobbiesJSON(),
+			})
+		}
 	}
+	h.mu.Unlock()
 }
 
 // handleJoinLobby handles a join lobby message
 func (h *LobbyHandler) handleJoinLobby(conn *websocket.Conn, sessionID string, message Message) {
-	// Get the player ID
+	// Get the player session
 	h.mu.Lock()
-	playerID, exists := h.clients[conn]
+	session, exists := h.sessions[sessionID]
 	h.mu.Unlock()
 
 	if !exists {
-		h.sendErrorMessage(conn, sessionID, "Player not found")
+		h.sendErrorMessage(conn, sessionID, "Player session not found")
 		return
 	}
+
+	playerID := session.PlayerID
 
 	// Extract lobby ID
 	lobbyID, ok := message.Data["lobby_id"].(string)
@@ -363,15 +573,15 @@ func (h *LobbyHandler) handleJoinLobby(conn *websocket.Conn, sessionID string, m
 
 	if player == nil {
 		// Create a new player if not found
-		playerName, ok := message.Data["player_name"].(string)
-		if !ok || playerName == "" {
+		// Use the player name from the session
+		if session.PlayerName == "" {
 			h.sendErrorMessage(conn, sessionID, "Player name is required")
 			return
 		}
 
 		player = &models.Player{
 			ID:       playerID,
-			Name:     playerName,
+			Name:     session.PlayerName,
 			JoinedAt: time.Now(),
 			Conn:     conn,
 		}
@@ -394,15 +604,17 @@ func (h *LobbyHandler) handleJoinLobby(conn *websocket.Conn, sessionID string, m
 
 // handleLeaveLobby handles a leave lobby message
 func (h *LobbyHandler) handleLeaveLobby(conn *websocket.Conn, sessionID string, message Message) {
-	// Get the player ID
+	// Get the player session
 	h.mu.Lock()
-	playerID, exists := h.clients[conn]
+	session, exists := h.sessions[sessionID]
 	h.mu.Unlock()
 
 	if !exists {
-		h.sendErrorMessage(conn, sessionID, "Player not found")
+		h.sendErrorMessage(conn, sessionID, "Player session not found")
 		return
 	}
+
+	playerID := session.PlayerID
 
 	// Find the player's lobby
 	lobby := h.lobbyManager.GetPlayerLobby(playerID)
@@ -428,15 +640,17 @@ func (h *LobbyHandler) handleLeaveLobby(conn *websocket.Conn, sessionID string, 
 
 // handleChatMessage handles a chat message
 func (h *LobbyHandler) handleChatMessage(conn *websocket.Conn, sessionID string, message Message) {
-	// Get the player ID
+	// Get the player session
 	h.mu.Lock()
-	playerID, exists := h.clients[conn]
+	session, exists := h.sessions[sessionID]
 	h.mu.Unlock()
 
 	if !exists {
-		h.sendErrorMessage(conn, sessionID, "Player not found")
+		h.sendErrorMessage(conn, sessionID, "Player session not found")
 		return
 	}
+
+	playerID := session.PlayerID
 
 	// Extract message content
 	content, ok := message.Data["content"].(string)
@@ -470,17 +684,35 @@ func (h *LobbyHandler) handleListLobbies(conn *websocket.Conn, sessionID string,
 	})
 }
 
+// handleListMaps handles a list maps message
+func (h *LobbyHandler) handleListMaps(conn *websocket.Conn, sessionID string, message Message) {
+	if h.mapManager == nil {
+		h.sendErrorMessage(conn, sessionID, "Map manager not available")
+		return
+	}
+
+	// Get all available maps
+	mapList := h.mapManager.GetMapList()
+
+	// Send the list to the client
+	h.sendMessage(conn, TypeMapsListed, sessionID, map[string]interface{}{
+		"maps": mapList,
+	})
+}
+
 // handleSetReady handles a set ready message
 func (h *LobbyHandler) handleSetReady(conn *websocket.Conn, sessionID string, message Message) {
-	// Get the player ID
+	// Get the player session
 	h.mu.Lock()
-	playerID, exists := h.clients[conn]
+	session, exists := h.sessions[sessionID]
 	h.mu.Unlock()
 
 	if !exists {
-		h.sendErrorMessage(conn, sessionID, "Player not found")
+		h.sendErrorMessage(conn, sessionID, "Player session not found")
 		return
 	}
+
+	playerID := session.PlayerID
 
 	// Extract ready status
 	readyStatus, ok := message.Data["ready"].(bool)
@@ -514,15 +746,17 @@ func (h *LobbyHandler) handleSetReady(conn *websocket.Conn, sessionID string, me
 
 // handleStartGame handles a start game message
 func (h *LobbyHandler) handleStartGame(conn *websocket.Conn, sessionID string, message Message) {
-	// Get the player ID
+	// Get the player session
 	h.mu.Lock()
-	playerID, exists := h.clients[conn]
+	session, exists := h.sessions[sessionID]
 	h.mu.Unlock()
 
 	if !exists {
-		h.sendErrorMessage(conn, sessionID, "Player not found")
+		h.sendErrorMessage(conn, sessionID, "Player session not found")
 		return
 	}
+
+	playerID := session.PlayerID
 
 	// Find the player's lobby
 	lobby := h.lobbyManager.GetPlayerLobby(playerID)
@@ -560,21 +794,28 @@ func (h *LobbyHandler) broadcastLobbyUpdate(lobby *models.Lobby) {
 	// Create a JSON representation of the lobby
 	lobbyJSON := lobby.ToJSON()
 
-	// Get a copy of the players to avoid holding the lock during sends
-	playersWithConns := make([]*websocket.Conn, 0, len(lobby.Players))
-
-	// Get all player connections
-	for _, player := range lobby.Players {
-		if player.Conn != nil {
-			playersWithConns = append(playersWithConns, player.Conn)
+	// Get sessions for all players in the lobby
+	h.mu.Lock()
+	sessionsToSend := make([]*PlayerSession, 0, len(lobby.Players))
+	for playerID := range lobby.Players {
+		// Find the session for this player
+		for _, session := range h.sessions {
+			if session.PlayerID == playerID && session.Connection != nil {
+				sessionsToSend = append(sessionsToSend, session)
+				break
+			}
 		}
 	}
+	h.mu.Unlock()
 
 	// Send the update to each player
-	for _, conn := range playersWithConns {
-		h.sendMessage(conn, TypeLobbyUpdated, "", map[string]interface{}{
+	for _, session := range sessionsToSend {
+		// Use mutex to ensure thread-safe write
+		session.ConnMutex.Lock()
+		h.sendMessage(session.Connection, TypeLobbyUpdated, "", map[string]interface{}{
 			"lobby": lobbyJSON,
 		})
+		session.ConnMutex.Unlock()
 	}
 }
 
@@ -583,20 +824,27 @@ func (h *LobbyHandler) broadcastGameStarting(lobby *models.Lobby) {
 	// Create a JSON representation of the lobby
 	lobbyJSON := lobby.ToJSON()
 
-	// Get a copy of the players to avoid holding the lock during sends
-	playersWithConns := make([]*websocket.Conn, 0, len(lobby.Players))
-
-	// Get all player connections
-	for _, player := range lobby.Players {
-		if player.Conn != nil {
-			playersWithConns = append(playersWithConns, player.Conn)
+	// Get sessions for all players in the lobby
+	h.mu.Lock()
+	sessionsToSend := make([]*PlayerSession, 0, len(lobby.Players))
+	for playerID := range lobby.Players {
+		// Find the session for this player
+		for _, session := range h.sessions {
+			if session.PlayerID == playerID && session.Connection != nil {
+				sessionsToSend = append(sessionsToSend, session)
+				break
+			}
 		}
 	}
+	h.mu.Unlock()
 
 	// Send the update to each player
-	for _, conn := range playersWithConns {
-		h.sendMessage(conn, TypeGameStarting, "", map[string]interface{}{
+	for _, session := range sessionsToSend {
+		// Use mutex to ensure thread-safe write
+		session.ConnMutex.Lock()
+		h.sendMessage(session.Connection, TypeGameStarting, "", map[string]interface{}{
 			"lobby": lobbyJSON,
 		})
+		session.ConnMutex.Unlock()
 	}
 }

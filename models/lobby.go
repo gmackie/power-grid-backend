@@ -46,6 +46,7 @@ type Lobby struct {
 	Players    map[string]*Player `json:"players"`
 	Messages   []Message          `json:"messages"`
 	MaxPlayers int                `json:"max_players"`
+	MapID      string             `json:"map_id"`
 	CreatedAt  time.Time          `json:"created_at"`
 	UpdatedAt  time.Time          `json:"updated_at"`
 	Password   string             `json:"-"` // Not serialized to JSON
@@ -53,7 +54,7 @@ type Lobby struct {
 }
 
 // NewLobby creates a new lobby
-func NewLobby(name string, host *Player, maxPlayers int, password string) *Lobby {
+func NewLobby(name string, host *Player, maxPlayers int, password string, mapID string) *Lobby {
 	// Create the lobby
 	lobby := &Lobby{
 		ID:         uuid.New().String(),
@@ -62,6 +63,7 @@ func NewLobby(name string, host *Player, maxPlayers int, password string) *Lobby
 		Players:    make(map[string]*Player),
 		Messages:   []Message{},
 		MaxPlayers: maxPlayers,
+		MapID:      mapID,
 		CreatedAt:  time.Now(),
 		UpdatedAt:  time.Now(),
 		Password:   password,
@@ -296,6 +298,7 @@ func (l *Lobby) ToJSON() map[string]interface{} {
 		"players":     players,
 		"messages":    l.Messages,
 		"max_players": l.MaxPlayers,
+		"map_id":      l.MapID,
 		"created_at":  l.CreatedAt,
 		"updated_at":  l.UpdatedAt,
 	}

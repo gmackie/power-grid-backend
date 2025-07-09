@@ -1,0 +1,83 @@
+[backend] 2025/07/09 10:57:58 Starting Power Grid Game Server on :4085
+[backend] 2025/07/09 10:57:58 Loaded 2 maps: 
+[backend] 2025/07/09 10:57:58   - germany (Germany): 39 cities, 2--6 players
+[backend] 2025/07/09 10:57:58   - usa (United States): 36 cities, 2--6 players
+[backend] 2025/07/09 10:58:01 [backend] New WebSocket connection established (temp ID: a8c6eef7-b204-43eb-af05-f1df9f0dd746)
+[backend] 2025/07/09 10:58:01 [backend] Received message: {"type":"CONNECT","session_id":"test-Host-1752083881357495000","data":{"player_name":"Host"}}
+[backend] 2025/07/09 10:58:01 [backend] Processing message type CONNECT with sessionID: test-Host-1752083881357495000
+[backend] 2025/07/09 10:58:01 [backend] New player session created: test-Host-1752083881357495000 (PlayerID: d443be33-3a52-491f-9185-4486d0d3aaf9, PlayerName: Host)
+[backend] 2025/07/09 10:58:01 [backend] New WebSocket connection established (temp ID: ca4d0e69-42f9-4c60-befb-0a5a6a5c1740)
+[backend] 2025/07/09 10:58:01 [backend] Received message: {"type":"CONNECT","session_id":"test-Player1-1752083881357496000","data":{"player_name":"Player1"}}
+[backend] 2025/07/09 10:58:01 [backend] Processing message type CONNECT with sessionID: test-Player1-1752083881357496000
+[backend] 2025/07/09 10:58:01 [backend] New player session created: test-Player1-1752083881357496000 (PlayerID: 787c14a3-e6a1-40fa-8ba3-d773c14eec99, PlayerName: Player1)
+[backend] 2025/07/09 10:58:01 [backend] New WebSocket connection established (temp ID: 3a6f9f10-016a-44f4-9f05-a7a1d1fe2c2f)
+[backend] 2025/07/09 10:58:01 [backend] Received message: {"type":"CONNECT","session_id":"test-Player2-1752083881357496000","data":{"player_name":"Player2"}}
+[backend] 2025/07/09 10:58:01 [backend] Processing message type CONNECT with sessionID: test-Player2-1752083881357496000
+[backend] 2025/07/09 10:58:01 [backend] New player session created: test-Player2-1752083881357496000 (PlayerID: e9ca2fe1-1a90-44ec-947d-84de5ed4b9b1, PlayerName: Player2)
+[backend] 2025/07/09 10:58:01 [backend] Received message: {"type":"CREATE_LOBBY","session_id":"test-Host-1752083881357495000","data":{"lobby_name":"Full Game Test","map_id":"usa","max_players":3}}
+[backend] 2025/07/09 10:58:01 [backend] Processing message type CREATE_LOBBY with sessionID: test-Host-1752083881357495000
+[backend] 2025/07/09 10:58:01 [backend] Player d443be33-3a52-491f-9185-4486d0d3aaf9 (SessionID: test-Host-1752083881357495000) creating lobby
+2025/07/09 10:58:01 Initialized new lobby: Full Game Test (ID: c4b20046-b5f1-46d2-a7f4-5add2df98853) with host: Host
+2025/07/09 10:58:01 Created new lobby: Full Game Test (ID: c4b20046-b5f1-46d2-a7f4-5add2df98853) with map: usa and host: Host
+[backend] 2025/07/09 10:58:01 Created lobby: Full Game Test (ID: c4b20046-b5f1-46d2-a7f4-5add2df98853) with host: Host
+[backend] 2025/07/09 10:58:01 [backend] Received message: {"type":"JOIN_LOBBY","session_id":"test-Player1-1752083881357496000","data":{"lobby_id":"c4b20046-b5f1-46d2-a7f4-5add2df98853"}}
+[backend] 2025/07/09 10:58:01 [backend] Processing message type JOIN_LOBBY with sessionID: test-Player1-1752083881357496000
+[backend] 2025/07/09 10:58:01 [backend] Received message: {"type":"JOIN_LOBBY","session_id":"test-Player2-1752083881357496000","data":{"lobby_id":"c4b20046-b5f1-46d2-a7f4-5add2df98853"}}
+[backend] 2025/07/09 10:58:01 [backend] Processing message type JOIN_LOBBY with sessionID: test-Player2-1752083881357496000
+[backend] 2025/07/09 10:58:01 [backend] Received message: {"type":"SET_READY","session_id":"test-Host-1752083881357495000","data":{"ready":true}}
+[backend] 2025/07/09 10:58:01 [backend] Processing message type SET_READY with sessionID: test-Host-1752083881357495000
+[backend] 2025/07/09 10:58:01 [backend] Received message: {"type":"SET_READY","session_id":"test-Player1-1752083881357496000","data":{"ready":true}}
+[backend] 2025/07/09 10:58:01 [backend] Processing message type SET_READY with sessionID: test-Player1-1752083881357496000
+[backend] 2025/07/09 10:58:01 [backend] Received message: {"type":"SET_READY","session_id":"test-Player2-1752083881357496000","data":{"ready":true}}
+[backend] 2025/07/09 10:58:01 [backend] Processing message type SET_READY with sessionID: test-Player2-1752083881357496000
+[backend] 2025/07/09 10:58:01 [backend] Received message: {"type":"START_GAME","session_id":"test-Host-1752083881357495000"}
+[backend] 2025/07/09 10:58:01 [backend] Processing message type START_GAME with sessionID: test-Host-1752083881357495000
+[backend] 2025/07/09 10:58:01 [backend] Connection closed: websocket: close 1006 (abnormal closure): unexpected EOF
+[backend] 2025/07/09 10:58:01 [backend] Connection closed for session test-Host-1752083881357495000 (PlayerID: d443be33-3a52-491f-9185-4486d0d3aaf9). Session retained for reconnection.
+[backend] 2025/07/09 10:58:01 [backend] New WebSocket connection established (temp ID: 99343fc7-89b7-4117-9a94-a2a35404db55)
+[backend] 2025/07/09 10:58:01 [backend] Received message: {"type":"CONNECT","session_id":"test-Host-1752083881357495000","data":{"player_name":"Host"}}
+[backend] 2025/07/09 10:58:01 [backend] Updating connection for existing session test-Host-1752083881357495000
+[backend] 2025/07/09 10:58:01 [backend] Processing message type CONNECT with sessionID: test-Host-1752083881357495000
+[backend] 2025/07/09 10:58:01 [backend] Restoring existing session: test-Host-1752083881357495000 (PlayerID: d443be33-3a52-491f-9185-4486d0d3aaf9, PlayerName: Host)
+[backend] 2025/07/09 10:58:01 [backend] Received message: {"type":"CREATE_LOBBY","session_id":"test-Host-1752083881357495000","data":{"lobby_name":"Second Test Lobby","map_id":"usa","max_players":3}}
+[backend] 2025/07/09 10:58:01 [backend] Processing message type CREATE_LOBBY with sessionID: test-Host-1752083881357495000
+[backend] 2025/07/09 10:58:01 [backend] Player d443be33-3a52-491f-9185-4486d0d3aaf9 (SessionID: test-Host-1752083881357495000) creating lobby
+2025/07/09 10:58:01 Initialized new lobby: Second Test Lobby (ID: 4944c462-b655-481d-8c94-bf112745858c) with host: Host
+2025/07/09 10:58:01 Created new lobby: Second Test Lobby (ID: 4944c462-b655-481d-8c94-bf112745858c) with map: usa and host: Host
+[backend] 2025/07/09 10:58:01 Created lobby: Second Test Lobby (ID: 4944c462-b655-481d-8c94-bf112745858c) with host: Host
+[backend] 2025/07/09 10:58:01 [backend] New WebSocket connection established (temp ID: 7e59691d-6513-4a94-a9ef-7ff36f24eabc)
+[backend] 2025/07/09 10:58:01 [backend] Received message: {"type":"CONNECT","session_id":"test-Temp0-1752083881669135000","data":{"player_name":"Temp0"}}
+[backend] 2025/07/09 10:58:01 [backend] Processing message type CONNECT with sessionID: test-Temp0-1752083881669135000
+[backend] 2025/07/09 10:58:01 [backend] New player session created: test-Temp0-1752083881669135000 (PlayerID: be8a6c70-3084-4efc-bc5d-5f3abaa1b8c5, PlayerName: Temp0)
+[backend] 2025/07/09 10:58:01 [backend] Connection closed: websocket: close 1006 (abnormal closure): unexpected EOF
+[backend] 2025/07/09 10:58:01 [backend] Connection closed for session test-Temp0-1752083881669135000 (PlayerID: be8a6c70-3084-4efc-bc5d-5f3abaa1b8c5). Session retained for reconnection.
+[backend] 2025/07/09 10:58:01 [backend] New WebSocket connection established (temp ID: eb687f42-c12a-4698-ad5f-336c27a26c75)
+[backend] 2025/07/09 10:58:01 [backend] Received message: {"type":"CONNECT","session_id":"test-Temp1-1752083881669718000","data":{"player_name":"Temp1"}}
+[backend] 2025/07/09 10:58:01 [backend] Processing message type CONNECT with sessionID: test-Temp1-1752083881669718000
+[backend] 2025/07/09 10:58:01 [backend] New player session created: test-Temp1-1752083881669718000 (PlayerID: f88f028c-4af0-46a5-9fb3-84cdbe698346, PlayerName: Temp1)
+[backend] 2025/07/09 10:58:01 [backend] Connection closed: websocket: close 1006 (abnormal closure): unexpected EOF
+[backend] 2025/07/09 10:58:01 [backend] Connection closed for session test-Temp1-1752083881669718000 (PlayerID: f88f028c-4af0-46a5-9fb3-84cdbe698346). Session retained for reconnection.
+[backend] 2025/07/09 10:58:01 [backend] New WebSocket connection established (temp ID: b3b2909a-02d8-4c3c-9ad0-88d27d1c639a)
+[backend] 2025/07/09 10:58:01 [backend] Received message: {"type":"CONNECT","session_id":"test-Temp2-1752083881670287000","data":{"player_name":"Temp2"}}
+[backend] 2025/07/09 10:58:01 [backend] Processing message type CONNECT with sessionID: test-Temp2-1752083881670287000
+[backend] 2025/07/09 10:58:01 [backend] New player session created: test-Temp2-1752083881670287000 (PlayerID: e3a1d5b3-c145-4e07-958b-7ae032a5081d, PlayerName: Temp2)
+[backend] 2025/07/09 10:58:01 [backend] Connection closed: websocket: close 1006 (abnormal closure): unexpected EOF
+[backend] 2025/07/09 10:58:01 [backend] Connection closed for session test-Temp2-1752083881670287000 (PlayerID: e3a1d5b3-c145-4e07-958b-7ae032a5081d). Session retained for reconnection.
+[backend] 2025/07/09 10:58:01 [backend] New WebSocket connection established (temp ID: 3f5afc29-da25-4470-85cc-f27d63a89a5b)
+[backend] 2025/07/09 10:58:01 [backend] Received message: {"type":"CONNECT","session_id":"test-Temp3-1752083881670793000","data":{"player_name":"Temp3"}}
+[backend] 2025/07/09 10:58:01 [backend] Processing message type CONNECT with sessionID: test-Temp3-1752083881670793000
+[backend] 2025/07/09 10:58:01 [backend] New player session created: test-Temp3-1752083881670793000 (PlayerID: 86cc6028-f403-4a34-a089-f6a8b2e46dde, PlayerName: Temp3)
+[backend] 2025/07/09 10:58:01 [backend] Connection closed: websocket: close 1006 (abnormal closure): unexpected EOF
+[backend] 2025/07/09 10:58:01 [backend] Connection closed for session test-Temp3-1752083881670793000 (PlayerID: 86cc6028-f403-4a34-a089-f6a8b2e46dde). Session retained for reconnection.
+[backend] 2025/07/09 10:58:01 [backend] New WebSocket connection established (temp ID: 7d6d95ef-62f6-4bea-9375-a84d05d10ef5)
+[backend] 2025/07/09 10:58:01 [backend] Received message: {"type":"CONNECT","session_id":"test-Temp4-1752083881671287000","data":{"player_name":"Temp4"}}
+[backend] 2025/07/09 10:58:01 [backend] Processing message type CONNECT with sessionID: test-Temp4-1752083881671287000
+[backend] 2025/07/09 10:58:01 [backend] New player session created: test-Temp4-1752083881671287000 (PlayerID: b1ec14f5-c6ca-4bcf-8d62-dbf3d5aae42d, PlayerName: Temp4)
+[backend] 2025/07/09 10:58:01 [backend] Connection closed: websocket: close 1006 (abnormal closure): unexpected EOF
+[backend] 2025/07/09 10:58:01 [backend] Connection closed for session test-Temp4-1752083881671287000 (PlayerID: b1ec14f5-c6ca-4bcf-8d62-dbf3d5aae42d). Session retained for reconnection.
+[backend] 2025/07/09 10:58:01 [backend] Connection closed: websocket: close 1006 (abnormal closure): unexpected EOF
+[backend] 2025/07/09 10:58:01 [backend] Connection closed for session test-Host-1752083881357495000 (PlayerID: d443be33-3a52-491f-9185-4486d0d3aaf9). Session retained for reconnection.
+[backend] 2025/07/09 10:58:01 [backend] Connection closed: read tcp [::1]:4085->[::1]:55378: read: connection reset by peer
+[backend] 2025/07/09 10:58:01 [backend] Connection closed for session test-Player2-1752083881357496000 (PlayerID: e9ca2fe1-1a90-44ec-947d-84de5ed4b9b1). Session retained for reconnection.
+[backend] 2025/07/09 10:58:01 [backend] Connection closed: read tcp [::1]:4085->[::1]:55377: read: connection reset by peer
+[backend] 2025/07/09 10:58:01 [backend] Connection closed for session test-Player1-1752083881357496000 (PlayerID: 787c14a3-e6a1-40fa-8ba3-d773c14eec99). Session retained for reconnection.

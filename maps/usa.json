@@ -1,0 +1,388 @@
+{
+  "id": "usa",
+  "name": "United States",
+  "description": "The classic Power Grid map featuring major US cities",
+  "playerCount": {
+    "min": 2,
+    "max": 6,
+    "recommended": [3, 4, 5, 6]
+  },
+  "regions": [
+    {
+      "id": "northwest",
+      "name": "Northwest",
+      "color": "#8B4513"
+    },
+    {
+      "id": "california_nevada",
+      "name": "California & Nevada",
+      "color": "#FFD700"
+    },
+    {
+      "id": "southwest",
+      "name": "Southwest",
+      "color": "#FF6347"
+    },
+    {
+      "id": "texas",
+      "name": "Texas",
+      "color": "#32CD32"
+    },
+    {
+      "id": "central",
+      "name": "Central",
+      "color": "#4169E1"
+    },
+    {
+      "id": "northeast",
+      "name": "Northeast",
+      "color": "#9932CC"
+    }
+  ],
+  "cities": [
+    {
+      "id": "seattle",
+      "name": "Seattle",
+      "region": "northwest",
+      "x": 0.12,
+      "y": 0.15
+    },
+    {
+      "id": "portland",
+      "name": "Portland",
+      "region": "northwest",
+      "x": 0.08,
+      "y": 0.25
+    },
+    {
+      "id": "boise",
+      "name": "Boise",
+      "region": "northwest",
+      "x": 0.22,
+      "y": 0.35
+    },
+    {
+      "id": "billings",
+      "name": "Billings",
+      "region": "northwest",
+      "x": 0.35,
+      "y": 0.25
+    },
+    {
+      "id": "cheyenne",
+      "name": "Cheyenne",
+      "region": "northwest",
+      "x": 0.42,
+      "y": 0.40
+    },
+    {
+      "id": "san_francisco",
+      "name": "San Francisco",
+      "region": "california_nevada",
+      "x": 0.05,
+      "y": 0.55
+    },
+    {
+      "id": "los_angeles",
+      "name": "Los Angeles",
+      "region": "california_nevada",
+      "x": 0.12,
+      "y": 0.70
+    },
+    {
+      "id": "san_diego",
+      "name": "San Diego",
+      "region": "california_nevada",
+      "x": 0.15,
+      "y": 0.80
+    },
+    {
+      "id": "las_vegas",
+      "name": "Las Vegas",
+      "region": "california_nevada",
+      "x": 0.22,
+      "y": 0.65
+    },
+    {
+      "id": "reno",
+      "name": "Reno",
+      "region": "california_nevada",
+      "x": 0.15,
+      "y": 0.50
+    },
+    {
+      "id": "phoenix",
+      "name": "Phoenix",
+      "region": "southwest",
+      "x": 0.28,
+      "y": 0.75
+    },
+    {
+      "id": "tucson",
+      "name": "Tucson",
+      "region": "southwest",
+      "x": 0.30,
+      "y": 0.82
+    },
+    {
+      "id": "el_paso",
+      "name": "El Paso",
+      "region": "southwest",
+      "x": 0.42,
+      "y": 0.80
+    },
+    {
+      "id": "santa_fe",
+      "name": "Santa Fe",
+      "region": "southwest",
+      "x": 0.45,
+      "y": 0.70
+    },
+    {
+      "id": "denver",
+      "name": "Denver",
+      "region": "southwest",
+      "x": 0.45,
+      "y": 0.55
+    },
+    {
+      "id": "houston",
+      "name": "Houston",
+      "region": "texas",
+      "x": 0.55,
+      "y": 0.85
+    },
+    {
+      "id": "dallas",
+      "name": "Dallas",
+      "region": "texas",
+      "x": 0.55,
+      "y": 0.75
+    },
+    {
+      "id": "austin",
+      "name": "Austin",
+      "region": "texas",
+      "x": 0.52,
+      "y": 0.80
+    },
+    {
+      "id": "san_antonio",
+      "name": "San Antonio",
+      "region": "texas",
+      "x": 0.50,
+      "y": 0.82
+    },
+    {
+      "id": "oklahoma_city",
+      "name": "Oklahoma City",
+      "region": "texas",
+      "x": 0.55,
+      "y": 0.65
+    },
+    {
+      "id": "kansas_city",
+      "name": "Kansas City",
+      "region": "central",
+      "x": 0.60,
+      "y": 0.55
+    },
+    {
+      "id": "omaha",
+      "name": "Omaha",
+      "region": "central",
+      "x": 0.58,
+      "y": 0.45
+    },
+    {
+      "id": "minneapolis",
+      "name": "Minneapolis",
+      "region": "central",
+      "x": 0.62,
+      "y": 0.30
+    },
+    {
+      "id": "fargo",
+      "name": "Fargo",
+      "region": "central",
+      "x": 0.58,
+      "y": 0.20
+    },
+    {
+      "id": "duluth",
+      "name": "Duluth",
+      "region": "central",
+      "x": 0.65,
+      "y": 0.25
+    },
+    {
+      "id": "chicago",
+      "name": "Chicago",
+      "region": "central",
+      "x": 0.70,
+      "y": 0.42
+    },
+    {
+      "id": "milwaukee",
+      "name": "Milwaukee",
+      "region": "central",
+      "x": 0.68,
+      "y": 0.38
+    },
+    {
+      "id": "detroit",
+      "name": "Detroit",
+      "region": "central",
+      "x": 0.75,
+      "y": 0.40
+    },
+    {
+      "id": "cincinnati",
+      "name": "Cincinnati",
+      "region": "central",
+      "x": 0.75,
+      "y": 0.52
+    },
+    {
+      "id": "st_louis",
+      "name": "St. Louis",
+      "region": "central",
+      "x": 0.65,
+      "y": 0.55
+    },
+    {
+      "id": "new_york",
+      "name": "New York",
+      "region": "northeast",
+      "x": 0.88,
+      "y": 0.45
+    },
+    {
+      "id": "philadelphia",
+      "name": "Philadelphia",
+      "region": "northeast",
+      "x": 0.85,
+      "y": 0.50
+    },
+    {
+      "id": "washington",
+      "name": "Washington",
+      "region": "northeast",
+      "x": 0.82,
+      "y": 0.55
+    },
+    {
+      "id": "pittsburgh",
+      "name": "Pittsburgh",
+      "region": "northeast",
+      "x": 0.80,
+      "y": 0.48
+    },
+    {
+      "id": "buffalo",
+      "name": "Buffalo",
+      "region": "northeast",
+      "x": 0.82,
+      "y": 0.40
+    },
+    {
+      "id": "boston",
+      "name": "Boston",
+      "region": "northeast",
+      "x": 0.90,
+      "y": 0.38
+    }
+  ],
+  "connections": [
+    {"from": "seattle", "to": "portland", "cost": 3},
+    {"from": "seattle", "to": "boise", "cost": 12},
+    {"from": "portland", "to": "boise", "cost": 13},
+    {"from": "portland", "to": "san_francisco", "cost": 17},
+    {"from": "boise", "to": "billings", "cost": 12},
+    {"from": "boise", "to": "cheyenne", "cost": 14},
+    {"from": "boise", "to": "reno", "cost": 15},
+    {"from": "billings", "to": "cheyenne", "cost": 9},
+    {"from": "billings", "to": "fargo", "cost": 17},
+    {"from": "billings", "to": "minneapolis", "cost": 18},
+    {"from": "cheyenne", "to": "denver", "cost": 0},
+    {"from": "cheyenne", "to": "omaha", "cost": 14},
+    {"from": "san_francisco", "to": "reno", "cost": 7},
+    {"from": "san_francisco", "to": "los_angeles", "cost": 9},
+    {"from": "los_angeles", "to": "san_diego", "cost": 3},
+    {"from": "los_angeles", "to": "las_vegas", "cost": 9},
+    {"from": "los_angeles", "to": "phoenix", "cost": 14},
+    {"from": "san_diego", "to": "phoenix", "cost": 14},
+    {"from": "las_vegas", "to": "reno", "cost": 16},
+    {"from": "las_vegas", "to": "phoenix", "cost": 15},
+    {"from": "phoenix", "to": "tucson", "cost": 18},
+    {"from": "phoenix", "to": "el_paso", "cost": 18},
+    {"from": "phoenix", "to": "santa_fe", "cost": 18},
+    {"from": "phoenix", "to": "denver", "cost": 16},
+    {"from": "tucson", "to": "el_paso", "cost": 16},
+    {"from": "el_paso", "to": "santa_fe", "cost": 13},
+    {"from": "el_paso", "to": "dallas", "cost": 16},
+    {"from": "santa_fe", "to": "denver", "cost": 13},
+    {"from": "santa_fe", "to": "oklahoma_city", "cost": 15},
+    {"from": "denver", "to": "kansas_city", "cost": 16},
+    {"from": "denver", "to": "omaha", "cost": 14},
+    {"from": "houston", "to": "dallas", "cost": 5},
+    {"from": "houston", "to": "austin", "cost": 4},
+    {"from": "houston", "to": "san_antonio", "cost": 4},
+    {"from": "dallas", "to": "austin", "cost": 3},
+    {"from": "dallas", "to": "oklahoma_city", "cost": 3},
+    {"from": "austin", "to": "san_antonio", "cost": 2},
+    {"from": "oklahoma_city", "to": "kansas_city", "cost": 8},
+    {"from": "kansas_city", "to": "omaha", "cost": 5},
+    {"from": "kansas_city", "to": "st_louis", "cost": 6},
+    {"from": "omaha", "to": "minneapolis", "cost": 8},
+    {"from": "minneapolis", "to": "fargo", "cost": 6},
+    {"from": "minneapolis", "to": "duluth", "cost": 5},
+    {"from": "minneapolis", "to": "milwaukee", "cost": 8},
+    {"from": "minneapolis", "to": "chicago", "cost": 8},
+    {"from": "fargo", "to": "duluth", "cost": 6},
+    {"from": "chicago", "to": "milwaukee", "cost": 2},
+    {"from": "chicago", "to": "detroit", "cost": 7},
+    {"from": "chicago", "to": "cincinnati", "cost": 7},
+    {"from": "chicago", "to": "st_louis", "cost": 10},
+    {"from": "milwaukee", "to": "detroit", "cost": 7},
+    {"from": "detroit", "to": "cincinnati", "cost": 4},
+    {"from": "detroit", "to": "pittsburgh", "cost": 6},
+    {"from": "detroit", "to": "buffalo", "cost": 7},
+    {"from": "cincinnati", "to": "st_louis", "cost": 12},
+    {"from": "cincinnati", "to": "pittsburgh", "cost": 7},
+    {"from": "pittsburgh", "to": "buffalo", "cost": 7},
+    {"from": "pittsburgh", "to": "washington", "cost": 6},
+    {"from": "pittsburgh", "to": "philadelphia", "cost": 8},
+    {"from": "buffalo", "to": "boston", "cost": 8},
+    {"from": "buffalo", "to": "new_york", "cost": 8},
+    {"from": "new_york", "to": "philadelphia", "cost": 0},
+    {"from": "new_york", "to": "boston", "cost": 3},
+    {"from": "philadelphia", "to": "washington", "cost": 3},
+    {"from": "washington", "to": "cincinnati", "cost": 8}
+  ],
+  "gameRules": {
+    "step2Trigger": 6,
+    "step3Trigger": 18,
+    "startingMoney": 50,
+    "resourceSupply": {
+      "coal": 24,
+      "oil": 18,
+      "garbage": 6,
+      "uranium": 2
+    },
+    "resourcePrices": {
+      "coal": [1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 5, 5, 6, 8],
+      "oil": [2, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 7, 7, 8, 8, 8],
+      "garbage": [3, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10],
+      "uranium": [8, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26]
+    },
+    "earningsTable": [10, 22, 33, 44, 54, 64, 73, 82, 90, 98, 105, 112, 118, 124, 129, 134, 138, 142, 145, 148, 150],
+    "winConditions": {
+      "2": 21,
+      "3": 17,
+      "4": 17,
+      "5": 15,
+      "6": 14
+    }
+  }
+}

@@ -20,18 +20,18 @@ func NewLobbyManager() *LobbyManager {
 }
 
 // CreateLobby creates a new lobby with the given parameters
-func (lm *LobbyManager) CreateLobby(name string, host *Player, maxPlayers int, password string) *Lobby {
+func (lm *LobbyManager) CreateLobby(name string, host *Player, maxPlayers int, password string, mapID string) *Lobby {
 	lm.mu.Lock()
 	defer lm.mu.Unlock()
 
 	// Create a new lobby
-	lobby := NewLobby(name, host, maxPlayers, password)
+	lobby := NewLobby(name, host, maxPlayers, password, mapID)
 
 	// Store the lobby
 	lm.lobbies[lobby.ID] = lobby
 
 	// Log the creation
-	log.Printf("Created new lobby: %s (ID: %s) with host: %s", name, lobby.ID, host.Name)
+	log.Printf("Created new lobby: %s (ID: %s) with map: %s and host: %s", name, lobby.ID, mapID, host.Name)
 
 	return lobby
 }
@@ -89,6 +89,7 @@ func (lm *LobbyManager) ListLobbiesJSON() []map[string]interface{} {
 			"status":       lobby.Status,
 			"player_count": len(lobby.Players),
 			"max_players":  lobby.MaxPlayers,
+			"map_id":       lobby.MapID,
 			"has_password": lobby.Password != "",
 			"created_at":   lobby.CreatedAt,
 		}
