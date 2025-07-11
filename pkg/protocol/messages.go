@@ -36,9 +36,10 @@ const (
 	MsgEndTurn      MessageType = "END_TURN"
 
 	// Notification messages
-	MsgError       MessageType = "ERROR"
-	MsgPhaseChange MessageType = "PHASE_CHANGE"
-	MsgTurnChange  MessageType = "TURN_CHANGE"
+	MsgError        MessageType = "ERROR"
+	MsgPhaseChange  MessageType = "PHASE_CHANGE"
+	MsgTurnChange   MessageType = "TURN_CHANGE"
+	MsgPlayerJoined MessageType = "PLAYER_JOINED"
 )
 
 // Game status values

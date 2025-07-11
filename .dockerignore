@@ -1,0 +1,62 @@
+# Git
+.git
+.gitignore
+
+# Documentation
+README.md
+*.md
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+powergrid_server
+server
+main
+
+# Logs
+logs/
+*.log
+
+# Test files
+*_test.go
+test_*.go
+
+# Development tools
+Dockerfile.dev
+docker-compose.dev.yml
+
+# Temporary files
+*.tmp
+*.temp
+
+# Coverage reports
+coverage.txt
+coverage.html
+
+# Vendor (if using)
+vendor/
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# Binaries
+*.exe
+*.dll
+*.so
+*.dylib

@@ -6,7 +6,11 @@
       "Bash(go test:*)",
       "Bash(chmod:*)",
       "Bash(make test-unit:*)",
-      "Bash(timeout:*)"
+      "Bash(timeout:*)",
+      "Bash(make test:*)",
+      "Bash(go get:*)",
+      "Bash(grep:*)",
+      "Bash(git add:*)"
     ],
     "deny": []
   }

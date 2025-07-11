@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: powergrid-server
+  namespace: powergrid
+  labels:
+    app: powergrid-server
+    version: v1
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: powergrid-server
+  template:
+    metadata:
+      labels:
+        app: powergrid-server
+        version: v1
+    spec:
+      containers:
+      - name: powergrid-server
+        image: powergrid/server:latest
+        ports:
+        - containerPort: 4080
+          name: http
+        env:
+        - name: ENVIRONMENT
+          value: "production"
+        - name: HOST
+          value: "0.0.0.0"
+        - name: PORT
+          value: "4080"
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 4080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 4080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        volumeMounts:
+        - name: config
+          mountPath: /config.yml
+          subPath: config.yml
+          readOnly: true
+        - name: maps
+          mountPath: /maps
+          readOnly: true
+      volumes:
+      - name: config
+        configMap:
+          name: powergrid-config
+      - name: maps
+        configMap:
+          name: powergrid-maps
+      restartPolicy: Always
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        runAsGroup: 65532
+        fsGroup: 65532

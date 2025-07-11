@@ -57,6 +57,8 @@ func (gm *GameManager) RemoveGame(gameID string) {
 // ProcessGameMessage processes a game-related message
 func ProcessGameMessage(session *Session, msg protocol.Message) error {
 	switch msg.Type {
+	case protocol.MsgConnect:
+		return handleConnect(session, msg)
 	case protocol.MsgCreateGame:
 		return handleCreateGame(session, msg)
 	case protocol.MsgJoinGame:
@@ -76,6 +78,42 @@ func ProcessGameMessage(session *Session, msg protocol.Message) error {
 	default:
 		return fmt.Errorf("unknown message type: %s", msg.Type)
 	}
+}
+
+func handleConnect(session *Session, msg protocol.Message) error {
+	// Extract connection payload
+	var payload struct {
+		PlayerName string `json:"player_name"`
+		PlayerID   string `json:"player_id"`
+		GameID     string `json:"game_id"`
+	}
+	if err := parsePayload(msg.Payload, &payload); err != nil {
+		return err
+	}
+
+	// Update session with player info
+	session.PlayerID = payload.PlayerID
+	session.PlayerName = payload.PlayerName
+
+	// Find the game
+	gameObj := Games.GetGame(payload.GameID)
+	if gameObj == nil {
+		return fmt.Errorf("game not found: %s", payload.GameID)
+	}
+
+	// Add session to the game room
+	session.AddToRoom(gameObj.ID)
+
+	// Send the current game state to the player
+	session.SendMessage(protocol.MsgGameState, gameObj.GetGameStatePayload())
+
+	// Notify other players
+	Manager.BroadcastToRoom(gameObj.ID, protocol.MsgPlayerJoined, map[string]interface{}{
+		"player_id":   payload.PlayerID,
+		"player_name": payload.PlayerName,
+	})
+
+	return nil
 }
 
 func handleCreateGame(session *Session, msg protocol.Message) error {

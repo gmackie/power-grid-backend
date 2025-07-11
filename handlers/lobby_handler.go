@@ -11,6 +11,7 @@ import (
 	"github.com/gorilla/websocket"
 
 	"powergrid/internal/maps"
+	"powergrid/internal/network"
 	"powergrid/models"
 )
 
@@ -91,13 +92,14 @@ type PlayerSession struct {
 
 // LobbyHandler handles lobby-related WebSocket connections
 type LobbyHandler struct {
-	upgrader     websocket.Upgrader
-	lobbyManager *models.LobbyManager
-	mapManager   *maps.MapManager
-	sessions     map[string]*PlayerSession  // sessionID -> PlayerSession
-	connections  map[*websocket.Conn]string // conn -> sessionID for cleanup
-	mu           sync.Mutex
-	logger       Logger
+	upgrader      websocket.Upgrader
+	lobbyManager  *models.LobbyManager
+	mapManager    *maps.MapManager
+	sessions      map[string]*PlayerSession  // sessionID -> PlayerSession
+	connections   map[*websocket.Conn]string // conn -> sessionID for cleanup
+	mu            sync.Mutex
+	logger        Logger
+	cleanupStop   chan struct{} // Channel to stop cleanup routine
 }
 
 // NewLobbyHandler creates a new lobby handler
@@ -127,6 +129,8 @@ func (h *LobbyHandler) SetMapManager(mapManager *maps.MapManager) {
 
 // StartSessionCleanup starts a goroutine that periodically cleans up inactive sessions
 func (h *LobbyHandler) StartSessionCleanup(interval time.Duration, maxInactivity time.Duration) {
+	h.cleanupStop = make(chan struct{})
+	
 	go func() {
 		ticker := time.NewTicker(interval)
 		defer ticker.Stop()
@@ -135,10 +139,21 @@ func (h *LobbyHandler) StartSessionCleanup(interval time.Duration, maxInactivity
 			select {
 			case <-ticker.C:
 				h.cleanupInactiveSessions(maxInactivity)
+			case <-h.cleanupStop:
+				h.logger.Println("[backend] Session cleanup routine stopped")
+				return
 			}
 		}
 	}()
 	h.logger.Printf("[backend] Session cleanup started: interval=%v, maxInactivity=%v", interval, maxInactivity)
+}
+
+// StopSessionCleanup stops the session cleanup routine
+func (h *LobbyHandler) StopSessionCleanup() {
+	if h.cleanupStop != nil {
+		close(h.cleanupStop)
+		h.cleanupStop = nil
+	}
 }
 
 // GetSessionInfo returns information about current sessions for debugging
@@ -785,8 +800,17 @@ func (h *LobbyHandler) handleStartGame(conn *websocket.Conn, sessionID string, m
 		return
 	}
 
+	// Create a game instance in the game server
+	gameID, err := h.createGameFromLobby(lobby)
+	if err != nil {
+		h.sendErrorMessage(conn, sessionID, "Failed to create game: " + err.Error())
+		// Revert lobby status
+		lobby.Status = models.LobbyStatusWaiting
+		return
+	}
+
 	// Broadcast the game starting message to all players in the lobby
-	h.broadcastGameStarting(lobby)
+	h.broadcastGameStarting(lobby, gameID)
 }
 
 // broadcastLobbyUpdate broadcasts a lobby update to all players in the lobby
@@ -819,8 +843,38 @@ func (h *LobbyHandler) broadcastLobbyUpdate(lobby *models.Lobby) {
 	}
 }
 
+// createGameFromLobby creates a game instance from a lobby
+func (h *LobbyHandler) createGameFromLobby(lobby *models.Lobby) (string, error) {
+	// Create the game in the game server
+	gameManager := network.Games
+	newGame, err := gameManager.CreateGame(lobby.Name, lobby.MapID)
+	if err != nil {
+		return "", err
+	}
+
+	// Add players to the game
+	colors := []string{"red", "blue", "green", "yellow", "purple", "black"}
+	colorIndex := 0
+	for playerID, player := range lobby.Players {
+		// Assign colors in order
+		color := ""
+		if colorIndex < len(colors) {
+			color = colors[colorIndex]
+			colorIndex++
+		}
+		err := newGame.AddPlayer(playerID, player.Name, color, nil)
+		if err != nil {
+			// If we fail to add a player, remove the game
+			gameManager.RemoveGame(newGame.ID)
+			return "", err
+		}
+	}
+
+	return newGame.ID, nil
+}
+
 // broadcastGameStarting broadcasts a game starting message to all players in the lobby
-func (h *LobbyHandler) broadcastGameStarting(lobby *models.Lobby) {
+func (h *LobbyHandler) broadcastGameStarting(lobby *models.Lobby, gameID string) {
 	// Create a JSON representation of the lobby
 	lobbyJSON := lobby.ToJSON()
 
@@ -843,7 +897,9 @@ func (h *LobbyHandler) broadcastGameStarting(lobby *models.Lobby) {
 		// Use mutex to ensure thread-safe write
 		session.ConnMutex.Lock()
 		h.sendMessage(session.Connection, TypeGameStarting, "", map[string]interface{}{
-			"lobby": lobbyJSON,
+			"lobby":    lobbyJSON,
+			"game_id":  gameID,
+			"game_url": "/game", // This could be a different server in production
 		})
 		session.ConnMutex.Unlock()
 	}

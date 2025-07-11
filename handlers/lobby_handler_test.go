@@ -78,13 +78,6 @@ func TestSessionManagement(t *testing.T) {
 		}
 		defer conn.Close()
 
-		// Wait for initial connection message
-		var connMsg Message
-		err = conn.ReadJSON(&connMsg)
-		if err != nil {
-			t.Fatalf("Failed to read connection message: %v", err)
-		}
-
 		// Send CONNECT message
 		connectMsg := Message{
 			Type:      TypeConnect,
@@ -117,10 +110,6 @@ func TestSessionManagement(t *testing.T) {
 			t.Fatalf("Failed to connect: %v", err)
 		}
 
-		// Wait for initial connection message
-		var connMsg Message
-		conn1.ReadJSON(&connMsg)
-
 		// Connect with session ID
 		connectMsg := Message{
 			Type:      TypeConnect,
@@ -141,9 +130,6 @@ func TestSessionManagement(t *testing.T) {
 		}
 		defer conn2.Close()
 
-		// Wait for initial connection message
-		conn2.ReadJSON(&connMsg)
-
 		// Reconnect with same session ID
 		response2 := sendAndReceive(t, conn2, connectMsg)
 
@@ -154,8 +140,8 @@ func TestSessionManagement(t *testing.T) {
 		}
 
 		// Verify welcome back message
-		if !strings.Contains(response2.Data["message"].(string), "Welcome back") {
-			t.Errorf("Expected welcome back message, got: %v", response2.Data["message"])
+		if !strings.Contains(response2.Data["message"].(string), "Session restored successfully") {
+			t.Errorf("Expected session restored message, got: %v", response2.Data["message"])
 		}
 	})
 }
@@ -173,10 +159,6 @@ func TestLobbyOperations(t *testing.T) {
 			t.Fatalf("Failed to connect: %v", err)
 		}
 		defer conn.Close()
-
-		// Wait for initial connection message
-		var connMsg Message
-		conn.ReadJSON(&connMsg)
 
 		// Try to create lobby without connecting first
 		createLobbyMsg := Message{
@@ -206,10 +188,6 @@ func TestLobbyOperations(t *testing.T) {
 			t.Fatalf("Failed to connect: %v", err)
 		}
 		defer conn.Close()
-
-		// Wait for initial connection message
-		var connMsg Message
-		conn.ReadJSON(&connMsg)
 
 		sessionID := "create-lobby-session-123"
 
@@ -268,9 +246,6 @@ func TestLobbyOperations(t *testing.T) {
 		}
 		defer hostConn.Close()
 
-		var connMsg Message
-		hostConn.ReadJSON(&connMsg)
-
 		hostSessionID := "host-session-456"
 		
 		// Host connects
@@ -303,8 +278,6 @@ func TestLobbyOperations(t *testing.T) {
 		}
 		defer guestConn.Close()
 
-		guestConn.ReadJSON(&connMsg)
-
 		guestSessionID := "guest-session-789"
 
 		// Guest connects
@@ -336,10 +309,28 @@ func TestLobbyOperations(t *testing.T) {
 			Type:      TypeLeaveLobby,
 			SessionID: guestSessionID,
 		}
-		leaveResponse := sendAndReceive(t, guestConn, leaveMsg)
+		// Send leave message
+		err = guestConn.WriteJSON(leaveMsg)
+		if err != nil {
+			t.Fatalf("Failed to send leave message: %v", err)
+		}
 
-		if leaveResponse.Type != TypeLobbyLeft {
-			t.Errorf("Expected type %s, got %s", TypeLobbyLeft, leaveResponse.Type)
+		// Read messages until we get LOBBY_LEFT 
+		var leaveResponse Message
+		found := false
+		for i := 0; i < 3; i++ {
+			err = guestConn.ReadJSON(&leaveResponse)
+			if err != nil {
+				t.Fatalf("Failed to read leave response: %v", err)
+			}
+			if leaveResponse.Type == TypeLobbyLeft {
+				found = true
+				break
+			}
+		}
+
+		if !found {
+			t.Errorf("Expected type %s, but didn't receive it", TypeLobbyLeft)
 		}
 	})
 }
@@ -418,10 +409,6 @@ func TestConcurrentConnections(t *testing.T) {
 				return
 			}
 			defer conn.Close()
-
-			// Wait for initial connection message
-			var connMsg Message
-			conn.ReadJSON(&connMsg)
 
 			// Connect
 			connectMsg := Message{

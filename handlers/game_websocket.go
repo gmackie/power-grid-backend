@@ -27,7 +27,9 @@ func HandleGameWebSocket(w http.ResponseWriter, r *http.Request) {
 
 	// Create a new session
 	session := network.NewSession(conn)
-	log.Printf("New game WebSocket connection established: %s", session.ID)
+	log.Printf("[backend] New game WebSocket connection established: %s", session.ID)
 
 	// The session will handle everything from here through its readPump/writePump
+	// When the client sends a CONNECT message with their session ID and game ID,
+	// the session's processMessage will handle it via ProcessGameMessage
 }

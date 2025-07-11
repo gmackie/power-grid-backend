@@ -1,0 +1,51 @@
+# Production Dockerfile with optimizations
+FROM golang:1.21-alpine AS builder
+
+# Install build dependencies
+RUN apk add --no-cache git ca-certificates tzdata
+
+WORKDIR /app
+
+# Copy go mod and sum files
+COPY go.mod go.sum ./
+
+# Download dependencies
+RUN go mod download
+RUN go mod verify
+
+# Copy source code
+COPY . .
+
+# Build the application with optimizations
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
+    -ldflags='-w -s -extldflags "-static"' \
+    -a -installsuffix cgo \
+    -o powergrid_server ./cmd/server
+
+# Final stage - use distroless for minimal attack surface
+FROM gcr.io/distroless/static-debian11:nonroot
+
+# Copy timezone data
+COPY --from=builder /usr/share/zoneinfo /usr/share/zoneinfo
+
+# Copy the binary
+COPY --from=builder /app/powergrid_server /powergrid_server
+
+# Copy maps directory
+COPY --from=builder /app/maps /maps
+
+# Copy default config
+COPY --from=builder /app/config.yml /config.yml
+
+# Expose port
+EXPOSE 4080
+
+# Health check (note: distroless doesn't have shell, so this is minimal)
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD ["/powergrid_server", "--health-check"]
+
+# Run as non-root user (distroless default)
+USER nonroot:nonroot
+
+# Run the application
+ENTRYPOINT ["/powergrid_server"]

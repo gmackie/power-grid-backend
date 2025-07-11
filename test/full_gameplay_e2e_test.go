@@ -1,9 +1,7 @@
 package test
 
 import (
-	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -13,7 +11,6 @@ import (
 	"github.com/gorilla/websocket"
 	"powergrid/handlers"
 	"powergrid/internal/maps"
-	"powergrid/internal/network"
 	"powergrid/pkg/protocol"
 )
 
@@ -251,8 +248,8 @@ func TestFullGameplayFlow(t *testing.T) {
 	lobbyHandler := handlers.NewLobbyHandler()
 	lobbyHandler.SetLogger(&handlers.DefaultLogger{})
 
-	mapManager := maps.NewMapManager()
-	if err := mapManager.LoadMapsFromDirectory("../maps"); err != nil {
+	mapManager := maps.NewMapManager("../maps")
+	if err := mapManager.LoadMaps(); err != nil {
 		t.Logf("Warning: Could not load maps: %v", err)
 	}
 	lobbyHandler.SetMapManager(mapManager)
@@ -434,14 +431,14 @@ func TestFullGameplayFlow(t *testing.T) {
 	})
 }
 
-// TestConcurrentGames tests multiple games running simultaneously
-func TestConcurrentGames(t *testing.T) {
+// TestFullGameplayConcurrentGames tests multiple games running simultaneously
+func TestFullGameplayConcurrentGames(t *testing.T) {
 	// Setup servers
 	lobbyHandler := handlers.NewLobbyHandler()
 	lobbyHandler.SetLogger(&handlers.DefaultLogger{})
 
-	mapManager := maps.NewMapManager()
-	if err := mapManager.LoadMapsFromDirectory("../maps"); err != nil {
+	mapManager := maps.NewMapManager("../maps")
+	if err := mapManager.LoadMaps(); err != nil {
 		t.Logf("Warning: Could not load maps: %v", err)
 	}
 	lobbyHandler.SetMapManager(mapManager)
@@ -453,7 +450,7 @@ func TestConcurrentGames(t *testing.T) {
 	defer gameServer.Close()
 
 	lobbyURL := "ws" + strings.TrimPrefix(lobbyServer.URL, "http")
-	gameURL := "ws" + strings.TrimPrefix(gameServer.URL, "http")
+	_ = "ws" + strings.TrimPrefix(gameServer.URL, "http") // gameURL not used in this test
 
 	t.Run("MultipleSimultaneousGames", func(t *testing.T) {
 		numGames := 3
@@ -522,8 +519,8 @@ func TestGameReconnection(t *testing.T) {
 	lobbyHandler := handlers.NewLobbyHandler()
 	lobbyHandler.SetLogger(&handlers.DefaultLogger{})
 
-	mapManager := maps.NewMapManager()
-	if err := mapManager.LoadMapsFromDirectory("../maps"); err != nil {
+	mapManager := maps.NewMapManager("../maps")
+	if err := mapManager.LoadMaps(); err != nil {
 		t.Logf("Warning: Could not load maps: %v", err)
 	}
 	lobbyHandler.SetMapManager(mapManager)
@@ -547,7 +544,7 @@ func TestGameReconnection(t *testing.T) {
 			t.Fatalf("Failed to connect to lobby: %v", err)
 		}
 
-		lobbyID, err := host.CreateLobby("Reconnection Test", 1)
+		_, err = host.CreateLobby("Reconnection Test", 1)
 		if err != nil {
 			t.Fatalf("Failed to create lobby: %v", err)
 		}

@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: powergrid
+  labels:
+    name: powergrid
+    app: powergrid-game

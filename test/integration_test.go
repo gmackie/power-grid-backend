@@ -1,7 +1,6 @@
 package test
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -135,8 +134,8 @@ func TestFullGameFlow(t *testing.T) {
 	handler.SetLogger(&handlers.DefaultLogger{})
 	
 	// Create map manager and load maps
-	mapManager := maps.NewMapManager()
-	if err := mapManager.LoadMapsFromDirectory("../maps"); err != nil {
+	mapManager := maps.NewMapManager("../maps")
+	if err := mapManager.LoadMaps(); err != nil {
 		t.Logf("Warning: Could not load maps from ../maps: %v", err)
 	}
 	handler.SetMapManager(mapManager)
@@ -363,8 +362,8 @@ func TestConcurrentGames(t *testing.T) {
 	handler := handlers.NewLobbyHandler()
 	handler.SetLogger(&handlers.DefaultLogger{})
 	
-	mapManager := maps.NewMapManager()
-	if err := mapManager.LoadMapsFromDirectory("../maps"); err != nil {
+	mapManager := maps.NewMapManager("../maps")
+	if err := mapManager.LoadMaps(); err != nil {
 		t.Logf("Warning: Could not load maps: %v", err)
 	}
 	handler.SetMapManager(mapManager)
