@@ -12,8 +12,9 @@ import (
 
 // GameManager manages all active games
 type GameManager struct {
-	games map[string]*game.Game
-	mutex sync.RWMutex
+	games         map[string]*game.Game
+	mutex         sync.RWMutex
+	analyticsHook *AnalyticsHook
 }
 
 // Global game manager instance
@@ -25,6 +26,13 @@ func init() {
 	}
 }
 
+// SetAnalyticsHook sets the analytics hook for the game manager
+func (gm *GameManager) SetAnalyticsHook(hook *AnalyticsHook) {
+	gm.mutex.Lock()
+	defer gm.mutex.Unlock()
+	gm.analyticsHook = hook
+}
+
 // CreateGame creates a new game
 func (gm *GameManager) CreateGame(name, mapName string) (*game.Game, error) {
 	gm.mutex.Lock()
@@ -34,6 +42,11 @@ func (gm *GameManager) CreateGame(name, mapName string) (*game.Game, error) {
 	newGame, err := game.NewGame(gameID, name, mapName)
 	if err != nil {
 		return nil, err
+	}
+
+	// Setup analytics if available
+	if gm.analyticsHook != nil {
+		gm.analyticsHook.SetupGameAnalytics(newGame)
 	}
 
 	gm.games[gameID] = newGame

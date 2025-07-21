@@ -30,8 +30,9 @@ type Game struct {
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
 
-	mutex    sync.RWMutex
-	sessions map[string]SessionInterface
+	mutex            sync.RWMutex
+	sessions         map[string]SessionInterface
+	analyticsHandler func(event string, data interface{})
 }
 
 // NewGame creates a new game instance
@@ -66,6 +67,13 @@ func NewGame(id, name string, mapName string) (*Game, error) {
 	return game, nil
 }
 
+// SetAnalyticsHandler sets the analytics event handler
+func (g *Game) SetAnalyticsHandler(handler func(event string, data interface{})) {
+	g.mutex.Lock()
+	defer g.mutex.Unlock()
+	g.analyticsHandler = handler
+}
+
 // AddPlayer adds a new player to the game
 func (g *Game) AddPlayer(id, name, color string, session SessionInterface) error {
 	g.mutex.Lock()
@@ -93,6 +101,16 @@ func (g *Game) AddPlayer(id, name, color string, session SessionInterface) error
 	g.sessions[id] = session
 
 	g.UpdatedAt = time.Now()
+	
+	// Send analytics event
+	if g.analyticsHandler != nil {
+		g.analyticsHandler("player_joined", map[string]interface{}{
+			"game_id":     g.ID,
+			"player_id":   id,
+			"player_name": name,
+		})
+	}
+	
 	return nil
 }
 

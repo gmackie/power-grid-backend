@@ -10,7 +10,9 @@
       "Bash(make test:*)",
       "Bash(go get:*)",
       "Bash(grep:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(go mod:*)",
+      "Bash(make:*)"
     ],
     "deny": []
   }

@@ -1,0 +1,5 @@
+*.log
+ai_client
+powergrid_server_db
+powergrid_server
+data/*

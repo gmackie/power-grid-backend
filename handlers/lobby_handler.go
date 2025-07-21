@@ -127,6 +127,11 @@ func (h *LobbyHandler) SetMapManager(mapManager *maps.MapManager) {
 	h.mapManager = mapManager
 }
 
+// GetLobbyManager returns the lobby manager instance
+func (h *LobbyHandler) GetLobbyManager() *models.LobbyManager {
+	return h.lobbyManager
+}
+
 // StartSessionCleanup starts a goroutine that periodically cleans up inactive sessions
 func (h *LobbyHandler) StartSessionCleanup(interval time.Duration, maxInactivity time.Duration) {
 	h.cleanupStop = make(chan struct{})

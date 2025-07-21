@@ -3,7 +3,7 @@
 # Server Settings
 server:
   host: "0.0.0.0"
-  port: 8080
+  port: 5080
   environment: "production"  # development, staging, production
   
 # WebSocket Configuration
@@ -79,7 +79,7 @@ performance:
 development:
   server:
     host: "localhost"
-    port: 8080
+    port: 5080
   logging:
     level: "debug"
     format: "text"

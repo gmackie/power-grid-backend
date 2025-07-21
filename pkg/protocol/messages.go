@@ -40,6 +40,9 @@ const (
 	MsgPhaseChange  MessageType = "PHASE_CHANGE"
 	MsgTurnChange   MessageType = "TURN_CHANGE"
 	MsgPlayerJoined MessageType = "PLAYER_JOINED"
+	
+	// AI messages
+	MsgAIDecision MessageType = "AI_DECISION"
 )
 
 // Game status values

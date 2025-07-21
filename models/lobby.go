@@ -48,6 +48,7 @@ type Lobby struct {
 	MaxPlayers int                `json:"max_players"`
 	MapID      string             `json:"map_id"`
 	CreatedAt  time.Time          `json:"created_at"`
+	IsAIOnly   bool               `json:"is_ai_only"`
 	UpdatedAt  time.Time          `json:"updated_at"`
 	Password   string             `json:"-"` // Not serialized to JSON
 	mu         sync.Mutex         `json:"-"` // For thread safety
