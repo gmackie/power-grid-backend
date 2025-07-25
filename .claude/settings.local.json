@@ -12,7 +12,10 @@
       "Bash(grep:*)",
       "Bash(git add:*)",
       "Bash(go mod:*)",
-      "Bash(make:*)"
+      "Bash(make:*)",
+      "Bash(touch:*)",
+      "Bash(mkdir:*)",
+      "Bash(git push:*)"
     ],
     "deny": []
   }

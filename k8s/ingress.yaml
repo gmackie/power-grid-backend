@@ -1,0 +1,60 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: power-grid-backend
+  namespace: production
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/websocket-services: "power-grid-backend"
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/upstream-keepalive-timeout: "600"
+spec:
+  tls:
+  - hosts:
+    - ws.power-grid.gmac.io
+    secretName: power-grid-backend-tls
+  rules:
+  - host: ws.power-grid.gmac.io
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: power-grid-backend
+            port:
+              number: 4080
+---
+# Staging ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: power-grid-backend
+  namespace: staging
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-staging
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/websocket-services: "power-grid-backend"
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/upstream-keepalive-timeout: "600"
+spec:
+  tls:
+  - hosts:
+    - staging-ws.power-grid.gmac.io
+    secretName: power-grid-backend-staging-tls
+  rules:
+  - host: staging-ws.power-grid.gmac.io
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: power-grid-backend
+            port:
+              number: 4080

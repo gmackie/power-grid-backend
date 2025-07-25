@@ -1,0 +1,110 @@
+name: Deploy Power Grid Backend to K3s
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    types: [ opened, synchronize ]
+
+env:
+  REGISTRY: ci.gmac.io
+  IMAGE_NAME: mackieg/power-grid-backend
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.21'
+
+    - name: Run tests
+      run: |
+        go mod download
+        go test -v ./...
+
+  build-and-deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Log in to Gitea Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ gitea.actor }}
+        password: ${{ secrets.GITEATOKEN }}
+
+    - name: Determine deployment environment
+      id: deployment
+      run: |
+        if [[ "${{ github.ref }}" == "refs/heads/main" ]] || [[ "${{ github.ref }}" == "refs/heads/master" ]]; then
+          echo "environment=production" >> $GITHUB_OUTPUT
+          echo "namespace=production" >> $GITHUB_OUTPUT
+          echo "replicas=2" >> $GITHUB_OUTPUT
+          echo "url=ws.power-grid.gmac.io" >> $GITHUB_OUTPUT
+          echo "tag=latest" >> $GITHUB_OUTPUT
+        else
+          PR_NUM=${{ github.event.pull_request.number }}
+          echo "environment=staging" >> $GITHUB_OUTPUT
+          echo "namespace=staging" >> $GITHUB_OUTPUT
+          echo "replicas=1" >> $GITHUB_OUTPUT
+          echo "url=staging-ws.power-grid.gmac.io" >> $GITHUB_OUTPUT
+          echo "tag=pr-${PR_NUM}" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        push: true
+        tags: |
+          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.deployment.outputs.tag }}
+        cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache
+        cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache,mode=max
+
+    - name: Deploy to K3s
+      env:
+        KUBECONFIG_CONTENT: ${{ secrets.KUBECONFIG }}
+      run: |
+        # Setup kubeconfig
+        echo "$KUBECONFIG_CONTENT" | base64 -d > /tmp/kubeconfig
+        export KUBECONFIG=/tmp/kubeconfig
+        
+        # Apply deployment manifests
+        kubectl apply -f k8s/deployment.yaml -n ${{ steps.deployment.outputs.namespace }}
+        kubectl apply -f k8s/ingress.yaml
+        
+        # Update image
+        kubectl set image deployment/power-grid-backend \
+          server=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} \
+          -n ${{ steps.deployment.outputs.namespace }}
+        
+        # Update replicas based on environment
+        kubectl scale deployment/power-grid-backend --replicas=${{ steps.deployment.outputs.replicas }} \
+          -n ${{ steps.deployment.outputs.namespace }}
+        
+        # Wait for deployment
+        kubectl rollout status deployment/power-grid-backend \
+          -n ${{ steps.deployment.outputs.namespace }} \
+          --timeout=300s
+        
+        echo "✅ Power Grid Backend deployed to wss://${{ steps.deployment.outputs.url }}"
+
+    - name: Test WebSocket connectivity
+      if: success()
+      run: |
+        # Wait for service to be ready
+        sleep 30
+        
+        # Test WebSocket endpoint
+        echo "Testing WebSocket connectivity at wss://${{ steps.deployment.outputs.url }}"
+        curl -s -o /dev/null -w "%{http_code}" https://${{ steps.deployment.outputs.url }} || true
