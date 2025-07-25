@@ -3,3 +3,8 @@ ai_client
 powergrid_server_db
 powergrid_server
 data/*
+
+# Sensitive files
+kubeconfig-base64.txt
+*-secrets.sh
+.env
