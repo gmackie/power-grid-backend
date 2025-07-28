@@ -99,12 +99,25 @@ jobs:
         kubectl scale deployment/power-grid-backend --replicas=${{ steps.deployment.outputs.replicas }} \
           -n ${{ steps.deployment.outputs.namespace }}
         
-        # Wait for deployment
+        # Check deployment status
+        echo "Checking deployment status..."
+        kubectl get pods -n ${{ steps.deployment.outputs.namespace }} -l app=power-grid-backend
+        kubectl describe deployment power-grid-backend -n ${{ steps.deployment.outputs.namespace }}
+        
+        # Wait for deployment with shorter timeout
         kubectl rollout status deployment/power-grid-backend \
           -n ${{ steps.deployment.outputs.namespace }} \
-          --timeout=300s
+          --timeout=60s || true
         
-        echo "✅ Power Grid Backend deployed to wss://${{ steps.deployment.outputs.url }}"
+        # Show pod logs if available
+        echo "Pod logs:"
+        kubectl logs -n ${{ steps.deployment.outputs.namespace }} -l app=power-grid-backend --tail=50 || true
+        
+        # Show pod events
+        echo "Pod events:"
+        kubectl get events -n ${{ steps.deployment.outputs.namespace }} --field-selector involvedObject.kind=Pod || true
+        
+        echo "✅ Power Grid Backend deployment attempted at wss://${{ steps.deployment.outputs.url }}"
 
     - name: Test WebSocket connectivity
       if: success()

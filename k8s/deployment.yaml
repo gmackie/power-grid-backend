@@ -4,7 +4,7 @@ metadata:
   name: power-grid-backend
   namespace: production
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: power-grid-backend
