@@ -12,10 +12,12 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"powergrid/handlers"
 	"powergrid/internal/analytics"
 	"powergrid/internal/database"
 	"powergrid/internal/maps"
+	"powergrid/internal/metrics"
 	"powergrid/internal/network"
 	"powergrid/pkg/config"
 	"powergrid/pkg/logger"
@@ -63,10 +65,17 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, `{"name": "Power Grid Game Server", "version": "0.1.0", "status": "running"}`)
 }
 
-// Health check handler
+// Health check handler - basic liveness check
 func healthHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	fmt.Fprintf(w, `{"status": "healthy"}`)
+}
+
+// Ready handler - readiness check
+func readyHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	// Could add more checks here (database, dependencies, etc.)
+	fmt.Fprintf(w, `{"status": "ready"}`)
 }
 
 func main() {
@@ -226,6 +235,8 @@ func main() {
 	// Register handlers
 	http.HandleFunc("/", homeHandler)
 	http.HandleFunc("/health", healthHandler)
+	http.HandleFunc("/ready", readyHandler)
+	http.Handle("/metrics", promhttp.Handler())
 	http.HandleFunc("/maps", func(w http.ResponseWriter, r *http.Request) {
 		handlers.HandleMapsAPI(w, r, mapManager)
 	})

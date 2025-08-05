@@ -9,8 +9,10 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
+	"github.com/prometheus/client_golang/prometheus"
 
 	"powergrid/internal/maps"
+	"powergrid/internal/metrics"
 	"powergrid/internal/network"
 	"powergrid/models"
 )
@@ -201,6 +203,11 @@ func (h *LobbyHandler) HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 	// The actual session ID will be determined when the client sends its first message
 	tempSessionID := uuid.New().String()
 	h.logger.Printf("[backend] New WebSocket connection established (temp ID: %s)", tempSessionID)
+	
+	// Track metrics
+	metrics.ActiveConnections.Inc()
+	metrics.TotalConnections.Inc()
+	defer metrics.ActiveConnections.Dec()
 
 	// Don't send initial connected message - wait for client to identify itself
 	
@@ -342,6 +349,11 @@ func (h *LobbyHandler) processMessage(conn *websocket.Conn, sessionID string, me
 	h.mu.Unlock()
 	
 	h.logger.Printf("[backend] Processing message type %s with sessionID: %s", message.Type, sessionID)
+	
+	// Track metrics
+	metrics.MessagesReceived.WithLabelValues(string(message.Type)).Inc()
+	timer := prometheus.NewTimer(metrics.MessageProcessingDuration.WithLabelValues(string(message.Type)))
+	defer timer.ObserveDuration()
 	
 	switch message.Type {
 	case TypeConnect:

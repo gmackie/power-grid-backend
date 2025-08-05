@@ -15,7 +15,9 @@
       "Bash(make:*)",
       "Bash(touch:*)",
       "Bash(mkdir:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(find:*)",
+      "Bash(git commit:*)"
     ],
     "deny": []
   }
