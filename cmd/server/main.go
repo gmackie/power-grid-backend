@@ -17,8 +17,9 @@ import (
 	"powergrid/internal/analytics"
 	"powergrid/internal/database"
 	"powergrid/internal/maps"
-	"powergrid/internal/metrics"
+	_ "powergrid/internal/metrics"
 	"powergrid/internal/network"
+	"powergrid/internal/otel"
 	"powergrid/pkg/config"
 	"powergrid/pkg/logger"
 )
@@ -249,10 +250,10 @@ func main() {
 	// Register simulated games routes
 	simulatedGamesManager.RegisterRoutes(http.DefaultServeMux)
 
-	// Create HTTP server
+	// Create HTTP server with OTel middleware
 	srv := &http.Server{
 		Addr:         serverAddr,
-		Handler:      nil, // Use DefaultServeMux
+		Handler:      otel.Middleware(http.DefaultServeMux),
 		ReadTimeout:  cfg.WebSocket.ReadTimeout,
 		WriteTimeout: cfg.WebSocket.WriteTimeout,
 		IdleTimeout:  120 * time.Second,
