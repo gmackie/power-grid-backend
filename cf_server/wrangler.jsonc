@@ -1,0 +1,30 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "power-grid-server",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-22",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": { "enabled": true },
+  "vars": {
+    "SERVER_NAME": "Power Grid Game Server",
+    "SERVER_VERSION": "0.2.0",
+    "SESSION_IDLE_MINUTES": "30"
+  },
+  "durable_objects": {
+    "bindings": [
+      { "name": "LOBBY_HUB", "class_name": "LobbyHubDO" },
+      { "name": "GAME", "class_name": "GameDO" }
+    ]
+  },
+  "migrations": [
+    { "tag": "v1", "new_sqlite_classes": ["LobbyHubDO", "GameDO"] }
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "powergrid",
+      "database_id": "REPLACE_WITH_D1_DATABASE_ID",
+      "migrations_dir": "migrations"
+    }
+  ]
+}

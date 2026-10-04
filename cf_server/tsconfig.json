@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": [
+      "ES2023"
+    ],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "types": [
+      "@cloudflare/workers-types/experimental"
+    ],
+    "strict": true,
+    "exactOptionalPropertyTypes": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "resolveJsonModule": true,
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    },
+    "allowImportingTsExtensions": true
+  },
+  "include": [
+    "src/**/*.ts",
+    "test/**/*.ts",
+    "scripts/**/*.mjs"
+  ]
+}
