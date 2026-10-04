@@ -1,3 +1,4 @@
+import { createLobbyId } from "../domain/lobby-id.ts"
 /**
  * Single Durable Object ("global") implementing the `/ws` lobby protocol from
  * handlers/lobby_handler.go, plus a relay for bare `/game` sockets whose target game is
@@ -284,7 +285,7 @@ export class LobbyHubDO extends DurableObject<Env> {
         if (session.lobby_id) await this.leaveLobby(sessionId, session)
         const now = new Date().toISOString()
         const lobby: Lobby = {
-          id: crypto.randomUUID(),
+          id: createLobbyId(id => Object.hasOwn(this.lobbies, id)),
           name,
           status: "waiting",
           players: {
@@ -307,7 +308,8 @@ export class LobbyHubDO extends DurableObject<Env> {
       case C.JOIN_LOBBY: {
         if (!session) return this.error(ws, sessionId, Err.NoSession)
         const d = Schema.decodeUnknownOption(JoinLobbyData)(data)
-        const lobbyId = d._tag === "Some" ? d.value.lobby_id : ""
+        const requestedId = d._tag === "Some" ? d.value.lobby_id.trim() : ""
+        const lobbyId = requestedId.length === 6 ? requestedId.toUpperCase() : requestedId
         if (!lobbyId) return this.error(ws, sessionId, Err.LobbyIdRequired)
         const lobby = this.lobbies[lobbyId]
         if (!lobby) return this.error(ws, sessionId, Err.LobbyNotFound)

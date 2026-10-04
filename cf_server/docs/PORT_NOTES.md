@@ -50,6 +50,11 @@ Analytics `/api/*`, admin `/admin/*`, simulated `/api/admin/simulated/*`: see §
 
 `Lobby`: `{id, name, status: "waiting"|"starting"|"in_game"|"ended", players: {[player_id]: LobbyPlayer}, messages: LobbyMessage[], max_players, map_id, created_at (RFC3339Nano), updated_at}`.
 `LobbyPlayer`: `{id, name, is_host, is_ready, joined_at}`. Host starts `is_ready:true`; joiners `false`.
+New lobby IDs are six-character codes using `ABCDEFGHJKLMNPQRSTUVWXYZ23456789`.
+Codes are randomly generated and checked against existing lobbies before allocation.
+Joining accepts lowercase codes and surrounding whitespace; existing UUID lobby IDs remain valid.
+Game, player, and session IDs retain their existing formats.
+
 `LobbyMessage`: `{id (uuid), player_id, player_name, content, created_at}`. System: `player_id:"system"`, `player_name:"System"`.
 System texts: `"Lobby created. Waiting for players..."`, `"<n> joined the lobby"`, `"<n> left the lobby"`, `"<n> is now the host"`, `"<n> is ready"`, `"<n> is not ready"`, `"Game is starting..."`.
 `LobbySummary`: `{id, name, status, player_count, max_players, map_id, has_password, created_at}`.

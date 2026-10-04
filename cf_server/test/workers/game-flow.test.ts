@@ -42,6 +42,7 @@ describe("lobby -> game over WebSockets", () => {
     alice.send({ type: "CREATE_LOBBY", session_id: "sess-alice", data: { lobby_name: "Room", max_players: 4, map_id: "usa" } })
     const created = await alice.until("LOBBY_CREATED")
     const lobby = data(created)["lobby"] as Record<string, any>
+    expect(lobby["id"]).toMatch(/^[A-HJ-NP-Z2-9]{6}$/)
     expect(lobby["status"]).toBe("waiting")
     expect(lobby["players"][aliceId]).toMatchObject({ is_host: true, is_ready: true, name: "Alice" })
     expect(lobby["messages"][0]["content"]).toBe("Lobby created. Waiting for players...")
@@ -50,7 +51,7 @@ describe("lobby -> game over WebSockets", () => {
     expect(data(listed)["lobbies"]).toEqual([expect.objectContaining({ id: lobby["id"], player_count: 1, max_players: 4, has_password: false })])
 
     // Join + ready
-    bob.send({ type: "JOIN_LOBBY", session_id: "sess-bob", data: { lobby_id: lobby["id"] } })
+    bob.send({ type: "JOIN_LOBBY", session_id: "sess-bob", data: { lobby_id: ` ${lobby["id"].toLowerCase()} ` } })
     const joined = await bob.until("LOBBY_JOINED")
     expect(Object.keys(data(joined)["lobby"]["players"])).toHaveLength(2)
     const updated = await alice.until("LOBBY_UPDATED")
