@@ -52,6 +52,17 @@ Additive fields on `GAME_STATE` (clients ignore unknown keys): `step`, `auction`
 `connected`, `has_passed`. Additive message types: `STEP_CHANGE`, `PLANT_BOUGHT`, `GAME_END`.
 `power_plants` now carries the 8 (step 3: 6) market plants instead of the whole deck.
 
+## Board lab (agent simulation)
+
+```bash
+pnpm sim -- --games 40 --players 4 --evolve 6          # all boards → sim/reports/<timestamp>.md + .json
+pnpm sim -- --maps megalopolis,frontier --games 100
+```
+
+`src/sim/bots.ts` holds bot archetypes (balanced, expander, hoarder, sniper, greenie, random)
+and an evolvable weighted heuristic; `src/sim/run.ts` plays full games against the pure engine
+and computes per-board metrics plus a composite interest score. See `../maps/README.md`.
+
 ## Develop
 
 ```bash

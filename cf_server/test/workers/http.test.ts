@@ -17,7 +17,7 @@ describe("HTTP API", () => {
     expect(res.headers.get("Access-Control-Allow-Origin")).toBe("*")
     const body = (await res.json()) as { maps: Array<Record<string, unknown>> }
     const ids = body.maps.map((m) => m["id"]).sort()
-    expect(ids).toEqual(["germany", "usa"])
+    expect(ids).toEqual(expect.arrayContaining(["germany", "usa"]))
     const usa = body.maps.find((m) => m["id"] === "usa")!
     expect(usa["playerCount"]).toEqual({ min: 2, max: 6, recommended: [3, 4, 5, 6] })
     expect(usa["cityCount"]).toBe(36)

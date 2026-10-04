@@ -1,0 +1,625 @@
+{
+  "id": "frontier",
+  "name": "Frontier",
+  "description": "A long march west to east: cheap and crowded on the Old Coast, costly and empty on the Far Shore. Uranium is plentiful out there.",
+  "playerCount": {
+    "min": 2,
+    "max": 6,
+    "recommended": [
+      2,
+      3,
+      4
+    ]
+  },
+  "regions": [
+    {
+      "id": "old_coast",
+      "name": "Old Coast",
+      "color": "#4169E1"
+    },
+    {
+      "id": "heartland",
+      "name": "Heartland",
+      "color": "#32CD32"
+    },
+    {
+      "id": "the_divide",
+      "name": "The Divide",
+      "color": "#FFD700"
+    },
+    {
+      "id": "badlands",
+      "name": "Badlands",
+      "color": "#FF6347"
+    },
+    {
+      "id": "far_shore",
+      "name": "Far Shore",
+      "color": "#9932CC"
+    }
+  ],
+  "cities": [
+    {
+      "id": "harrowgate",
+      "name": "Harrowgate",
+      "region": "old_coast",
+      "x": 0.188,
+      "y": 0.551
+    },
+    {
+      "id": "portsend",
+      "name": "Portsend",
+      "region": "old_coast",
+      "x": 0.14,
+      "y": 0.761
+    },
+    {
+      "id": "kingsbury",
+      "name": "Kingsbury",
+      "region": "old_coast",
+      "x": 0.084,
+      "y": 0.306
+    },
+    {
+      "id": "millford",
+      "name": "Millford",
+      "region": "old_coast",
+      "x": 0.187,
+      "y": 0.349
+    },
+    {
+      "id": "ashby",
+      "name": "Ashby",
+      "region": "old_coast",
+      "x": 0.157,
+      "y": 0.459
+    },
+    {
+      "id": "stonebridge",
+      "name": "Stonebridge",
+      "region": "old_coast",
+      "x": 0.163,
+      "y": 0.657
+    },
+    {
+      "id": "lowmarsh",
+      "name": "Lowmarsh",
+      "region": "old_coast",
+      "x": 0.06,
+      "y": 0.545
+    },
+    {
+      "id": "brightwater",
+      "name": "Brightwater",
+      "region": "old_coast",
+      "x": 0.083,
+      "y": 0.701
+    },
+    {
+      "id": "wheatridge",
+      "name": "Wheatridge",
+      "region": "heartland",
+      "x": 0.372,
+      "y": 0.749
+    },
+    {
+      "id": "silo_city",
+      "name": "Silo City",
+      "region": "heartland",
+      "x": 0.345,
+      "y": 0.434
+    },
+    {
+      "id": "barrowfield",
+      "name": "Barrowfield",
+      "region": "heartland",
+      "x": 0.305,
+      "y": 0.309
+    },
+    {
+      "id": "cornwell",
+      "name": "Cornwell",
+      "region": "heartland",
+      "x": 0.38,
+      "y": 0.538
+    },
+    {
+      "id": "prairie_rose",
+      "name": "Prairie Rose",
+      "region": "heartland",
+      "x": 0.293,
+      "y": 0.817
+    },
+    {
+      "id": "hollins",
+      "name": "Hollins",
+      "region": "heartland",
+      "x": 0.269,
+      "y": 0.486
+    },
+    {
+      "id": "grange",
+      "name": "Grange",
+      "region": "heartland",
+      "x": 0.336,
+      "y": 0.198
+    },
+    {
+      "id": "summit",
+      "name": "Summit",
+      "region": "the_divide",
+      "x": 0.476,
+      "y": 0.51
+    },
+    {
+      "id": "snowline",
+      "name": "Snowline",
+      "region": "the_divide",
+      "x": 0.443,
+      "y": 0.592
+    },
+    {
+      "id": "pass_fork",
+      "name": "Pass Fork",
+      "region": "the_divide",
+      "x": 0.49,
+      "y": 0.377
+    },
+    {
+      "id": "cragmoor",
+      "name": "Cragmoor",
+      "region": "the_divide",
+      "x": 0.537,
+      "y": 0.569
+    },
+    {
+      "id": "timberline",
+      "name": "Timberline",
+      "region": "the_divide",
+      "x": 0.515,
+      "y": 0.252
+    },
+    {
+      "id": "ridgeback",
+      "name": "Ridgeback",
+      "region": "the_divide",
+      "x": 0.482,
+      "y": 0.78
+    },
+    {
+      "id": "dustbowl",
+      "name": "Dustbowl",
+      "region": "badlands",
+      "x": 0.743,
+      "y": 0.172
+    },
+    {
+      "id": "red_mesa",
+      "name": "Red Mesa",
+      "region": "badlands",
+      "x": 0.666,
+      "y": 0.563
+    },
+    {
+      "id": "bonecreek",
+      "name": "Bonecreek",
+      "region": "badlands",
+      "x": 0.753,
+      "y": 0.631
+    },
+    {
+      "id": "sunstroke",
+      "name": "Sunstroke",
+      "region": "badlands",
+      "x": 0.686,
+      "y": 0.794
+    },
+    {
+      "id": "gulch",
+      "name": "Gulch",
+      "region": "badlands",
+      "x": 0.78,
+      "y": 0.362
+    },
+    {
+      "id": "tumbleton",
+      "name": "Tumbleton",
+      "region": "badlands",
+      "x": 0.736,
+      "y": 0.505
+    },
+    {
+      "id": "lastlight",
+      "name": "Lastlight",
+      "region": "far_shore",
+      "x": 0.895,
+      "y": 0.721
+    },
+    {
+      "id": "edgewater",
+      "name": "Edgewater",
+      "region": "far_shore",
+      "x": 0.834,
+      "y": 0.686
+    },
+    {
+      "id": "new_hope",
+      "name": "New Hope",
+      "region": "far_shore",
+      "x": 0.899,
+      "y": 0.636
+    },
+    {
+      "id": "terminus",
+      "name": "Terminus",
+      "region": "far_shore",
+      "x": 0.829,
+      "y": 0.435
+    },
+    {
+      "id": "outpost_nine",
+      "name": "Outpost Nine",
+      "region": "far_shore",
+      "x": 0.897,
+      "y": 0.205
+    }
+  ],
+  "connections": [
+    {
+      "from": "ashby",
+      "to": "harrowgate",
+      "cost": 8
+    },
+    {
+      "from": "stonebridge",
+      "to": "harrowgate",
+      "cost": 8
+    },
+    {
+      "from": "brightwater",
+      "to": "stonebridge",
+      "cost": 7
+    },
+    {
+      "from": "portsend",
+      "to": "brightwater",
+      "cost": 8
+    },
+    {
+      "from": "millford",
+      "to": "ashby",
+      "cost": 8
+    },
+    {
+      "from": "kingsbury",
+      "to": "millford",
+      "cost": 8
+    },
+    {
+      "from": "lowmarsh",
+      "to": "harrowgate",
+      "cost": 8
+    },
+    {
+      "from": "portsend",
+      "to": "stonebridge",
+      "cost": 7
+    },
+    {
+      "from": "ashby",
+      "to": "lowmarsh",
+      "cost": 8
+    },
+    {
+      "from": "stonebridge",
+      "to": "lowmarsh",
+      "cost": 8
+    },
+    {
+      "from": "lowmarsh",
+      "to": "brightwater",
+      "cost": 8
+    },
+    {
+      "from": "kingsbury",
+      "to": "ashby",
+      "cost": 8
+    },
+    {
+      "from": "harrowgate",
+      "to": "brightwater",
+      "cost": 8
+    },
+    {
+      "from": "ashby",
+      "to": "stonebridge",
+      "cost": 8
+    },
+    {
+      "from": "prairie_rose",
+      "to": "wheatridge",
+      "cost": 9
+    },
+    {
+      "from": "cornwell",
+      "to": "wheatridge",
+      "cost": 12
+    },
+    {
+      "from": "silo_city",
+      "to": "cornwell",
+      "cost": 10
+    },
+    {
+      "from": "hollins",
+      "to": "silo_city",
+      "cost": 8
+    },
+    {
+      "from": "barrowfield",
+      "to": "silo_city",
+      "cost": 11
+    },
+    {
+      "from": "grange",
+      "to": "barrowfield",
+      "cost": 10
+    },
+    {
+      "from": "cornwell",
+      "to": "hollins",
+      "cost": 11
+    },
+    {
+      "from": "barrowfield",
+      "to": "hollins",
+      "cost": 12
+    },
+    {
+      "from": "silo_city",
+      "to": "grange",
+      "cost": 12
+    },
+    {
+      "from": "barrowfield",
+      "to": "cornwell",
+      "cost": 12
+    },
+    {
+      "from": "wheatridge",
+      "to": "hollins",
+      "cost": 12
+    },
+    {
+      "from": "cornwell",
+      "to": "prairie_rose",
+      "cost": 12
+    },
+    {
+      "from": "cragmoor",
+      "to": "summit",
+      "cost": 10
+    },
+    {
+      "from": "snowline",
+      "to": "summit",
+      "cost": 11
+    },
+    {
+      "from": "pass_fork",
+      "to": "summit",
+      "cost": 13
+    },
+    {
+      "from": "timberline",
+      "to": "pass_fork",
+      "cost": 15
+    },
+    {
+      "from": "ridgeback",
+      "to": "snowline",
+      "cost": 16
+    },
+    {
+      "from": "snowline",
+      "to": "cragmoor",
+      "cost": 12
+    },
+    {
+      "from": "pass_fork",
+      "to": "cragmoor",
+      "cost": 16
+    },
+    {
+      "from": "cragmoor",
+      "to": "ridgeback",
+      "cost": 16
+    },
+    {
+      "from": "snowline",
+      "to": "pass_fork",
+      "cost": 16
+    },
+    {
+      "from": "summit",
+      "to": "timberline",
+      "cost": 16
+    },
+    {
+      "from": "gulch",
+      "to": "dustbowl",
+      "cost": 20
+    },
+    {
+      "from": "tumbleton",
+      "to": "gulch",
+      "cost": 18
+    },
+    {
+      "from": "red_mesa",
+      "to": "tumbleton",
+      "cost": 15
+    },
+    {
+      "from": "bonecreek",
+      "to": "red_mesa",
+      "cost": 16
+    },
+    {
+      "from": "sunstroke",
+      "to": "bonecreek",
+      "cost": 17
+    },
+    {
+      "from": "bonecreek",
+      "to": "tumbleton",
+      "cost": 16
+    },
+    {
+      "from": "red_mesa",
+      "to": "gulch",
+      "cost": 20
+    },
+    {
+      "from": "red_mesa",
+      "to": "sunstroke",
+      "cost": 20
+    },
+    {
+      "from": "bonecreek",
+      "to": "gulch",
+      "cost": 20
+    },
+    {
+      "from": "sunstroke",
+      "to": "tumbleton",
+      "cost": 20
+    },
+    {
+      "from": "edgewater",
+      "to": "lastlight",
+      "cost": 15
+    },
+    {
+      "from": "new_hope",
+      "to": "edgewater",
+      "cost": 14
+    },
+    {
+      "from": "terminus",
+      "to": "new_hope",
+      "cost": 24
+    },
+    {
+      "from": "outpost_nine",
+      "to": "terminus",
+      "cost": 24
+    },
+    {
+      "from": "lastlight",
+      "to": "new_hope",
+      "cost": 14
+    },
+    {
+      "from": "edgewater",
+      "to": "terminus",
+      "cost": 24
+    },
+    {
+      "from": "lastlight",
+      "to": "terminus",
+      "cost": 24
+    },
+    {
+      "from": "new_hope",
+      "to": "outpost_nine",
+      "cost": 24
+    },
+    {
+      "from": "edgewater",
+      "to": "outpost_nine",
+      "cost": 24
+    },
+    {
+      "from": "harrowgate",
+      "to": "hollins",
+      "cost": 11
+    },
+    {
+      "from": "ashby",
+      "to": "hollins",
+      "cost": 11
+    },
+    {
+      "from": "cornwell",
+      "to": "snowline",
+      "cost": 12
+    },
+    {
+      "from": "cornwell",
+      "to": "summit",
+      "cost": 12
+    },
+    {
+      "from": "cragmoor",
+      "to": "red_mesa",
+      "cost": 16
+    },
+    {
+      "from": "summit",
+      "to": "red_mesa",
+      "cost": 19
+    },
+    {
+      "from": "gulch",
+      "to": "terminus",
+      "cost": 23
+    },
+    {
+      "from": "bonecreek",
+      "to": "edgewater",
+      "cost": 20
+    }
+  ],
+  "gameRules": {
+    "step2Trigger": 7,
+    "step3Trigger": 18,
+    "startingMoney": 45,
+    "resourceSupply": {
+      "coal": 20,
+      "oil": 14,
+      "garbage": 6,
+      "uranium": 6
+    },
+    "earningsTable": [
+      10,
+      22,
+      33,
+      44,
+      54,
+      64,
+      73,
+      82,
+      90,
+      98,
+      105,
+      112,
+      118,
+      124,
+      129,
+      134,
+      138,
+      142,
+      145,
+      148,
+      150
+    ],
+    "winConditions": {
+      "2": 20,
+      "3": 16,
+      "4": 15,
+      "5": 14,
+      "6": 13
+    }
+  }
+}

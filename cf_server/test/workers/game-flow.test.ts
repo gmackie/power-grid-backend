@@ -36,7 +36,7 @@ describe("lobby -> game over WebSockets", () => {
     alice.send({ type: "LIST_MAPS", session_id: "sess-alice" })
     const maps = await alice.next()
     expect(maps.type).toBe("MAPS_LISTED")
-    expect((data(maps)["maps"] as Array<{ id: string }>).map((m) => m.id).sort()).toEqual(["germany", "usa"])
+    expect((data(maps)["maps"] as Array<{ id: string }>).map((m) => m.id).sort()).toEqual(expect.arrayContaining(["germany", "usa"]))
 
     // Create lobby: creator gets LOBBY_CREATED, everyone gets LOBBIES_LISTED
     alice.send({ type: "CREATE_LOBBY", session_id: "sess-alice", data: { lobby_name: "Room", max_players: 4, map_id: "usa" } })

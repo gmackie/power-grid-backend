@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": [
+      "node"
+    ],
+    "lib": [
+      "ES2023"
+    ]
+  },
+  "include": [
+    "src/sim/**/*.ts",
+    "src/domain/**/*.ts",
+    "src/protocol/**/*.ts"
+  ],
+  "exclude": []
+}

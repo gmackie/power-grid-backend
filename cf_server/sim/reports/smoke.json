@@ -1,0 +1,51 @@
+[
+  {
+    "map": "usa",
+    "games": 10,
+    "finishedRate": 1,
+    "avgRounds": 19.3,
+    "avgLeadChanges": 0.2,
+    "avgMargin": 12.4,
+    "avgContested": 0.1,
+    "avgPremium": 2.47,
+    "step3Rate": 1,
+    "winRates": {
+      "sniper": 0.25,
+      "expander": 0.429,
+      "greenie": 0.333,
+      "hoarder": 0.167,
+      "random": 0.25,
+      "balanced": 0
+    },
+    "regionShare": {
+      "northwest": 0.256,
+      "southwest": 0.189,
+      "central": 0.377,
+      "california_nevada": 0.071,
+      "northeast": 0.071,
+      "texas": 0.036
+    },
+    "scarcity": {
+      "Coal": 0,
+      "Oil": 0,
+      "Garbage": 0,
+      "Uranium": 0
+    },
+    "interest": 0.23,
+    "errors": 82,
+    "topRejections": [
+      [
+        "BuyResources: not enough money)])",
+        44
+      ],
+      [
+        "BuyResources: not enough resources available)])",
+        25
+      ],
+      [
+        "BidPlant: not enough money for this bid)])",
+        13
+      ]
+    ]
+  }
+]

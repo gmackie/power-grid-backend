@@ -1,0 +1,222 @@
+[
+  {
+    "map": "archipelago",
+    "games": 40,
+    "finishedRate": 1,
+    "avgRounds": 14.6,
+    "avgLeadChanges": 0.28,
+    "avgMargin": 11.65,
+    "avgContested": 0.82,
+    "avgPremium": 3.5,
+    "step3Rate": 1,
+    "winRates": {
+      "greenie": 0.793,
+      "balanced": 0.043,
+      "sniper": 0.032,
+      "expander": 0.192,
+      "hoarder": 0,
+      "random": 0.435
+    },
+    "regionShare": {
+      "northreach": 0.411,
+      "westmarch_cays": 0.098,
+      "stormcape": 0.104,
+      "greenholm": 0.142,
+      "ember_isle": 0.246
+    },
+    "scarcity": {
+      "Coal": 0,
+      "Oil": 0,
+      "Garbage": 0,
+      "Uranium": 0
+    },
+    "interest": 0.156,
+    "errors": 15,
+    "topRejections": [
+      [
+        "BidPlant: not enough money for this bid",
+        9
+      ],
+      [
+        "BuyResources: not enough storage capacity on your power plants",
+        6
+      ]
+    ]
+  },
+  {
+    "map": "frontier",
+    "games": 40,
+    "finishedRate": 0.925,
+    "avgRounds": 22.3,
+    "avgLeadChanges": 0.17,
+    "avgMargin": 12.28,
+    "avgContested": 0.05,
+    "avgPremium": 1.58,
+    "step3Rate": 1,
+    "winRates": {
+      "greenie": 0.667,
+      "hoarder": 0.069,
+      "sniper": 0.077,
+      "random": 0.379,
+      "balanced": 0.045,
+      "expander": 0.111
+    },
+    "regionShare": {
+      "heartland": 0.449,
+      "the_divide": 0.255,
+      "badlands": 0.104,
+      "old_coast": 0.192
+    },
+    "scarcity": {
+      "Coal": 0,
+      "Oil": 0,
+      "Garbage": 0,
+      "Uranium": 0
+    },
+    "interest": 0.198,
+    "errors": 59,
+    "topRejections": [
+      [
+        "BidPlant: not enough money for this bid",
+        53
+      ],
+      [
+        "BuyResources: not enough storage capacity on your power plants",
+        6
+      ]
+    ]
+  },
+  {
+    "map": "germany",
+    "games": 40,
+    "finishedRate": 0.95,
+    "avgRounds": 20.6,
+    "avgLeadChanges": 0.47,
+    "avgMargin": 9.75,
+    "avgContested": 0.3,
+    "avgPremium": 2.52,
+    "step3Rate": 1,
+    "winRates": {
+      "expander": 0.063,
+      "sniper": 0.143,
+      "random": 0.231,
+      "balanced": 0.038,
+      "greenie": 0.862,
+      "hoarder": 0.038
+    },
+    "regionShare": {
+      "east": 0.216,
+      "central": 0.201,
+      "south": 0.063,
+      "west": 0.289,
+      "north": 0.231
+    },
+    "scarcity": {
+      "Coal": 0,
+      "Oil": 0,
+      "Garbage": 0,
+      "Uranium": 0
+    },
+    "interest": 0.207,
+    "errors": 30,
+    "topRejections": [
+      [
+        "BidPlant: not enough money for this bid",
+        29
+      ],
+      [
+        "BuyResources: not enough storage capacity on your power plants",
+        1
+      ]
+    ]
+  },
+  {
+    "map": "megalopolis",
+    "games": 40,
+    "finishedRate": 0.925,
+    "avgRounds": 19.8,
+    "avgLeadChanges": 0.78,
+    "avgMargin": 7.67,
+    "avgContested": 2.8,
+    "avgPremium": 3.45,
+    "step3Rate": 1,
+    "winRates": {
+      "greenie": 0.655,
+      "balanced": 0.13,
+      "sniper": 0.129,
+      "expander": 0.269,
+      "hoarder": 0,
+      "random": 0.174
+    },
+    "regionShare": {
+      "core": 0.617,
+      "east_sprawl": 0.149,
+      "south_sprawl": 0.103,
+      "west_sprawl": 0.057,
+      "north_sprawl": 0.074
+    },
+    "scarcity": {
+      "Coal": 0,
+      "Oil": 0,
+      "Garbage": 0,
+      "Uranium": 0
+    },
+    "interest": 0.132,
+    "errors": 19,
+    "topRejections": [
+      [
+        "BidPlant: not enough money for this bid",
+        13
+      ],
+      [
+        "BuyResources: not enough storage capacity on your power plants",
+        6
+      ]
+    ]
+  },
+  {
+    "map": "usa",
+    "games": 40,
+    "finishedRate": 0.925,
+    "avgRounds": 21.5,
+    "avgLeadChanges": 0.3,
+    "avgMargin": 12.53,
+    "avgContested": 0.1,
+    "avgPremium": 2.43,
+    "step3Rate": 1,
+    "winRates": {
+      "sniper": 0.172,
+      "expander": 0.185,
+      "greenie": 0.64,
+      "hoarder": 0.033,
+      "random": 0.261,
+      "balanced": 0.154
+    },
+    "regionShare": {
+      "northwest": 0.274,
+      "southwest": 0.185,
+      "central": 0.409,
+      "california_nevada": 0.038,
+      "northeast": 0.07,
+      "texas": 0.024
+    },
+    "scarcity": {
+      "Coal": 0,
+      "Oil": 0,
+      "Garbage": 0,
+      "Uranium": 0
+    },
+    "interest": 0.154,
+    "errors": 22,
+    "topRejections": [
+      [
+        "BidPlant: not enough money for this bid",
+        21
+      ],
+      [
+        "BuyResources: not enough storage capacity on your power plants",
+        1
+      ]
+    ]
+  }
+]

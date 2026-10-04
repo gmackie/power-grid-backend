@@ -1,0 +1,696 @@
+{
+  "id": "archipelago",
+  "name": "Archipelago",
+  "description": "Five islands with cheap local grids and costly ferry crossings. Cash is tight; pick your island.",
+  "playerCount": {
+    "min": 2,
+    "max": 6,
+    "recommended": [
+      3,
+      4,
+      5
+    ]
+  },
+  "regions": [
+    {
+      "id": "northreach",
+      "name": "Northreach",
+      "color": "#4169E1"
+    },
+    {
+      "id": "ember_isle",
+      "name": "Ember Isle",
+      "color": "#FF6347"
+    },
+    {
+      "id": "greenholm",
+      "name": "Greenholm",
+      "color": "#32CD32"
+    },
+    {
+      "id": "westmarch_cays",
+      "name": "Westmarch Cays",
+      "color": "#FFD700"
+    },
+    {
+      "id": "stormcape",
+      "name": "Stormcape",
+      "color": "#9932CC"
+    }
+  ],
+  "cities": [
+    {
+      "id": "gullhaven",
+      "name": "Gullhaven",
+      "region": "northreach",
+      "x": 0.111,
+      "y": 0.213
+    },
+    {
+      "id": "kelpmoor",
+      "name": "Kelpmoor",
+      "region": "northreach",
+      "x": 0.13,
+      "y": 0.157
+    },
+    {
+      "id": "brinefall",
+      "name": "Brinefall",
+      "region": "northreach",
+      "x": 0.285,
+      "y": 0.143
+    },
+    {
+      "id": "tidewatch",
+      "name": "Tidewatch",
+      "region": "northreach",
+      "x": 0.316,
+      "y": 0.266
+    },
+    {
+      "id": "fogmere",
+      "name": "Fogmere",
+      "region": "northreach",
+      "x": 0.112,
+      "y": 0.271
+    },
+    {
+      "id": "saltrock",
+      "name": "Saltrock",
+      "region": "northreach",
+      "x": 0.195,
+      "y": 0.173
+    },
+    {
+      "id": "driftwood",
+      "name": "Driftwood",
+      "region": "northreach",
+      "x": 0.254,
+      "y": 0.282
+    },
+    {
+      "id": "cinderport",
+      "name": "Cinderport",
+      "region": "ember_isle",
+      "x": 0.647,
+      "y": 0.249
+    },
+    {
+      "id": "ashgate",
+      "name": "Ashgate",
+      "region": "ember_isle",
+      "x": 0.673,
+      "y": 0.177
+    },
+    {
+      "id": "lavaquay",
+      "name": "Lavaquay",
+      "region": "ember_isle",
+      "x": 0.627,
+      "y": 0.143
+    },
+    {
+      "id": "basalt",
+      "name": "Basalt",
+      "region": "ember_isle",
+      "x": 0.765,
+      "y": 0.093
+    },
+    {
+      "id": "sootcombe",
+      "name": "Sootcombe",
+      "region": "ember_isle",
+      "x": 0.72,
+      "y": 0.231
+    },
+    {
+      "id": "fumarole",
+      "name": "Fumarole",
+      "region": "ember_isle",
+      "x": 0.716,
+      "y": 0.123
+    },
+    {
+      "id": "kilnbay",
+      "name": "Kilnbay",
+      "region": "ember_isle",
+      "x": 0.842,
+      "y": 0.255
+    },
+    {
+      "id": "mossbridge",
+      "name": "Mossbridge",
+      "region": "greenholm",
+      "x": 0.391,
+      "y": 0.502
+    },
+    {
+      "id": "fernhollow",
+      "name": "Fernhollow",
+      "region": "greenholm",
+      "x": 0.486,
+      "y": 0.591
+    },
+    {
+      "id": "dewhurst",
+      "name": "Dewhurst",
+      "region": "greenholm",
+      "x": 0.496,
+      "y": 0.461
+    },
+    {
+      "id": "sporefield",
+      "name": "Sporefield",
+      "region": "greenholm",
+      "x": 0.598,
+      "y": 0.492
+    },
+    {
+      "id": "lichenby",
+      "name": "Lichenby",
+      "region": "greenholm",
+      "x": 0.421,
+      "y": 0.597
+    },
+    {
+      "id": "vinecross",
+      "name": "Vinecross",
+      "region": "greenholm",
+      "x": 0.528,
+      "y": 0.538
+    },
+    {
+      "id": "bramblewick",
+      "name": "Bramblewick",
+      "region": "greenholm",
+      "x": 0.419,
+      "y": 0.425
+    },
+    {
+      "id": "sunreef",
+      "name": "Sunreef",
+      "region": "westmarch_cays",
+      "x": 0.264,
+      "y": 0.796
+    },
+    {
+      "id": "coralgate",
+      "name": "Coralgate",
+      "region": "westmarch_cays",
+      "x": 0.096,
+      "y": 0.828
+    },
+    {
+      "id": "lagoona",
+      "name": "Lagoona",
+      "region": "westmarch_cays",
+      "x": 0.272,
+      "y": 0.658
+    },
+    {
+      "id": "pearlcove",
+      "name": "Pearlcove",
+      "region": "westmarch_cays",
+      "x": 0.116,
+      "y": 0.695
+    },
+    {
+      "id": "shellhaven",
+      "name": "Shellhaven",
+      "region": "westmarch_cays",
+      "x": 0.162,
+      "y": 0.827
+    },
+    {
+      "id": "palmstead",
+      "name": "Palmstead",
+      "region": "westmarch_cays",
+      "x": 0.341,
+      "y": 0.747
+    },
+    {
+      "id": "sandspit",
+      "name": "Sandspit",
+      "region": "westmarch_cays",
+      "x": 0.197,
+      "y": 0.644
+    },
+    {
+      "id": "galeport",
+      "name": "Galeport",
+      "region": "stormcape",
+      "x": 0.732,
+      "y": 0.736
+    },
+    {
+      "id": "thunderhead",
+      "name": "Thunderhead",
+      "region": "stormcape",
+      "x": 0.67,
+      "y": 0.702
+    },
+    {
+      "id": "squallrock",
+      "name": "Squallrock",
+      "region": "stormcape",
+      "x": 0.89,
+      "y": 0.655
+    },
+    {
+      "id": "lightning_point",
+      "name": "Lightning Point",
+      "region": "stormcape",
+      "x": 0.88,
+      "y": 0.799
+    },
+    {
+      "id": "rainmoor",
+      "name": "Rainmoor",
+      "region": "stormcape",
+      "x": 0.693,
+      "y": 0.635
+    },
+    {
+      "id": "hailstone",
+      "name": "Hailstone",
+      "region": "stormcape",
+      "x": 0.867,
+      "y": 0.727
+    },
+    {
+      "id": "windward",
+      "name": "Windward",
+      "region": "stormcape",
+      "x": 0.788,
+      "y": 0.635
+    }
+  ],
+  "connections": [
+    {
+      "from": "fogmere",
+      "to": "gullhaven",
+      "cost": 4
+    },
+    {
+      "from": "kelpmoor",
+      "to": "gullhaven",
+      "cost": 5
+    },
+    {
+      "from": "saltrock",
+      "to": "kelpmoor",
+      "cost": 7
+    },
+    {
+      "from": "brinefall",
+      "to": "saltrock",
+      "cost": 8
+    },
+    {
+      "from": "driftwood",
+      "to": "saltrock",
+      "cost": 8
+    },
+    {
+      "from": "tidewatch",
+      "to": "driftwood",
+      "cost": 5
+    },
+    {
+      "from": "gullhaven",
+      "to": "saltrock",
+      "cost": 8
+    },
+    {
+      "from": "kelpmoor",
+      "to": "fogmere",
+      "cost": 8
+    },
+    {
+      "from": "brinefall",
+      "to": "tidewatch",
+      "cost": 8
+    },
+    {
+      "from": "fogmere",
+      "to": "saltrock",
+      "cost": 8
+    },
+    {
+      "from": "brinefall",
+      "to": "driftwood",
+      "cost": 8
+    },
+    {
+      "from": "fogmere",
+      "to": "driftwood",
+      "cost": 8
+    },
+    {
+      "from": "tidewatch",
+      "to": "saltrock",
+      "cost": 8
+    },
+    {
+      "from": "sootcombe",
+      "to": "cinderport",
+      "cost": 8
+    },
+    {
+      "from": "ashgate",
+      "to": "sootcombe",
+      "cost": 7
+    },
+    {
+      "from": "lavaquay",
+      "to": "ashgate",
+      "cost": 3
+    },
+    {
+      "from": "fumarole",
+      "to": "ashgate",
+      "cost": 6
+    },
+    {
+      "from": "basalt",
+      "to": "fumarole",
+      "cost": 7
+    },
+    {
+      "from": "kilnbay",
+      "to": "sootcombe",
+      "cost": 8
+    },
+    {
+      "from": "cinderport",
+      "to": "ashgate",
+      "cost": 7
+    },
+    {
+      "from": "lavaquay",
+      "to": "fumarole",
+      "cost": 8
+    },
+    {
+      "from": "cinderport",
+      "to": "lavaquay",
+      "cost": 6
+    },
+    {
+      "from": "sootcombe",
+      "to": "fumarole",
+      "cost": 8
+    },
+    {
+      "from": "ashgate",
+      "to": "basalt",
+      "cost": 8
+    },
+    {
+      "from": "lavaquay",
+      "to": "sootcombe",
+      "cost": 8
+    },
+    {
+      "from": "cinderport",
+      "to": "fumarole",
+      "cost": 8
+    },
+    {
+      "from": "bramblewick",
+      "to": "mossbridge",
+      "cost": 5
+    },
+    {
+      "from": "dewhurst",
+      "to": "bramblewick",
+      "cost": 5
+    },
+    {
+      "from": "vinecross",
+      "to": "dewhurst",
+      "cost": 8
+    },
+    {
+      "from": "fernhollow",
+      "to": "vinecross",
+      "cost": 7
+    },
+    {
+      "from": "lichenby",
+      "to": "fernhollow",
+      "cost": 7
+    },
+    {
+      "from": "sporefield",
+      "to": "vinecross",
+      "cost": 8
+    },
+    {
+      "from": "mossbridge",
+      "to": "lichenby",
+      "cost": 8
+    },
+    {
+      "from": "dewhurst",
+      "to": "sporefield",
+      "cost": 8
+    },
+    {
+      "from": "mossbridge",
+      "to": "dewhurst",
+      "cost": 7
+    },
+    {
+      "from": "lichenby",
+      "to": "vinecross",
+      "cost": 8
+    },
+    {
+      "from": "mossbridge",
+      "to": "fernhollow",
+      "cost": 8
+    },
+    {
+      "from": "fernhollow",
+      "to": "dewhurst",
+      "cost": 8
+    },
+    {
+      "from": "mossbridge",
+      "to": "vinecross",
+      "cost": 8
+    },
+    {
+      "from": "palmstead",
+      "to": "sunreef",
+      "cost": 8
+    },
+    {
+      "from": "shellhaven",
+      "to": "sunreef",
+      "cost": 7
+    },
+    {
+      "from": "coralgate",
+      "to": "shellhaven",
+      "cost": 4
+    },
+    {
+      "from": "lagoona",
+      "to": "palmstead",
+      "cost": 8
+    },
+    {
+      "from": "sandspit",
+      "to": "lagoona",
+      "cost": 6
+    },
+    {
+      "from": "pearlcove",
+      "to": "sandspit",
+      "cost": 7
+    },
+    {
+      "from": "coralgate",
+      "to": "pearlcove",
+      "cost": 8
+    },
+    {
+      "from": "sunreef",
+      "to": "lagoona",
+      "cost": 8
+    },
+    {
+      "from": "pearlcove",
+      "to": "shellhaven",
+      "cost": 8
+    },
+    {
+      "from": "lagoona",
+      "to": "pearlcove",
+      "cost": 8
+    },
+    {
+      "from": "sunreef",
+      "to": "sandspit",
+      "cost": 8
+    },
+    {
+      "from": "sunreef",
+      "to": "coralgate",
+      "cost": 8
+    },
+    {
+      "from": "palmstead",
+      "to": "sandspit",
+      "cost": 8
+    },
+    {
+      "from": "thunderhead",
+      "to": "galeport",
+      "cost": 6
+    },
+    {
+      "from": "rainmoor",
+      "to": "thunderhead",
+      "cost": 5
+    },
+    {
+      "from": "windward",
+      "to": "rainmoor",
+      "cost": 8
+    },
+    {
+      "from": "squallrock",
+      "to": "windward",
+      "cost": 8
+    },
+    {
+      "from": "hailstone",
+      "to": "squallrock",
+      "cost": 7
+    },
+    {
+      "from": "lightning_point",
+      "to": "hailstone",
+      "cost": 7
+    },
+    {
+      "from": "galeport",
+      "to": "rainmoor",
+      "cost": 7
+    },
+    {
+      "from": "galeport",
+      "to": "windward",
+      "cost": 7
+    },
+    {
+      "from": "hailstone",
+      "to": "windward",
+      "cost": 8
+    },
+    {
+      "from": "galeport",
+      "to": "hailstone",
+      "cost": 8
+    },
+    {
+      "from": "thunderhead",
+      "to": "windward",
+      "cost": 8
+    },
+    {
+      "from": "squallrock",
+      "to": "lightning_point",
+      "cost": 8
+    },
+    {
+      "from": "galeport",
+      "to": "lightning_point",
+      "cost": 8
+    },
+    {
+      "from": "tidewatch",
+      "to": "bramblewick",
+      "cost": 23
+    },
+    {
+      "from": "cinderport",
+      "to": "sporefield",
+      "cost": 24
+    },
+    {
+      "from": "lagoona",
+      "to": "lichenby",
+      "cost": 23
+    },
+    {
+      "from": "rainmoor",
+      "to": "sporefield",
+      "cost": 24
+    },
+    {
+      "from": "tidewatch",
+      "to": "cinderport",
+      "cost": 18
+    },
+    {
+      "from": "palmstead",
+      "to": "thunderhead",
+      "cost": 18
+    },
+    {
+      "from": "driftwood",
+      "to": "sandspit",
+      "cost": 23
+    },
+    {
+      "from": "kilnbay",
+      "to": "windward",
+      "cost": 19
+    }
+  ],
+  "gameRules": {
+    "step2Trigger": 6,
+    "step3Trigger": 18,
+    "startingMoney": 60,
+    "resourceSupply": {
+      "coal": 24,
+      "oil": 18,
+      "garbage": 6,
+      "uranium": 2
+    },
+    "earningsTable": [
+      10,
+      22,
+      33,
+      44,
+      54,
+      64,
+      73,
+      82,
+      90,
+      98,
+      105,
+      112,
+      118,
+      124,
+      129,
+      134,
+      138,
+      142,
+      145,
+      148,
+      150
+    ],
+    "winConditions": {
+      "2": 19,
+      "3": 16,
+      "4": 15,
+      "5": 14,
+      "6": 13
+    }
+  }
+}

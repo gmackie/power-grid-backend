@@ -7,7 +7,8 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "types": [
-      "@cloudflare/workers-types/experimental"
+      "@cloudflare/workers-types/experimental",
+      "node"
     ],
     "strict": true,
     "exactOptionalPropertyTypes": true,
@@ -31,5 +32,8 @@
     "src/**/*.ts",
     "test/**/*.ts",
     "scripts/**/*.mjs"
+  ],
+  "exclude": [
+    "src/sim/cli.ts"
   ]
 }

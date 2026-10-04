@@ -1,0 +1,659 @@
+{
+  "id": "megalopolis",
+  "name": "Megalopolis",
+  "description": "A dense, nearly free city core ringed by sprawl. Everyone wants the Core; the Core fills fast.",
+  "playerCount": {
+    "min": 2,
+    "max": 6,
+    "recommended": [
+      4,
+      5,
+      6
+    ]
+  },
+  "regions": [
+    {
+      "id": "core",
+      "name": "The Core",
+      "color": "#9932CC"
+    },
+    {
+      "id": "north_sprawl",
+      "name": "North Sprawl",
+      "color": "#4169E1"
+    },
+    {
+      "id": "east_sprawl",
+      "name": "East Sprawl",
+      "color": "#32CD32"
+    },
+    {
+      "id": "south_sprawl",
+      "name": "South Sprawl",
+      "color": "#FF6347"
+    },
+    {
+      "id": "west_sprawl",
+      "name": "West Sprawl",
+      "color": "#FFD700"
+    }
+  ],
+  "cities": [
+    {
+      "id": "hub_central",
+      "name": "Hub Central",
+      "region": "core",
+      "x": 0.64,
+      "y": 0.5
+    },
+    {
+      "id": "transit_one",
+      "name": "Transit One",
+      "region": "core",
+      "x": 0.613,
+      "y": 0.571
+    },
+    {
+      "id": "gridlock",
+      "name": "Gridlock",
+      "region": "core",
+      "x": 0.543,
+      "y": 0.614
+    },
+    {
+      "id": "neon_row",
+      "name": "Neon Row",
+      "region": "core",
+      "x": 0.457,
+      "y": 0.614
+    },
+    {
+      "id": "skyline",
+      "name": "Skyline",
+      "region": "core",
+      "x": 0.387,
+      "y": 0.571
+    },
+    {
+      "id": "undercity",
+      "name": "Undercity",
+      "region": "core",
+      "x": 0.36,
+      "y": 0.5
+    },
+    {
+      "id": "vaultside",
+      "name": "Vaultside",
+      "region": "core",
+      "x": 0.387,
+      "y": 0.429
+    },
+    {
+      "id": "pylon_square",
+      "name": "Pylon Square",
+      "region": "core",
+      "x": 0.457,
+      "y": 0.386
+    },
+    {
+      "id": "circuit_park",
+      "name": "Circuit Park",
+      "region": "core",
+      "x": 0.543,
+      "y": 0.386
+    },
+    {
+      "id": "datum",
+      "name": "Datum",
+      "region": "core",
+      "x": 0.613,
+      "y": 0.429
+    },
+    {
+      "id": "frostgate",
+      "name": "Frostgate",
+      "region": "north_sprawl",
+      "x": 0.531,
+      "y": 0.156
+    },
+    {
+      "id": "hillcrest",
+      "name": "Hillcrest",
+      "region": "north_sprawl",
+      "x": 0.448,
+      "y": 0.095
+    },
+    {
+      "id": "bramwell",
+      "name": "Bramwell",
+      "region": "north_sprawl",
+      "x": 0.471,
+      "y": 0.186
+    },
+    {
+      "id": "northwick",
+      "name": "Northwick",
+      "region": "north_sprawl",
+      "x": 0.364,
+      "y": 0.132
+    },
+    {
+      "id": "pinefield",
+      "name": "Pinefield",
+      "region": "north_sprawl",
+      "x": 0.619,
+      "y": 0.196
+    },
+    {
+      "id": "aldercross",
+      "name": "Aldercross",
+      "region": "north_sprawl",
+      "x": 0.545,
+      "y": 0.231
+    },
+    {
+      "id": "daybreak",
+      "name": "Daybreak",
+      "region": "east_sprawl",
+      "x": 0.925,
+      "y": 0.578
+    },
+    {
+      "id": "eastmoor",
+      "name": "Eastmoor",
+      "region": "east_sprawl",
+      "x": 0.791,
+      "y": 0.557
+    },
+    {
+      "id": "riverbend",
+      "name": "Riverbend",
+      "region": "east_sprawl",
+      "x": 0.783,
+      "y": 0.421
+    },
+    {
+      "id": "sunfield",
+      "name": "Sunfield",
+      "region": "east_sprawl",
+      "x": 0.843,
+      "y": 0.45
+    },
+    {
+      "id": "oakridge",
+      "name": "Oakridge",
+      "region": "east_sprawl",
+      "x": 0.901,
+      "y": 0.418
+    },
+    {
+      "id": "millrun",
+      "name": "Millrun",
+      "region": "east_sprawl",
+      "x": 0.852,
+      "y": 0.524
+    },
+    {
+      "id": "heatwell",
+      "name": "Heatwell",
+      "region": "south_sprawl",
+      "x": 0.563,
+      "y": 0.863
+    },
+    {
+      "id": "southgate",
+      "name": "Southgate",
+      "region": "south_sprawl",
+      "x": 0.476,
+      "y": 0.834
+    },
+    {
+      "id": "dunmere",
+      "name": "Dunmere",
+      "region": "south_sprawl",
+      "x": 0.379,
+      "y": 0.812
+    },
+    {
+      "id": "coppertown",
+      "name": "Coppertown",
+      "region": "south_sprawl",
+      "x": 0.486,
+      "y": 0.76
+    },
+    {
+      "id": "ironvale",
+      "name": "Ironvale",
+      "region": "south_sprawl",
+      "x": 0.441,
+      "y": 0.887
+    },
+    {
+      "id": "kiln_row",
+      "name": "Kiln Row",
+      "region": "south_sprawl",
+      "x": 0.623,
+      "y": 0.846
+    },
+    {
+      "id": "duskport",
+      "name": "Duskport",
+      "region": "west_sprawl",
+      "x": 0.174,
+      "y": 0.46
+    },
+    {
+      "id": "westhaven",
+      "name": "Westhaven",
+      "region": "west_sprawl",
+      "x": 0.255,
+      "y": 0.537
+    },
+    {
+      "id": "goldmarch",
+      "name": "Goldmarch",
+      "region": "west_sprawl",
+      "x": 0.062,
+      "y": 0.442
+    },
+    {
+      "id": "harborlight",
+      "name": "Harborlight",
+      "region": "west_sprawl",
+      "x": 0.16,
+      "y": 0.593
+    },
+    {
+      "id": "fairwater",
+      "name": "Fairwater",
+      "region": "west_sprawl",
+      "x": 0.101,
+      "y": 0.493
+    },
+    {
+      "id": "lantern_hill",
+      "name": "Lantern Hill",
+      "region": "west_sprawl",
+      "x": 0.179,
+      "y": 0.53
+    }
+  ],
+  "connections": [
+    {
+      "from": "hub_central",
+      "to": "transit_one",
+      "cost": 0
+    },
+    {
+      "from": "transit_one",
+      "to": "gridlock",
+      "cost": 2
+    },
+    {
+      "from": "gridlock",
+      "to": "neon_row",
+      "cost": 2
+    },
+    {
+      "from": "neon_row",
+      "to": "skyline",
+      "cost": 0
+    },
+    {
+      "from": "skyline",
+      "to": "undercity",
+      "cost": 2
+    },
+    {
+      "from": "undercity",
+      "to": "vaultside",
+      "cost": 2
+    },
+    {
+      "from": "vaultside",
+      "to": "pylon_square",
+      "cost": 0
+    },
+    {
+      "from": "pylon_square",
+      "to": "circuit_park",
+      "cost": 2
+    },
+    {
+      "from": "circuit_park",
+      "to": "datum",
+      "cost": 2
+    },
+    {
+      "from": "datum",
+      "to": "hub_central",
+      "cost": 0
+    },
+    {
+      "from": "hub_central",
+      "to": "undercity",
+      "cost": 4
+    },
+    {
+      "from": "gridlock",
+      "to": "pylon_square",
+      "cost": 4
+    },
+    {
+      "from": "skyline",
+      "to": "datum",
+      "cost": 4
+    },
+    {
+      "from": "vaultside",
+      "to": "transit_one",
+      "cost": 4
+    },
+    {
+      "from": "circuit_park",
+      "to": "neon_row",
+      "cost": 4
+    },
+    {
+      "from": "bramwell",
+      "to": "frostgate",
+      "cost": 9
+    },
+    {
+      "from": "aldercross",
+      "to": "frostgate",
+      "cost": 8
+    },
+    {
+      "from": "pinefield",
+      "to": "aldercross",
+      "cost": 10
+    },
+    {
+      "from": "hillcrest",
+      "to": "bramwell",
+      "cost": 11
+    },
+    {
+      "from": "northwick",
+      "to": "hillcrest",
+      "cost": 11
+    },
+    {
+      "from": "bramwell",
+      "to": "aldercross",
+      "cost": 8
+    },
+    {
+      "from": "frostgate",
+      "to": "pinefield",
+      "cost": 10
+    },
+    {
+      "from": "frostgate",
+      "to": "hillcrest",
+      "cost": 12
+    },
+    {
+      "from": "bramwell",
+      "to": "northwick",
+      "cost": 12
+    },
+    {
+      "from": "bramwell",
+      "to": "pinefield",
+      "cost": 12
+    },
+    {
+      "from": "millrun",
+      "to": "daybreak",
+      "cost": 8
+    },
+    {
+      "from": "eastmoor",
+      "to": "millrun",
+      "cost": 9
+    },
+    {
+      "from": "sunfield",
+      "to": "millrun",
+      "cost": 7
+    },
+    {
+      "from": "oakridge",
+      "to": "sunfield",
+      "cost": 9
+    },
+    {
+      "from": "riverbend",
+      "to": "sunfield",
+      "cost": 9
+    },
+    {
+      "from": "oakridge",
+      "to": "millrun",
+      "cost": 10
+    },
+    {
+      "from": "riverbend",
+      "to": "oakridge",
+      "cost": 11
+    },
+    {
+      "from": "eastmoor",
+      "to": "sunfield",
+      "cost": 12
+    },
+    {
+      "from": "riverbend",
+      "to": "millrun",
+      "cost": 12
+    },
+    {
+      "from": "daybreak",
+      "to": "eastmoor",
+      "cost": 12
+    },
+    {
+      "from": "kiln_row",
+      "to": "heatwell",
+      "cost": 7
+    },
+    {
+      "from": "southgate",
+      "to": "heatwell",
+      "cost": 8
+    },
+    {
+      "from": "ironvale",
+      "to": "southgate",
+      "cost": 6
+    },
+    {
+      "from": "coppertown",
+      "to": "southgate",
+      "cost": 10
+    },
+    {
+      "from": "dunmere",
+      "to": "ironvale",
+      "cost": 11
+    },
+    {
+      "from": "southgate",
+      "to": "dunmere",
+      "cost": 12
+    },
+    {
+      "from": "dunmere",
+      "to": "coppertown",
+      "cost": 10
+    },
+    {
+      "from": "heatwell",
+      "to": "ironvale",
+      "cost": 10
+    },
+    {
+      "from": "heatwell",
+      "to": "coppertown",
+      "cost": 12
+    },
+    {
+      "from": "coppertown",
+      "to": "ironvale",
+      "cost": 11
+    },
+    {
+      "from": "lantern_hill",
+      "to": "duskport",
+      "cost": 7
+    },
+    {
+      "from": "harborlight",
+      "to": "lantern_hill",
+      "cost": 7
+    },
+    {
+      "from": "westhaven",
+      "to": "lantern_hill",
+      "cost": 9
+    },
+    {
+      "from": "fairwater",
+      "to": "duskport",
+      "cost": 7
+    },
+    {
+      "from": "goldmarch",
+      "to": "fairwater",
+      "cost": 9
+    },
+    {
+      "from": "fairwater",
+      "to": "lantern_hill",
+      "cost": 8
+    },
+    {
+      "from": "westhaven",
+      "to": "harborlight",
+      "cost": 12
+    },
+    {
+      "from": "duskport",
+      "to": "westhaven",
+      "cost": 10
+    },
+    {
+      "from": "duskport",
+      "to": "goldmarch",
+      "cost": 9
+    },
+    {
+      "from": "harborlight",
+      "to": "fairwater",
+      "cost": 10
+    },
+    {
+      "from": "aldercross",
+      "to": "circuit_park",
+      "cost": 15
+    },
+    {
+      "from": "aldercross",
+      "to": "pylon_square",
+      "cost": 13
+    },
+    {
+      "from": "eastmoor",
+      "to": "hub_central",
+      "cost": 10
+    },
+    {
+      "from": "riverbend",
+      "to": "hub_central",
+      "cost": 12
+    },
+    {
+      "from": "coppertown",
+      "to": "neon_row",
+      "cost": 12
+    },
+    {
+      "from": "coppertown",
+      "to": "gridlock",
+      "cost": 11
+    },
+    {
+      "from": "westhaven",
+      "to": "undercity",
+      "cost": 12
+    },
+    {
+      "from": "westhaven",
+      "to": "skyline",
+      "cost": 14
+    },
+    {
+      "from": "pinefield",
+      "to": "riverbend",
+      "cost": 14
+    },
+    {
+      "from": "eastmoor",
+      "to": "kiln_row",
+      "cost": 15
+    },
+    {
+      "from": "dunmere",
+      "to": "westhaven",
+      "cost": 14
+    },
+    {
+      "from": "duskport",
+      "to": "northwick",
+      "cost": 17
+    }
+  ],
+  "gameRules": {
+    "step2Trigger": 8,
+    "step3Trigger": 18,
+    "startingMoney": 50,
+    "resourceSupply": {
+      "coal": 24,
+      "oil": 18,
+      "garbage": 9,
+      "uranium": 2
+    },
+    "earningsTable": [
+      10,
+      22,
+      33,
+      44,
+      54,
+      64,
+      73,
+      82,
+      90,
+      98,
+      105,
+      112,
+      118,
+      124,
+      129,
+      134,
+      138,
+      142,
+      145,
+      148,
+      150
+    ],
+    "winConditions": {
+      "2": 22,
+      "3": 18,
+      "4": 18,
+      "5": 16,
+      "6": 15
+    }
+  }
+}
