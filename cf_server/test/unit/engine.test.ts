@@ -30,6 +30,14 @@ const started = (players = 3, seed = 42) => run(Engine.start(newGame(players, se
 
 const act = (s: GameState, playerId: string, action: Engine.Action) => run(Engine.applyAction(s, playerId, action, 3000))
 
+/** First city of an in-play region, plus one neighbour of it inside the same region set. */
+const inPlayPair = (s: GameState): [string, string, number] => {
+  for (const c of usa.connections) {
+    if (Engine.cityInPlay(s, c.from) && Engine.cityInPlay(s, c.to)) return [c.from, c.to, c.cost]
+  }
+  throw new Error("no in-play connection")
+}
+
 /** Everyone buys the cheapest available plant at face value in turn order. */
 const runAuctionRound = (s0: GameState): GameState => {
   let s = s0
@@ -172,18 +180,19 @@ describe("resources and building", () => {
     expect(s.phase).toBe("BUILD_CITIES")
     const pid = actingPlayerId(s)
     const money = s.players[pid]!.money
-    let n = act(s, pid, { _tag: "BuildCity", cityId: "seattle" }).state
+    const [cityA, cityB, connCost] = inPlayPair(s)
+    let n = act(s, pid, { _tag: "BuildCity", cityId: cityA }).state
     expect(n.players[pid]!.money).toBe(money - 10)
-    expect(n.citySlots["seattle"]).toEqual([pid])
-    // portland is adjacent to seattle in usa.json
-    const conn = usa.connections.find((c) => (c.from === "seattle" && c.to === "portland") || (c.from === "portland" && c.to === "seattle"))!
-    n = act(n, pid, { _tag: "BuildCity", cityId: "portland" }).state
-    expect(n.players[pid]!.money).toBe(money - 10 - 10 - conn.cost)
-    expectFail(Engine.applyAction(n, pid, { _tag: "BuildCity", cityId: "seattle" }, 0), "already has a house")
+    expect(n.citySlots[cityA]).toEqual([pid])
+    n = act(n, pid, { _tag: "BuildCity", cityId: cityB }).state
+    expect(n.players[pid]!.money).toBe(money - 10 - 10 - connCost)
+    expectFail(Engine.applyAction(n, pid, { _tag: "BuildCity", cityId: cityA }, 0), "already has a house")
     // another player cannot take a second slot in step 1
     n = act(n, pid, { _tag: "EndTurn" }).state
     const other = actingPlayerId(n)
-    expectFail(Engine.applyAction(n, other, { _tag: "BuildCity", cityId: "seattle" }, 0), "no open slot")
+    expectFail(Engine.applyAction(n, other, { _tag: "BuildCity", cityId: cityA }, 0), "no open slot")
+    const outside = usa.cities.find((c) => !n.activeRegions.includes(c.region))!
+    expectFail(Engine.applyAction(n, other, { _tag: "BuildCity", cityId: outside.id }, 0), "outside the regions in play")
     expectFail(Engine.applyAction(n, other, { _tag: "BuildCity", cityId: "nowhere" }, 0), "city not found")
   })
 })
@@ -193,7 +202,7 @@ describe("bureaucracy and rounds", () => {
     let s = runAuctionRound(started(3, 42).state)
     for (let i = 0; i < 3; i++) s = act(s, actingPlayerId(s), { _tag: "EndTurn" }).state // skip resources
     const builder = actingPlayerId(s)
-    s = act(s, builder, { _tag: "BuildCity", cityId: "seattle" }).state
+    s = act(s, builder, { _tag: "BuildCity", cityId: inPlayPair(s)[0] }).state
     for (let i = 0; i < 3; i++) s = act(s, actingPlayerId(s), { _tag: "EndTurn" }).state // end building
     expect(s.phase).toBe("BUREAUCRACY")
     const moneyBefore = Object.fromEntries(Object.values(s.players).map((p) => [p.id, p.money]))
@@ -237,5 +246,26 @@ describe("wire payload", () => {
     expect(p.map.connections[0]).toEqual(expect.objectContaining({ city_a: expect.any(String), city_b: expect.any(String), cost: expect.any(Number) }))
     expect(Object.values(p.map.cities)[0]!.position).toHaveLength(2)
     expect(p.current_turn).toBe(actingPlayerId(s))
+  })
+})
+
+describe("regions in play", () => {
+  it("limits the board to 3/3/4/5/5 contiguous regions for 2-6 players", () => {
+    for (const [players, want] of [[2, 3], [3, 3], [4, 4], [5, 5], [6, 5]] as const) {
+      const s = started(players, 11).state
+      expect(s.activeRegions).toHaveLength(want)
+      expect(new Set(s.activeRegions).size).toBe(want)
+      const regionOf = new Map(usa.cities.map((c) => [c.id, c.region]))
+      // every chosen region (after the first) touches another chosen region
+      for (const r of s.activeRegions.slice(1)) {
+        const touches = usa.connections.some((c) => {
+          const a = regionOf.get(c.from)!
+          const b = regionOf.get(c.to)!
+          return a !== b && ((a === r && s.activeRegions.includes(b)) || (b === r && s.activeRegions.includes(a)))
+        })
+        expect(touches, `region ${r} is not adjacent to the chosen set`).toBe(true)
+      }
+      expect(Engine.toPayload(s).active_regions).toEqual(s.activeRegions)
+    }
   })
 })

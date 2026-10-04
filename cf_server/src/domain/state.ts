@@ -54,6 +54,8 @@ export interface GameState {
   /** Order players were added (used for colors / seating). */
   readonly seating: ReadonlyArray<string>
   readonly citySlots: Readonly<Record<string, ReadonlyArray<string>>>
+  /** Region ids in play (standard: 3/3/4/5/5 contiguous regions for 2-6 players). Empty = whole map. */
+  readonly activeRegions: ReadonlyArray<string>
   readonly market: ResourceMarket
   readonly currentMarket: ReadonlyArray<Plant>
   readonly futureMarket: ReadonlyArray<Plant>

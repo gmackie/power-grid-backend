@@ -70,8 +70,11 @@ at `ws://localhost:8787/game`.
 
 ## Deploy
 
+Production: `https://power-grid-server.gmac.workers.dev` (D1 `powergrid`, created 2026-10-04).
+The admin token is in `.admin-token.local` (gitignored) on the machine that deployed.
+
 ```bash
-wrangler d1 create powergrid           # once; paste database_id into wrangler.jsonc
+wrangler d1 create powergrid           # once; database_id is already in wrangler.jsonc
 pnpm db:migrate:remote
 wrangler secret put ADMIN_TOKEN
 pnpm deploy

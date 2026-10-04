@@ -175,7 +175,8 @@ export const GameStatePayload = Schema.Struct({
     deck_remaining: Schema.Number
   }),
   winner_id: Schema.NullOr(Schema.String),
-  map_id: Schema.String
+  map_id: Schema.String,
+  active_regions: Schema.Array(Schema.String)
 })
 export type GameStatePayload = typeof GameStatePayload.Type
 
@@ -220,6 +221,7 @@ export const GameErrors = {
   CityNotFound: "city not found", // go
   CityFull: "city is full", // go
   CityClosedThisStep: "this city has no open slot in the current step",
+  CityNotInPlay: "this city is outside the regions in play",
   AlreadyInCity: "player already has a house in this city", // go
   NotConnected: "city not connected to player's network", // go
   NotBureaucracyPhase: "not in bureaucracy phase", // go

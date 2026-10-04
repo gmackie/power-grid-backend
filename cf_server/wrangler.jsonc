@@ -23,7 +23,7 @@
     {
       "binding": "DB",
       "database_name": "powergrid",
-      "database_id": "REPLACE_WITH_D1_DATABASE_ID",
+      "database_id": "4f61b246-cf16-45e0-ace5-60afc7505d9a",
       "migrations_dir": "migrations"
     }
   ]

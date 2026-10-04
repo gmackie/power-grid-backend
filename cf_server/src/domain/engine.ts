@@ -12,6 +12,7 @@ import * as Plants from "./plants.ts"
 import { seedRng, shuffle, type Rng } from "./rng.ts"
 import {
   CITY_SLOT_COST,
+  REGIONS_IN_PLAY,
   DEFAULT_STEP2_TRIGGER,
   MAX_PLANTS_PER_PLAYER,
   MAX_PLAYERS,
@@ -102,6 +103,45 @@ const determineOrder = (s: GameState): GameState => {
   return { ...s, turnOrder: order }
 }
 
+/**
+ * Pick REGIONS_IN_PLAY[players] contiguous regions: a random seed region, then repeatedly the
+ * adjacent region with the most connections into the chosen set.
+ */
+const chooseRegions = (s: GameState): GameState => {
+  const regions = s.map.regions.map((r) => r.id)
+  const want = REGIONS_IN_PLAY[playerCount(s)] ?? regions.length
+  if (regions.length <= want) return { ...s, activeRegions: regions }
+  const regionOf = new Map(s.map.cities.map((c) => [c.id, c.region]))
+  const links = new Map<string, Map<string, number>>()
+  for (const conn of s.map.connections) {
+    const a = regionOf.get(conn.from)
+    const b = regionOf.get(conn.to)
+    if (!a || !b || a === b) continue
+    for (const [x, y] of [[a, b], [b, a]] as const) {
+      const m = links.get(x) ?? new Map<string, number>()
+      m.set(y, (m.get(y) ?? 0) + 1)
+      links.set(x, m)
+    }
+  }
+  const [shuffled, rng] = shuffle(rngOf(s), regions)
+  const chosen: Array<string> = [shuffled[0]!]
+  while (chosen.length < want) {
+    const score = new Map<string, number>()
+    for (const c of chosen) for (const [n, k] of links.get(c) ?? []) if (!chosen.includes(n)) score.set(n, (score.get(n) ?? 0) + k)
+    const next = [...score.entries()].sort((x, y) => y[1] - x[1] || shuffled.indexOf(x[0]) - shuffled.indexOf(y[0]))[0]?.[0]
+      ?? shuffled.find((r) => !chosen.includes(r))
+    if (!next) break
+    chosen.push(next)
+  }
+  return withRng({ ...s, activeRegions: chosen }, rng)
+}
+
+export const cityInPlay = (s: GameState, cityId: string): boolean => {
+  if (s.activeRegions.length === 0) return true
+  const region = s.map.cities.find((c) => c.id === cityId)?.region
+  return region !== undefined && s.activeRegions.includes(region)
+}
+
 // --- lifecycle ------------------------------------------------------------------
 
 export interface CreateOptions {
@@ -136,6 +176,7 @@ export const createGame = (o: CreateOptions): GameState => {
     players: {},
     seating: [],
     citySlots: {},
+    activeRegions: [],
     market: Market.initialMarket(initial),
     currentMarket: [],
     futureMarket: [],
@@ -201,7 +242,7 @@ export const startGame = (s0: GameState, now: number): Outcome => {
     deck: setup.deck,
     updatedAt: now
   }
-  s = determineOrder(s)
+  s = determineOrder(chooseRegions(s))
   const events: Array<Event> = [{ _tag: "PhaseChange", phase: "PLAYER_ORDER", round: 1 }]
   return beginAuction(s, events)
 }
@@ -481,6 +522,7 @@ const buildCity = (s: GameState, playerId: string, cityId: string): Outcome => {
   if (actingPlayerId(s) !== playerId) fail(GameErrors.NotYourTurn)
   const player = requirePlayer(s, playerId)
   if (!s.map.cities.some((c) => c.id === cityId)) fail(GameErrors.CityNotFound)
+  if (!cityInPlay(s, cityId)) fail(GameErrors.CityNotInPlay)
   const slots = s.citySlots[cityId] ?? []
   if (slots.includes(playerId)) fail(GameErrors.AlreadyInCity)
   if (slots.length >= CITY_SLOT_COST.length) fail(GameErrors.CityFull)
@@ -672,6 +714,7 @@ export const toPayload = (s: GameState): GameStatePayload => {
       deck_remaining: s.deck.length
     },
     winner_id: s.winnerId,
-    map_id: s.mapId
+    map_id: s.mapId,
+    active_regions: [...s.activeRegions]
   }
 }
