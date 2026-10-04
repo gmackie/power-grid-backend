@@ -1,0 +1,18 @@
+app: power-grid
+server: https://forgegraf.com
+deploymentPlatform: cloudflare-workers
+healthCheckUrl: https://power.gmac.io/health
+stages:
+  - name: production
+    sortOrder: 20
+  - name: staging
+    nodeId: 911d5e20-1116-4843-9593-2352dfd3ebee
+    sortOrder: 10
+
+# ForgeGraph operator notes:
+# deployable app: cf_server/ (Effect + Durable Objects + D1); go_server code at the root is legacy
+# production target "worker" (cloudflare-workers, node hetzner-fg): appDir cf_server,
+#   build: pnpm install --frozen-lockfile && wrangler deploy --dry-run --config wrangler.web.jsonc
+#   deploy: wrangler deploy --config wrangler.web.jsonc  (Worker power-grid-server, route power.gmac.io/*)
+# the web client is vendored in cf_server/web-dist; regenerate with `pnpm build:web ../react_client`
+# the root package.json exists only so the agent's install step is a no-op
