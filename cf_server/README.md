@@ -83,27 +83,49 @@ at `ws://localhost:8787/game`.
 
 ## Deploy
 
-> Both `wrangler.jsonc` and `wrangler.web.jsonc` deploy the same Worker name. Always deploy with
-> `pnpm deploy` (web config: custom domain + static React bundle). `pnpm deploy:api-only` uses the
-> plain config and **drops the ASSETS binding**, which blanks power.gmac.io until the next web deploy.
-> Run `pnpm build:web /path/to/react_client` first so `web-dist/` is current.
-
-Production web app, HTTP API, and WebSockets: `https://power.gmac.io`.
-The legacy Worker URL remains available at `https://power-grid-server.gmac.workers.dev` (D1 `powergrid`, created 2026-10-04).
-The admin token is in `.admin-token.local` (gitignored) on the machine that deployed.
+Production deploys go through ForgeGraph, which clones this repository
+(`git.forgegraf.com/gmackie/power-grid`, branch `master`), installs `cf_server/`
+with pnpm and runs `wrangler deploy --config wrangler.web.jsonc` for the Worker
+`power-grid-server` (route `power.gmac.io/*`, D1 `powergrid`). Health is read
+from `https://power.gmac.io/health`.
 
 ```bash
-wrangler d1 create powergrid           # once; database_id is already in wrangler.jsonc
-pnpm db:migrate:remote
-wrangler secret put ADMIN_TOKEN
-pnpm build:web /path/to/react_client   # builds web-dist with the production WebSocket URL
-pnpm deploy                          # uses wrangler.web.jsonc, including assets and domain route
+forge deploy create production        # from this repo; gated on green CI
+forge deploy history --stage production
 ```
 
-The deployment requires a freshly built `web-dist`; a backend-only deployment would remove
-the website assets. CI must build the matching React checkout before deploying.
-`.github/workflows/deploy-cf.yml` requires
-`CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` secrets.
+> Both `wrangler.jsonc` and `wrangler.web.jsonc` deploy the same Worker name. Always use
+> `wrangler.web.jsonc` (`pnpm deploy`): the plain config **drops the ASSETS binding** and
+> blanks power.gmac.io until the next web deploy. `pnpm deploy:api-only` exists only for
+> local experiments.
+
+### Secrets
+
+`ADMIN_TOKEN` lives in ForgeGraph's production secret store and is synced onto the
+Worker on every deploy (`syncSecrets: true` on the production target). Rotate it with:
+
+```bash
+forge secret set ADMIN_TOKEN --stage production --stdin < new-token
+forge deploy create production
+```
+
+Do not `wrangler secret put` it by hand; the next deploy would overwrite it.
+
+### Web client
+
+`web-dist/` is the built React client, committed so a single-repo deploy carries the
+assets. After changing `react_client`, rebuild and commit:
+
+```bash
+pnpm build:web ../react_client          # runs the client build, copies dist/ to web-dist/
+```
+
+### Database
+
+```bash
+wrangler d1 migrations apply powergrid --remote   # schema and seed migrations in migrations/
+```
+
 
 ## History
 
