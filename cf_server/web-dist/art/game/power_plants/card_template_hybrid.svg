@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="120" viewBox="0 0 180 120">
+<defs>
+  <pattern id="hatch-t-hybrid" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+    <line x1="0" y1="0" x2="0" y2="7" stroke="#6e3a0c" stroke-width="2" stroke-opacity="0.55"/>
+  </pattern>
+  <pattern id="dots-t-hybrid" width="8" height="8" patternUnits="userSpaceOnUse">
+    <circle cx="2" cy="2" r="1.6" fill="#6e3a0c" fill-opacity="0.35"/>
+    <circle cx="6" cy="6" r="1.6" fill="#6e3a0c" fill-opacity="0.35"/>
+  </pattern>
+  <filter id="ink-t-hybrid" x="-5%" y="-5%" width="110%" height="110%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="1" seed="3" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="1.1"/>
+  </filter></defs>
+
+  <path d="M14 6 H166 Q178 6 178 18 V110 Q178 122 166 122 H14 Q2 122 2 110 V18 Q2 6 14 6 Z" fill="#141414" opacity="0.9"/>
+  <path d="M12 0 H164 Q176 0 176 12 V104 Q176 116 164 116 H12 Q0 116 0 104 V12 Q0 0 12 0 Z" fill="#f6efd9" stroke="#141414" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M4.0 4.0 L62.3 2.9 L118.6 5.0 L176.0 4.0 L176.2 41.1 L177.3 78.3 L176.0 116.0 L119.8 117.1 L60.2 114.8 L4.0 116.0 L2.7 79.8 L3.6 42.1 Z" fill="none" stroke="#c9752a" stroke-width="6" stroke-linejoin="round" opacity="0.9"/>
+  <rect x="8" y="8" width="160" height="26" rx="6" fill="#c9752a" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="3"/>
+  <rect x="8" y="8" width="160" height="26" rx="6" fill="url(#dots-t-hybrid)"/>
+  <rect x="8" y="84" width="160" height="24" rx="6" fill="#f2b233" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="3"/>
+  <rect x="8" y="84" width="160" height="24" rx="6" fill="url(#hatch-t-hybrid)" opacity="0.35"/><clipPath id="art-t-hybrid"><rect x="10" y="36" width="160" height="48" rx="4"/></clipPath><g clip-path="url(#art-t-hybrid)"><g transform="translate(46 38) scale(0.66)"><path d="M6.0 68.0 L6.5 57.7 L5.6 48.6 L6.0 38.0 L21.1 38.3 L36.7 37.6 L52.0 38.0 L52.2 48.4 L51.3 57.0 L52.0 68.0 L36.0 67.2 L22.2 69.0 Z" fill="#5a5a66" stroke="#141414" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M6 38 L16 26 L42 26 L52 38" fill="#2d2d36" stroke="#141414" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" />
+  <rect x="12" y="46" width="12" height="10" fill="#ffd56b" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5"/><rect x="32" y="46" width="12" height="10" fill="#ffd56b" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5"/>
+  <path d="M56 68 V22 H64 V68" fill="#8a8a99" stroke="#141414" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" /><rect x="55" y="22" width="10" height="5" fill="#5a5a66" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5"/>
+  <path d="M74 68 L82 14 L86 14 L94 68 Z" fill="#9c6a0c" stroke="#141414" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" /><path d="M76 50 H92 M78 36 H90 M80 24 H88" fill="none" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5"/><path d="M70 14 L98 14 L84 6 Z" fill="#5a3b00" stroke="#141414" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" />
+  <circle cx="65.66211998630315" cy="18" r="3.5999999999999996" fill="#f6efd9" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="3"/><circle cx="71.31421927828342" cy="12.600000000000001" r="5.1" fill="#f6efd9" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="3"/></g></g>
+</svg>

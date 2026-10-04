@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="400" viewBox="0 0 500 400">
+<defs>
+  <pattern id="hatch-panel" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+    <line x1="0" y1="0" x2="0" y2="7" stroke="#143a8a" stroke-width="2" stroke-opacity="0.55"/>
+  </pattern>
+  <pattern id="dots-panel" width="8" height="8" patternUnits="userSpaceOnUse">
+    <circle cx="2" cy="2" r="1.6" fill="#143a8a" fill-opacity="0.35"/>
+    <circle cx="6" cy="6" r="1.6" fill="#143a8a" fill-opacity="0.35"/>
+  </pattern>
+  <filter id="ink-panel" x="-5%" y="-5%" width="110%" height="110%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="1" seed="3" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="1.1"/>
+  </filter></defs>
+
+  <path d="M20 8 H484 Q498 8 498 22 V384 Q498 398 484 398 H20 Q6 398 6 384 V22 Q6 8 20 8 Z" fill="#141414" opacity="0.85"/>
+  <path d="M16 2 H480 Q494 2 494 16 V378 Q494 392 480 392 H16 Q2 392 2 378 V16 Q2 2 16 2 Z" fill="#f6efd9" stroke="#141414" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M10.0 10.0 L167.7 10.9 L327.1 9.0 L484.0 10.0 L484.0 133.0 L485.0 257.0 L484.0 382.0 L326.5 382.3 L166.9 382.8 L10.0 382.0 L10.6 256.9 L10.9 134.8 Z" fill="none" stroke="#2f6fe5" stroke-width="3" stroke-dasharray="14 8" opacity="0.7"/>
+  <path d="M16 2 H480 Q494 2 494 16 V18 Q494 32 480 32 H16 Q2 32 2 18 V16 Q2 2 16 2 Z" fill="url(#dots-panel)"/>
+</svg>

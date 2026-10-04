@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="120" viewBox="0 0 180 120">
+<defs>
+  <pattern id="hatch-c14" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+    <line x1="0" y1="0" x2="0" y2="7" stroke="#3f6a1d" stroke-width="2" stroke-opacity="0.55"/>
+  </pattern>
+  <pattern id="dots-c14" width="8" height="8" patternUnits="userSpaceOnUse">
+    <circle cx="2" cy="2" r="1.6" fill="#3f6a1d" fill-opacity="0.35"/>
+    <circle cx="6" cy="6" r="1.6" fill="#3f6a1d" fill-opacity="0.35"/>
+  </pattern>
+  <filter id="ink-c14" x="-5%" y="-5%" width="110%" height="110%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="1" seed="3" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="1.1"/>
+  </filter></defs>
+
+  <path d="M14 6 H166 Q178 6 178 18 V110 Q178 122 166 122 H14 Q2 122 2 110 V18 Q2 6 14 6 Z" fill="#141414" opacity="0.9"/>
+  <path d="M12 0 H164 Q176 0 176 12 V104 Q176 116 164 116 H12 Q0 116 0 104 V12 Q0 0 12 0 Z" fill="#f6efd9" stroke="#141414" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M4.0 4.0 L61.5 3.1 L119.4 4.5 L176.0 4.0 L176.7 40.9 L175.8 79.8 L176.0 116.0 L118.3 115.6 L62.5 117.0 L4.0 116.0 L3.4 78.7 L2.7 41.8 Z" fill="none" stroke="#7ab648" stroke-width="6" stroke-linejoin="round" opacity="0.9"/>
+  <rect x="8" y="8" width="160" height="26" rx="6" fill="#7ab648" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="3"/>
+  <rect x="8" y="8" width="160" height="26" rx="6" fill="url(#dots-c14)"/>
+  <rect x="8" y="84" width="160" height="24" rx="6" fill="#b6e07a" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="3"/>
+  <rect x="8" y="84" width="160" height="24" rx="6" fill="url(#hatch-c14)" opacity="0.35"/>
+    <clipPath id="art-c14"><rect x="10" y="36" width="160" height="48" rx="4"/></clipPath>
+    <g clip-path="url(#art-c14)"><g transform="translate(46 38) scale(0.66)"><path d="M10.0 68.0 L9.7 57.4 L10.6 46.3 L10.0 34.0 L30.9 33.4 L50.9 34.6 L70.0 34.0 L70.2 46.1 L69.6 56.7 L70.0 68.0 L50.6 67.7 L29.4 67.9 Z" fill="#7ab648" stroke="#141414" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M10 34 L40 14 L70 34 Z" fill="#3f6a1d" stroke="#141414" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M30 68 V48 H50 V68" fill="#141414"/>
+  <path d="M38 48 a8 8 0 1 0 12 0" fill="none" stroke-linejoin="round" stroke-linecap="round" stroke="#f2b233" stroke-width="3"/><rect x="76" y="40" width="16" height="28" fill="#b6e07a" stroke="#141414" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" /><rect x="74" y="36" width="20" height="5" fill="#3f6a1d" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5"/><path d="M14 64 l3 -6 l3 6" fill="#9c6a3a" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5"/><path d="M23 64 l3 -6 l3 6" fill="#9c6a3a" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5"/><path d="M32 64 l3 -6 l3 6" fill="#9c6a3a" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5"/><path d="M41 64 l3 -6 l3 6" fill="#9c6a3a" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5"/><circle cx="17.565020264871418" cy="10" r="3.5999999999999996" fill="#f6efd9" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="3"/><circle cx="21.402056032978" cy="4.6000000000000005" r="5.1" fill="#f6efd9" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="3"/></g></g>
+    <circle cx="26" cy="21" r="16" fill="#f6efd9" stroke="#141414" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" />
+    <text x="26" y="27" text-anchor="middle" font-family="'Arial Black','Helvetica Neue',Arial,sans-serif" font-weight="900" font-size="18" fill="#141414" stroke="#f6efd9" stroke-width="2.5714285714285716" paint-order="stroke" stroke-linejoin="round">14</text>
+    <text x="112" y="27" text-anchor="middle" font-family="'Arial Black','Helvetica Neue',Arial,sans-serif" font-weight="900" font-size="12" fill="#f6efd9" stroke="#141414" stroke-width="2" paint-order="stroke" stroke-linejoin="round">GARBAGE</text>
+    
+    <g transform="translate(20 86) scale(0.55)"><path d="M8.0 29.0 L6.2 24.3 L6.8 21.7 L5.0 17.0 L7.3 15.3 L8.3 12.4 L11.0 11.0 L11.9 9.6 L14.0 8.7 L16.0 8.0 L17.9 8.5 L19.8 9.7 L21.0 11.0 L22.9 12.8 L25.4 15.1 L27.0 17.0 L26.6 20.4 L24.3 25.3 L24.0 29.0 L18.9 29.1 L13.8 28.9 Z" fill="#7ab648" stroke="#141414" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M13 9 l-2 -5 M19 9 l2 -5" fill="none" stroke="#141414" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M10 17 a6 6 0 1 0 12 0 M16 11 v12" fill="none" stroke-linejoin="round" stroke-linecap="round" stroke="#3f6a1d" stroke-width="2.5"/></g>
+    <text x="52" y="104" text-anchor="start" font-family="'Arial Black','Helvetica Neue',Arial,sans-serif" font-weight="900" font-size="15" fill="#f6efd9" stroke="#141414" stroke-width="2.142857142857143" paint-order="stroke" stroke-linejoin="round">×2</text>
+    <path transform="translate(118 86) scale(0.9166666666666666)" d="M13 1 L4 14 H11 L9 23 L20 9 H13 Z" fill="#ffd33d" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="2.6"/>
+    <text x="150" y="104" text-anchor="start" font-family="'Arial Black','Helvetica Neue',Arial,sans-serif" font-weight="900" font-size="17" fill="#f6efd9" stroke="#141414" stroke-width="2.4285714285714284" paint-order="stroke" stroke-linejoin="round">2</text>
+</svg>

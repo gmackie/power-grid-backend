@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="120" viewBox="0 0 180 120">
+<defs>
+  <pattern id="hatch-c20" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+    <line x1="0" y1="0" x2="0" y2="7" stroke="#2d2d36" stroke-width="2" stroke-opacity="0.55"/>
+  </pattern>
+  <pattern id="dots-c20" width="8" height="8" patternUnits="userSpaceOnUse">
+    <circle cx="2" cy="2" r="1.6" fill="#2d2d36" fill-opacity="0.35"/>
+    <circle cx="6" cy="6" r="1.6" fill="#2d2d36" fill-opacity="0.35"/>
+  </pattern>
+  <filter id="ink-c20" x="-5%" y="-5%" width="110%" height="110%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="1" seed="3" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="1.1"/>
+  </filter></defs>
+
+  <path d="M14 6 H166 Q178 6 178 18 V110 Q178 122 166 122 H14 Q2 122 2 110 V18 Q2 6 14 6 Z" fill="#141414" opacity="0.9"/>
+  <path d="M12 0 H164 Q176 0 176 12 V104 Q176 116 164 116 H12 Q0 116 0 104 V12 Q0 0 12 0 Z" fill="#f6efd9" stroke="#141414" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M4.0 4.0 L61.2 4.8 L118.3 2.8 L176.0 4.0 L176.0 41.5 L174.8 78.9 L176.0 116.0 L119.8 116.0 L61.7 115.5 L4.0 116.0 L3.8 78.1 L5.1 40.3 Z" fill="none" stroke="#5a5a66" stroke-width="6" stroke-linejoin="round" opacity="0.9"/>
+  <rect x="8" y="8" width="160" height="26" rx="6" fill="#5a5a66" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="3"/>
+  <rect x="8" y="8" width="160" height="26" rx="6" fill="url(#dots-c20)"/>
+  <rect x="8" y="84" width="160" height="24" rx="6" fill="#8a8a99" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="3"/>
+  <rect x="8" y="84" width="160" height="24" rx="6" fill="url(#hatch-c20)" opacity="0.35"/>
+    <clipPath id="art-c20"><rect x="10" y="36" width="160" height="48" rx="4"/></clipPath>
+    <g clip-path="url(#art-c20)"><g transform="translate(46 38) scale(0.66)"><path d="M8.0 68.0 L7.3 56.5 L7.6 46.1 L8.0 36.0 L24.7 36.0 L42.4 36.2 L60.0 36.0 L59.6 46.1 L60.5 57.3 L60.0 68.0 L43.3 68.4 L24.5 68.0 Z" fill="#5a5a66" stroke="#141414" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" />
+  <rect x="14" y="44" width="12" height="10" fill="#ffd56b" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5"/>
+  <rect x="34" y="44" width="12" height="10" fill="#ffd56b" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5"/><path d="M66 68 V18 H74 V68" fill="#8a8a99" stroke="#141414" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" /><rect x="65" y="18" width="10" height="5" fill="#ff5c3a" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5"/><circle cx="71.35100030284374" cy="14" r="4.199999999999999" fill="#f6efd9" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="3"/><circle cx="75.53394566047936" cy="7.7" r="5.949999999999999" fill="#f6efd9" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="3"/><circle cx="82.51920011844486" cy="1.4000000000000004" r="7.699999999999999" fill="#f6efd9" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="3"/><path d="M78 68 V24 H86 V68" fill="#8a8a99" stroke="#141414" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" /><rect x="77" y="24" width="10" height="5" fill="#ff5c3a" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5"/><circle cx="84.48278372325004" cy="20" r="4.199999999999999" fill="#f6efd9" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="3"/><circle cx="89.24310691077262" cy="13.7" r="5.949999999999999" fill="#f6efd9" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="3"/><circle cx="94.79350468432531" cy="7.4" r="7.699999999999999" fill="#f6efd9" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="3"/><path d="M90 68 V30 H98 V68" fill="#8a8a99" stroke="#141414" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" /><rect x="89" y="30" width="10" height="5" fill="#ff5c3a" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5"/><circle cx="97.36939658056944" cy="26" r="4.199999999999999" fill="#f6efd9" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="3"/><circle cx="99.7912746769376" cy="19.7" r="5.949999999999999" fill="#f6efd9" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="3"/><circle cx="105.9268872245215" cy="13.4" r="7.699999999999999" fill="#f6efd9" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="3"/><path d="M8 36 L20 24 L48 24 L60 36" fill="#2d2d36" stroke="#141414" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" /></g></g>
+    <circle cx="26" cy="21" r="16" fill="#f6efd9" stroke="#141414" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" />
+    <text x="26" y="27" text-anchor="middle" font-family="'Arial Black','Helvetica Neue',Arial,sans-serif" font-weight="900" font-size="18" fill="#141414" stroke="#f6efd9" stroke-width="2.5714285714285716" paint-order="stroke" stroke-linejoin="round">20</text>
+    <text x="112" y="27" text-anchor="middle" font-family="'Arial Black','Helvetica Neue',Arial,sans-serif" font-weight="900" font-size="12" fill="#f6efd9" stroke="#141414" stroke-width="2" paint-order="stroke" stroke-linejoin="round">COAL</text>
+    
+    <g transform="translate(20 86) scale(0.55)"><path d="M6.0 18.0 L7.4 14.2 L9.4 10.7 L10.0 7.0 L12.8 6.6 L16.3 5.3 L20.0 4.0 L22.8 6.4 L25.9 9.6 L28.0 12.0 L27.1 15.5 L27.4 19.4 L26.0 24.0 L22.8 25.1 L19.9 26.9 L16.0 29.0 L13.8 28.6 L10.6 26.8 L8.0 26.0 L7.4 23.9 L7.1 20.9 Z" fill="#5a5a66" stroke="#141414" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M12.0 10.0 L14.2 9.6 L16.9 9.0 L19.0 8.0 L19.9 10.2 L21.3 13.0 L22.0 15.0" fill="none" stroke-linejoin="round" stroke-linecap="round" stroke="#8a8a99" stroke-width="2.6666666666666665"/>
+  <path d="M9.0 20.0 L10.7 21.7 L12.9 23.1 L15.0 25.0 L17.5 23.7 L20.0 23.1 L23.0 22.0" fill="none" stroke-linejoin="round" stroke-linecap="round" stroke="#2d2d36" stroke-width="2.2857142857142856"/></g>
+    <text x="52" y="104" text-anchor="start" font-family="'Arial Black','Helvetica Neue',Arial,sans-serif" font-weight="900" font-size="15" fill="#f6efd9" stroke="#141414" stroke-width="2.142857142857143" paint-order="stroke" stroke-linejoin="round">×3</text>
+    <path transform="translate(118 86) scale(0.9166666666666666)" d="M13 1 L4 14 H11 L9 23 L20 9 H13 Z" fill="#ffd33d" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="2.6"/>
+    <text x="150" y="104" text-anchor="start" font-family="'Arial Black','Helvetica Neue',Arial,sans-serif" font-weight="900" font-size="17" fill="#f6efd9" stroke="#141414" stroke-width="2.4285714285714284" paint-order="stroke" stroke-linejoin="round">5</text>
+</svg>

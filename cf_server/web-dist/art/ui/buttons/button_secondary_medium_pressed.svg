@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="50" viewBox="0 0 200 50">
+<defs>
+  <pattern id="hatch-btn" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+    <line x1="0" y1="0" x2="0" y2="7" stroke="#141414" stroke-width="2" stroke-opacity="0.55"/>
+  </pattern>
+  <pattern id="dots-btn" width="8" height="8" patternUnits="userSpaceOnUse">
+    <circle cx="2" cy="2" r="1.6" fill="#141414" fill-opacity="0.35"/>
+    <circle cx="6" cy="6" r="1.6" fill="#141414" fill-opacity="0.35"/>
+  </pattern>
+  <filter id="ink-btn" x="-5%" y="-5%" width="110%" height="110%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="1" seed="3" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="1.1"/>
+  </filter></defs>
+<g transform="translate(0 3)"><path d="M13 3 H187 Q197 3 197 13 V35 Q197 45 187 45 H13 Q3 45 3 35 V13 Q3 3 13 3 Z" fill="#143a8a" stroke="#141414" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" /><path d="M3.0 3.0 L68.3 2.6 L132.3 3.4 L197.0 3.0 L197.2 17.0 L197.3 31.7 L197.0 45.0 L132.0 45.6 L67.2 44.1 L3.0 45.0 L4.0 31.2 L2.7 17.1 Z" fill="none" stroke="#141414" stroke-width="2" opacity="0.5"/><path d="M14 13 H176" stroke="#f6efd9" stroke-width="4" stroke-linecap="round" opacity="0.8"/></g>
+</svg>

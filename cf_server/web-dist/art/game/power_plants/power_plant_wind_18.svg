@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="120" viewBox="0 0 180 120">
+<defs>
+  <pattern id="hatch-c18" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+    <line x1="0" y1="0" x2="0" y2="7" stroke="#1e6e99" stroke-width="2" stroke-opacity="0.55"/>
+  </pattern>
+  <pattern id="dots-c18" width="8" height="8" patternUnits="userSpaceOnUse">
+    <circle cx="2" cy="2" r="1.6" fill="#1e6e99" fill-opacity="0.35"/>
+    <circle cx="6" cy="6" r="1.6" fill="#1e6e99" fill-opacity="0.35"/>
+  </pattern>
+  <filter id="ink-c18" x="-5%" y="-5%" width="110%" height="110%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="1" seed="3" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="1.1"/>
+  </filter></defs>
+
+  <path d="M14 6 H166 Q178 6 178 18 V110 Q178 122 166 122 H14 Q2 122 2 110 V18 Q2 6 14 6 Z" fill="#141414" opacity="0.9"/>
+  <path d="M12 0 H164 Q176 0 176 12 V104 Q176 116 164 116 H12 Q0 116 0 104 V12 Q0 0 12 0 Z" fill="#f6efd9" stroke="#141414" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M4.0 4.0 L60.9 4.9 L119.8 3.5 L176.0 4.0 L175.0 40.7 L175.6 79.9 L176.0 116.0 L119.4 116.2 L60.2 116.9 L4.0 116.0 L4.1 78.7 L2.9 41.5 Z" fill="none" stroke="#6ac1e8" stroke-width="6" stroke-linejoin="round" opacity="0.9"/>
+  <rect x="8" y="8" width="160" height="26" rx="6" fill="#6ac1e8" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="3"/>
+  <rect x="8" y="8" width="160" height="26" rx="6" fill="url(#dots-c18)"/>
+  <rect x="8" y="84" width="160" height="24" rx="6" fill="#bfe9ff" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="3"/>
+  <rect x="8" y="84" width="160" height="24" rx="6" fill="url(#hatch-c18)" opacity="0.35"/>
+    <clipPath id="art-c18"><rect x="10" y="36" width="160" height="48" rx="4"/></clipPath>
+    <g clip-path="url(#art-c18)"><g transform="translate(46 38) scale(0.66)"><path d="M0 68 Q30 58 60 66 T100 64 V70 H0 Z" fill="#2fb35a" stroke="#141414" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" /><path d="M13 66 L14.5 22 L17.5 22 L19 66 Z" fill="#bfe9ff" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="2.6"/><g transform="rotate(66 16 22)"><path d="M16 22 q-3 -8 1 -12 q4 4 1 12 Z" fill="#ffffff" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="2.4"/></g><g transform="rotate(186 16 22)"><path d="M16 22 q-3 -8 1 -12 q4 4 1 12 Z" fill="#ffffff" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="2.4"/></g><g transform="rotate(306 16 22)"><path d="M16 22 q-3 -8 1 -12 q4 4 1 12 Z" fill="#ffffff" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="2.4"/></g><circle cx="16" cy="22" r="2.2" fill="#141414"/><path d="M51 66 L52.5 29 L55.5 29 L57 66 Z" fill="#bfe9ff" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="2.6"/><g transform="rotate(116 54 29)"><path d="M54 29 q-3 -8 1 -10.5 q4 4 1 10.5 Z" fill="#ffffff" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="2.4"/></g><g transform="rotate(236 54 29)"><path d="M54 29 q-3 -8 1 -10.5 q4 4 1 10.5 Z" fill="#ffffff" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="2.4"/></g><g transform="rotate(356 54 29)"><path d="M54 29 q-3 -8 1 -10.5 q4 4 1 10.5 Z" fill="#ffffff" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="2.4"/></g><circle cx="54" cy="29" r="2.2" fill="#141414"/><circle cx="88" cy="12" r="6" fill="#ffd33d" stroke="#141414" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" /><line x1="95.9" y1="13.2" x2="100.2" y2="13.9" stroke="#ff7a2a" stroke-width="3" stroke-linecap="round"/><line x1="93.2" y1="18.0" x2="96.3" y2="21.6" stroke="#ff7a2a" stroke-width="3" stroke-linecap="round"/><line x1="87.0" y1="19.9" x2="86.6" y2="23.7" stroke="#ff7a2a" stroke-width="3" stroke-linecap="round"/><line x1="82.0" y1="17.3" x2="78.4" y2="20.5" stroke="#ff7a2a" stroke-width="3" stroke-linecap="round"/><line x1="80.1" y1="10.8" x2="75.5" y2="10.1" stroke="#ff7a2a" stroke-width="3" stroke-linecap="round"/><line x1="83.3" y1="5.5" x2="79.0" y2="-0.5" stroke="#ff7a2a" stroke-width="3" stroke-linecap="round"/><line x1="88.7" y1="4.0" x2="89.3" y2="-2.6" stroke="#ff7a2a" stroke-width="3" stroke-linecap="round"/><line x1="94.6" y1="7.5" x2="101.5" y2="2.9" stroke="#ff7a2a" stroke-width="3" stroke-linecap="round"/></g></g>
+    <circle cx="26" cy="21" r="16" fill="#f6efd9" stroke="#141414" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" />
+    <text x="26" y="27" text-anchor="middle" font-family="'Arial Black','Helvetica Neue',Arial,sans-serif" font-weight="900" font-size="18" fill="#141414" stroke="#f6efd9" stroke-width="2.5714285714285716" paint-order="stroke" stroke-linejoin="round">18</text>
+    <text x="112" y="27" text-anchor="middle" font-family="'Arial Black','Helvetica Neue',Arial,sans-serif" font-weight="900" font-size="12" fill="#f6efd9" stroke="#141414" stroke-width="2" paint-order="stroke" stroke-linejoin="round">WIND</text>
+    
+    <path transform="translate(118 86) scale(0.9166666666666666)" d="M13 1 L4 14 H11 L9 23 L20 9 H13 Z" fill="#ffd33d" stroke="#141414" stroke-linejoin="round" stroke-linecap="round" stroke-width="2.6"/>
+    <text x="150" y="104" text-anchor="start" font-family="'Arial Black','Helvetica Neue',Arial,sans-serif" font-weight="900" font-size="17" fill="#f6efd9" stroke="#141414" stroke-width="2.4285714285714284" paint-order="stroke" stroke-linejoin="round">2</text>
+</svg>
