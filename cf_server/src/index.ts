@@ -36,7 +36,7 @@ const isAuthorized = (request: Request, url: URL, env: Env): boolean => {
   return bearer === env.ADMIN_TOKEN || url.searchParams.get("token") === env.ADMIN_TOKEN
 }
 
-const isAdminPath = (path: string) => path.startsWith("/admin/") || path.startsWith("/ws/admin/")
+const isAdminPath = (path: string) => path.startsWith("/ws/admin/")
 
 /** Browser origin allowlist (worker/ slice idea). Non-browser clients send no Origin and pass. */
 const originAllowed = (request: Request, env: Env): boolean => {
@@ -75,6 +75,10 @@ export default {
       }
       return new Response("unknown websocket endpoint", { status: 404 })
     }
+
+    // Static hosting is enabled only in the web deployment configuration.
+    const apiPath = /^\/(api|admin|maps|health|ready|docs|openapi\.json|ws|game)(\/|$)/.test(url.pathname)
+    if (env.ASSETS && !apiPath) return env.ASSETS.fetch(request)
 
     let h = handlers.get(env)
     if (!h) {

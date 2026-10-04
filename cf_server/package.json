@@ -6,7 +6,7 @@
   "description": "Power Grid game server on Cloudflare Workers + Durable Objects + D1, built with Effect 4",
   "scripts": {
     "dev": "wrangler dev",
-    "deploy": "wrangler deploy",
+    "deploy": "wrangler deploy --config wrangler.web.jsonc",
     "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.sim.json",
     "test": "vitest run && vitest run --config vitest.workers.config.ts",
     "test:watch": "vitest",
@@ -18,7 +18,9 @@
     "test:workers": "vitest run --config vitest.workers.config.ts",
     "build": "wrangler deploy --dry-run",
     "check": "pnpm typecheck && pnpm test && pnpm build",
-    "sim": "node src/sim/cli.ts"
+    "sim": "node src/sim/cli.ts",
+    "build:web": "node scripts/build-web.mjs",
+    "deploy:web": "wrangler deploy --config wrangler.web.jsonc"
   },
   "dependencies": {
     "@effect/sql-d1": "^4.0.0",
@@ -27,9 +29,9 @@
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "^0.22.0",
     "@cloudflare/workers-types": "5.20260926.1",
+    "@types/node": "^24.19.1",
     "typescript": "^5.9.0",
     "vitest": "^4.1.0",
-    "wrangler": "^4.83.0",
-    "@types/node": "^24.19.1"
+    "wrangler": "^4.83.0"
   }
 }

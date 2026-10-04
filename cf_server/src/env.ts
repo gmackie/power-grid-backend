@@ -1,5 +1,6 @@
 /** Worker bindings (mirrors wrangler.jsonc). */
 export interface Env {
+  readonly ASSETS?: Fetcher
   readonly DB: D1Database
   readonly LOBBY_HUB: DurableObjectNamespace
   readonly GAME: DurableObjectNamespace

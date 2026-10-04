@@ -1,4 +1,6 @@
 import { SELF, env } from "cloudflare:test"
+import { Effect } from "effect"
+import { makeClient } from "../../src/http/client.ts"
 import { describe, expect, it } from "vitest"
 
 const get = (path: string, init?: RequestInit) => SELF.fetch(`http://example.com${path}`, init)
@@ -72,4 +74,26 @@ describe("HTTP API", () => {
     const after = (await (await get("/maps")).json()) as { maps: Array<{ id: string }> }
     expect(after.maps.map((m) => m.id)).not.toContain("tiny")
   })
+  it("publishes contracts and serves requests through the generated client", async () => {
+    const spec = await (await get("/openapi.json")).json() as { paths: Record<string, unknown> }
+    expect(spec.paths["/admin/maps/{id}"]).toBeDefined()
+    expect((await get("/docs")).status).toBe(200)
+    const client = await Effect.runPromise(makeClient("http://example.com"))
+    // Route the generated Fetch client through the same Worker used in production.
+    const { FetchHttpClient } = await import("effect/http")
+    const maps = await Effect.runPromise(client.server.maps().pipe(
+      Effect.provideService(FetchHttpClient.Fetch, (input, init) => SELF.fetch(input, init))
+    ))
+    expect(maps.maps.map(map => map.id)).toContain("usa")
+  })
+
+  it("rejects malformed admin payloads before writing data", async () => {
+    const response = await get("/admin/maps/invalid", {
+      method: "PUT", headers: { Authorization: "Bearer test-token", "Content-Type": "application/json" },
+      body: JSON.stringify({ name: "Invalid" })
+    })
+    expect(response.status).toBe(400)
+    expect((await get("/maps/invalid")).status).toBe(404)
+  })
+
 })

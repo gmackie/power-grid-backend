@@ -28,7 +28,9 @@ statistics, achievements, map assets and power plant decks.
 Effect usage: services are `Context.Service` classes provided through `Layer`s; each DO
 owns a `ManagedRuntime` built from `makeAppLayer(env)`; the engine is pure and lifts into
 `Effect` at its boundary (`Engine.applyAction` etc. fail with `GameError`); the HTTP API is
-an `HttpRouter` turned into a fetch handler with `HttpRouter.toWebHandler`.
+an `HttpApi` contract implemented with `HttpApiBuilder`, served through `HttpRouter.toWebHandler`.
+`src/http/client.ts` creates an Effect `HttpApiClient` from that same contract.
+OpenAPI is generated at `/openapi.json`, with interactive documentation at `/docs`.
 
 ## Endpoints
 
@@ -81,17 +83,21 @@ at `ws://localhost:8787/game`.
 
 ## Deploy
 
-Production: `https://power-grid-server.gmac.workers.dev` (D1 `powergrid`, created 2026-10-04).
+Production web app, HTTP API, and WebSockets: `https://power.gmac.io`.
+The legacy Worker URL remains available at `https://power-grid-server.gmac.workers.dev` (D1 `powergrid`, created 2026-10-04).
 The admin token is in `.admin-token.local` (gitignored) on the machine that deployed.
 
 ```bash
 wrangler d1 create powergrid           # once; database_id is already in wrangler.jsonc
 pnpm db:migrate:remote
 wrangler secret put ADMIN_TOKEN
-pnpm deploy
+pnpm build:web /path/to/react_client   # builds web-dist with the production WebSocket URL
+pnpm deploy                          # uses wrangler.web.jsonc, including assets and domain route
 ```
 
-`.github/workflows/deploy-cf.yml` does the same on push to `master` given
+The deployment requires a freshly built `web-dist`; a backend-only deployment would remove
+the website assets. CI must build the matching React checkout before deploying.
+`.github/workflows/deploy-cf.yml` requires
 `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` secrets.
 
 ## History
@@ -105,6 +111,7 @@ here; phase 4 (client adapter, staged cutover) remains.
 - Prometheus `/metrics`, OTel middleware (use Workers observability / Logpush).
 - Simulated games / AI client launcher (spawned local processes).
 - File-based analytics mode, SQLite maintenance endpoints, log streaming over WebSocket.
-- React in-game screen: it sends a lowercase dialect (`join_game`, `player_action`) which the
-  server translates, but it expects a camelCase `game_state` message the Go server never sent
-  either. The server emits the Go `GAME_STATE` shape; adapting the React store is client work.
+The deployed React client uses a separate game socket and adapts the server `GAME_STATE`
+payload to its UI store. Lobby registration, readiness, game start, bidding, and plant purchase
+were verified against the production domain. A complete browser-played game is not yet covered
+by an automated end-to-end test.

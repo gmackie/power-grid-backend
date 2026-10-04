@@ -4,3 +4,5 @@ dist/
 .dev.vars
 worker-configuration.d.ts
 .admin-token.local
+
+web-dist/
