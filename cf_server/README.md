@@ -83,6 +83,11 @@ at `ws://localhost:8787/game`.
 
 ## Deploy
 
+> Both `wrangler.jsonc` and `wrangler.web.jsonc` deploy the same Worker name. Always deploy with
+> `pnpm deploy` (web config: custom domain + static React bundle). `pnpm deploy:api-only` uses the
+> plain config and **drops the ASSETS binding**, which blanks power.gmac.io until the next web deploy.
+> Run `pnpm build:web /path/to/react_client` first so `web-dist/` is current.
+
 Production web app, HTTP API, and WebSockets: `https://power.gmac.io`.
 The legacy Worker URL remains available at `https://power-grid-server.gmac.workers.dev` (D1 `powergrid`, created 2026-10-04).
 The admin token is in `.admin-token.local` (gitignored) on the machine that deployed.

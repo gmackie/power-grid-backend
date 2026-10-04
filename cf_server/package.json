@@ -20,7 +20,8 @@
     "check": "pnpm typecheck && pnpm test && pnpm build",
     "sim": "node src/sim/cli.ts",
     "build:web": "node scripts/build-web.mjs",
-    "deploy:web": "wrangler deploy --config wrangler.web.jsonc"
+    "deploy:web": "wrangler deploy --config wrangler.web.jsonc",
+    "deploy:api-only": "wrangler deploy"
   },
   "dependencies": {
     "@effect/sql-d1": "^4.0.0",

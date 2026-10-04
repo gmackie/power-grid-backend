@@ -22,9 +22,12 @@ jobs:
       - run: pnpm test:unit
       - run: pnpm test:workers
 
+  # Deploy is manual for now: the production Worker also serves the React bundle (web-dist/),
+  # which is built from the sibling react_client checkout that is not in this repository.
+  # Run `pnpm build:web <react_client> && pnpm deploy` from cf_server/ instead.
   deploy:
     needs: test
-    if: github.event_name == 'push'
+    if: false
     runs-on: ubuntu-latest
     defaults: { run: { working-directory: cf_server } }
     steps:
